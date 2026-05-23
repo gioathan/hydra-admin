@@ -22,7 +22,7 @@ export default function DashboardLayout({
 
   useEffect(() => {
     if (mounted && !token) {
-      router.replace("/login");
+      router.replace("/admin/login");
     }
   }, [mounted, token, router]);
 

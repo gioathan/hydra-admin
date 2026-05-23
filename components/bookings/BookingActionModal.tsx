@@ -26,14 +26,14 @@ const actionConfig: Record<
     description: "Are you sure you want to confirm this booking?",
     confirmLabel: "Confirm Booking",
     confirmVariant: "success",
-    noteLabel: "Note (optional)",
+    noteLabel: "Comment for customer (optional)",
   },
   decline: {
     title: "Decline Booking",
     description: "Are you sure you want to decline this booking?",
     confirmLabel: "Decline Booking",
     confirmVariant: "danger",
-    noteLabel: "Note (optional)",
+    noteLabel: "Comment for customer (optional)",
   },
   cancel: {
     title: "Cancel Booking",

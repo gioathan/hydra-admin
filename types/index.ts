@@ -12,6 +12,7 @@ export interface UserDto {
   id: string;
   email: string;
   role: string;
+  isEmailVerified: boolean;
 }
 
 export interface VenuePhotoDto {
@@ -29,6 +30,12 @@ export interface VenueDto {
   userId: string;
   venueTypeId: string;
   photos: VenuePhotoDto[];
+  averageRating: number | null;
+  ratingCount: number;
+  location: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  googleMapsUrl: string | null;
 }
 
 export interface UpdateVenueRequest {
@@ -36,6 +43,9 @@ export interface UpdateVenueRequest {
   address: string;
   capacity: number;
   venueTypeId: string;
+  location?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 export interface AddVenuePhotoRequest {
@@ -69,6 +79,7 @@ export interface BookingDto {
   endUtc: string;
   partySize: number;
   status: BookingStatus;
+  venueComment: string | null;
   createdAtUtc: string;
   updatedAtUtc: string;
 }
@@ -109,6 +120,111 @@ export interface ApiError {
 
 export interface SimpleError {
   message: string;
+}
+
+// ─── Customer types ───────────────────────────────────────────────
+
+export interface CustomerPagedResult<T> {
+  items: T[];
+  totalCount: number;
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+}
+
+export interface CustomerVenuePhotoDto {
+  photoUrl: string | null;
+  displayOrder: number;
+}
+
+export interface CustomerVenueDto {
+  id: string;
+  name: string;
+  address: string;
+  capacity: number;
+  photos: CustomerVenuePhotoDto[];
+  averageRating: number | null;
+  ratingCount: number;
+  venueTypeId: string;
+  location: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  googleMapsUrl: string | null;
+}
+
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+}
+
+export interface RegisterResponse {
+  user: UserDto;
+  customer: CustomerDto;
+  token: string;
+}
+
+export interface VerifyEmailRequest {
+  email: string;
+  code: string;
+}
+
+export interface ResendVerificationRequest {
+  email: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  code: string;
+  newPassword: string;
+}
+
+export interface CustomerDto {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  locale: "en" | "el";
+  createdAtUtc: string;
+  pushToken: string | null;
+}
+
+export interface UpdateCustomerRequest {
+  name?: string;
+  phone?: string;
+  locale?: "en" | "el";
+}
+
+export interface AvailabilitySlot {
+  startUtc: string;
+  endUtc: string;
+}
+
+export interface CreateBookingRequest {
+  venueId: string;
+  customerId: string;
+  startUtc: string;
+  endUtc: string;
+  partySize: number;
+}
+
+export interface PendingRatingDto {
+  bookingId: string;
+  venueId: string;
+  venueName: string;
+  bookingEndUtc: string;
+}
+
+export interface RateVenueRequest {
+  bookingId: string;
+  value: number;
 }
 
 export interface VenueRulesDto {

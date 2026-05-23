@@ -8,7 +8,7 @@ import { getVenue } from "@/lib/api/venues";
 
 const navItems = [
   {
-    href: "/dashboard",
+    href: "/admin/dashboard",
     label: "Dashboard",
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -17,7 +17,7 @@ const navItems = [
     ),
   },
   {
-    href: "/bookings",
+    href: "/admin/bookings",
     label: "Bookings",
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,7 +26,7 @@ const navItems = [
     ),
   },
   {
-    href: "/venue",
+    href: "/admin/venue",
     label: "Venue",
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,7 +35,7 @@ const navItems = [
     ),
   },
   {
-    href: "/account",
+    href: "/admin/account",
     label: "Account",
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,6 +91,14 @@ export function Sidebar() {
       <div className="px-6 py-4 border-t border-white/10">
         <p className="text-xs text-white/50 truncate">{user?.email}</p>
         <p className="text-xs text-white/30 capitalize mt-0.5">{user?.role}</p>
+        <div className="flex gap-3 mt-3">
+          <Link href="/admin/privacy-policy" className="text-[10px] text-white/30 hover:text-white/60 transition-colors">
+            Privacy
+          </Link>
+          <Link href="/admin/terms-of-service" className="text-[10px] text-white/30 hover:text-white/60 transition-colors">
+            Terms
+          </Link>
+        </div>
       </div>
     </aside>
   );
