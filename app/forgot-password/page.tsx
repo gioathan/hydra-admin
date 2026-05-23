@@ -6,18 +6,25 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { forgotPassword } from "@/lib/api/customerAuth";
 import { extractErrorMessage } from "@/lib/axios";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
 
 interface FormValues {
   email: string;
 }
 
+function Spinner() {
+  return (
+    <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+    </svg>
+  );
+}
+
 export default function ForgotPasswordPage() {
   const router = useRouter();
-  const { register, handleSubmit, getValues, formState: { errors } } = useForm<FormValues>();
+  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
 
-  const { mutate, isPending, error, isSuccess } = useMutation({
+  const { mutate, isPending, error } = useMutation({
     mutationFn: forgotPassword,
     onSuccess: (_, variables) => {
       localStorage.setItem("reset_password_email", variables.email);
@@ -28,53 +35,95 @@ export default function ForgotPasswordPage() {
   const errorMessage = error ? extractErrorMessage(error) : null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#fbf8fc] px-4">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <Link href="/" className="text-2xl font-bold text-[#1B2B4B] tracking-widest">
+    <div className="min-h-screen bg-[#dbdad5] flex items-center justify-center relative overflow-hidden px-4 py-12">
+      {/* Atmospheric blobs */}
+      <div className="absolute top-[-8%] right-[-4%] w-80 h-80 rounded-full bg-[#9c440f]/20 blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[-8%] left-[-4%] w-80 h-80 rounded-full bg-[#1b2b4b]/20 blur-[100px] pointer-events-none" />
+
+      <section className="relative z-10 w-full max-w-[520px]">
+
+        {/* Brand */}
+        <div className="text-center mb-6">
+          <Link href="/" style={{ fontFamily: "var(--font-serif)" }} className="text-2xl font-bold tracking-[0.2em] text-[#041635] hover:text-[#1b2b4b] transition-colors">
             HYDRA
           </Link>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-7">
-          <h2 className="text-lg font-semibold text-[#1B2B4B] mb-1">Forgot password?</h2>
-          <p className="text-sm text-[#44474e] mb-6">
-            Enter your email and we&apos;ll send you a reset code.
-          </p>
+        {/* Card */}
+        <div className="bg-white shadow-sm rounded-xl border border-[#c5c6cf]/30 overflow-hidden">
+          <div className="p-10 md:p-12">
 
-          <form
-            onSubmit={handleSubmit((data) => mutate(data))}
-            className="flex flex-col gap-4"
-            noValidate
-          >
-            <Input
-              label="Email"
-              type="email"
-              autoComplete="email"
-              placeholder="you@example.com"
-              error={errors.email?.message}
-              {...register("email", {
-                required: "Email is required",
-                pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email" },
-              })}
-            />
+            {/* Icon */}
+            <div className="flex justify-center mb-8">
+              <div className="w-16 h-16 rounded-full border border-[#c5c6cf] flex items-center justify-center text-[#041635]">
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                  <rect x="4" y="11" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="1.5" />
+                  <path d="M8 11V8a5 5 0 0110 0v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  <circle cx="13" cy="17" r="2" fill="currentColor" />
+                  <line x1="13" y1="19" x2="13" y2="21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </div>
+            </div>
 
-            {errorMessage && (
-              <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{errorMessage}</p>
-            )}
+            <div className="text-center mb-10">
+              <h1 style={{ fontFamily: "var(--font-serif)" }} className="text-[32px] font-semibold text-[#041635] leading-tight mb-2">
+                Forgot Password?
+              </h1>
+              <p className="text-[#44474e]">Enter your email and we&apos;ll send you a reset code.</p>
+            </div>
 
-            <Button type="submit" loading={isPending} className="w-full">
-              Send Reset Code
-            </Button>
-          </form>
+            <form onSubmit={handleSubmit((data) => mutate(data))} className="space-y-6" noValidate>
+
+              {/* Email */}
+              <div className="space-y-2">
+                <label htmlFor="email" className="block text-xs font-bold tracking-[0.12em] text-[#44474e] uppercase">
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  className={`w-full h-14 px-4 bg-[#f5f3f6] border rounded-lg text-[#1b1b1e] placeholder:text-[#75777f] outline-none transition-colors text-base
+                    ${errors.email ? "border-red-500 focus:border-red-500" : "border-[#c5c6cf] focus:border-[#9c440f]"}`}
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email" },
+                  })}
+                />
+                {errors.email && <p className="text-xs text-red-600">{errors.email.message}</p>}
+              </div>
+
+              {errorMessage && (
+                <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{errorMessage}</p>
+              )}
+
+              <button
+                type="submit"
+                disabled={isPending}
+                className="w-full h-16 bg-[#041635] text-white font-bold tracking-[0.1em] text-sm rounded-lg hover:bg-[#1b2b4b] transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isPending ? <Spinner /> : "SEND RESET CODE"}
+              </button>
+            </form>
+
+            <div className="mt-10 pt-10 border-t border-[#c5c6cf]/30 text-center">
+              <Link href="/signin" className="text-[#9c440f] font-bold hover:underline">
+                ← Back to sign in
+              </Link>
+            </div>
+          </div>
         </div>
 
-        <p className="text-center text-sm text-[#44474e] mt-6">
-          <Link href="/signin" className="text-[#C4622D] font-medium hover:underline">
-            Back to sign in
-          </Link>
-        </p>
-      </div>
+        {/* Footer links */}
+        <div className="mt-8 flex justify-center items-center gap-5 text-xs text-[#75777f]/60">
+          <span className="hover:text-[#9c440f] transition-colors cursor-pointer">Privacy Policy</span>
+          <span className="w-1 h-1 bg-[#c5c6cf] rounded-full" />
+          <span className="hover:text-[#9c440f] transition-colors cursor-pointer">Terms of Service</span>
+          <span className="w-1 h-1 bg-[#c5c6cf] rounded-full" />
+          <span className="hover:text-[#9c440f] transition-colors cursor-pointer">Contact Support</span>
+        </div>
+      </section>
     </div>
   );
 }
