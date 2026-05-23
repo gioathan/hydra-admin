@@ -36,6 +36,7 @@ export interface VenueDto {
   latitude: number | null;
   longitude: number | null;
   googleMapsUrl: string | null;
+  description: string | null;
 }
 
 export interface UpdateVenueRequest {
@@ -46,6 +47,7 @@ export interface UpdateVenueRequest {
   location?: string | null;
   latitude?: number | null;
   longitude?: number | null;
+  description?: string | null;
 }
 
 export interface AddVenuePhotoRequest {
@@ -152,6 +154,7 @@ export interface CustomerVenueDto {
   latitude: number | null;
   longitude: number | null;
   googleMapsUrl: string | null;
+  description: string | null;
 }
 
 export interface RegisterRequest {

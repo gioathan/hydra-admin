@@ -58,6 +58,7 @@ function VenueDetailsSection({ venueId }: { venueId: string }) {
         location: venue.location ?? "",
         latitude: venue.latitude ?? undefined,
         longitude: venue.longitude ?? undefined,
+        description: venue.description ?? "",
       });
     }
   }, [venue, reset]);
@@ -75,6 +76,7 @@ function VenueDetailsSection({ venueId }: { venueId: string }) {
         location: updated.location ?? "",
         latitude: updated.latitude ?? undefined,
         longitude: updated.longitude ?? undefined,
+        description: updated.description ?? "",
       });
     },
     onError: (err) => showToast(extractErrorMessage(err), "error"),
@@ -166,6 +168,15 @@ function VenueDetailsSection({ venueId }: { venueId: string }) {
           </a>
         </div>
       )}
+      <div className="flex flex-col gap-1.5">
+        <label className="text-sm font-medium text-[#1B2B4B]">Description</label>
+        <textarea
+          rows={4}
+          placeholder="A short description of the venue (optional)"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-[#1B2B4B] placeholder:text-[#6B7280] outline-none focus:border-[#1B2B4B] focus:ring-1 focus:ring-[#1B2B4B] resize-none"
+          {...register("description")}
+        />
+      </div>
       <div>
         <Button type="submit" loading={isPending} disabled={!isDirty}>
           Save Changes

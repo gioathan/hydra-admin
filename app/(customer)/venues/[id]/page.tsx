@@ -103,6 +103,9 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 Open in Maps
               </a>
             )}
+            {venue.description && (
+              <p className="mt-4 text-sm leading-relaxed" style={{ color: "#4b4f5a" }}>{venue.description}</p>
+            )}
           </div>
 
           <div>
@@ -336,6 +339,14 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                   </div>
                 )}
               </div>
+
+              {/* Description */}
+              {venue.description && (
+                <div>
+                  <h2 className="text-lg font-semibold mb-3" style={{ color: "#041635", fontFamily: "var(--font-serif)" }}>About</h2>
+                  <p className="text-sm leading-relaxed" style={{ color: "#4b4f5a", fontFamily: "var(--font-sans)" }}>{venue.description}</p>
+                </div>
+              )}
             </div>
 
             {/* Right: booking card */}
