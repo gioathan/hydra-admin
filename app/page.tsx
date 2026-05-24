@@ -1,67 +1,82 @@
 import Link from "next/link";
 
-const STARS = [
-  { top: "8%", left: "14%" }, { top: "16%", left: "68%" },
-  { top: "31%", left: "88%" }, { top: "47%", left: "22%" },
-  { top: "62%", left: "91%" }, { top: "21%", left: "42%" },
-  { top: "72%", left: "11%" }, { top: "11%", left: "82%" },
-  { top: "84%", left: "57%" }, { top: "53%", left: "73%" },
-  { top: "38%", left: "6%"  }, { top: "77%", left: "38%" },
-  { top: "5%",  left: "50%" }, { top: "92%", left: "79%" },
-  { top: "25%", left: "30%" }, { top: "67%", left: "60%" },
-];
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen flex flex-col lg:grid lg:grid-cols-2">
+    <main className="min-h-screen lg:h-screen flex flex-col lg:grid lg:grid-cols-2 lg:overflow-hidden">
 
       {/* ── Left Panel ── */}
-      <section className="flex flex-col justify-between p-10 lg:p-20 bg-white min-h-screen lg:min-h-0">
+      <section className="flex flex-col justify-between p-10 lg:p-10 xl:p-16 bg-white lg:h-full lg:overflow-hidden">
 
         <div className="flex items-center justify-between">
           <span style={{ fontFamily: "var(--font-serif)" }} className="text-2xl font-bold tracking-[0.2em] text-[#041635]">
             HYDRA
           </span>
-          <span className="text-sm text-[#44474e] hover:text-[#9c440f] transition-colors cursor-pointer">
+          <a href="mailto:test@mail.com" className="text-sm text-[#44474e] hover:text-[#9c440f] transition-colors">
             Support
-          </span>
+          </a>
         </div>
 
         {/* Mobile-only decorative element */}
-        <div className="lg:hidden relative mx-auto w-56 h-56 my-8 flex items-center justify-center" aria-hidden="true">
-          <div className="absolute inset-0 bg-[#efedf0] rounded-xl rotate-2 shadow-sm" />
-          <div className="absolute top-3 left-3  w-6 h-6 border-l-2 border-t-2 border-[#9c440f]/30" />
-          <div className="absolute top-3 right-3 w-6 h-6 border-r-2 border-t-2 border-[#9c440f]/30" />
-          <div className="absolute bottom-3 left-3  w-6 h-6 border-l-2 border-b-2 border-[#9c440f]/30" />
-          <div className="absolute bottom-3 right-3 w-6 h-6 border-r-2 border-b-2 border-[#9c440f]/30" />
-          <div className="relative z-10 flex items-center justify-center w-36 h-36">
-            <div className="absolute inset-0 rounded-full border border-[#041635]/10" />
-            <div className="absolute w-24 h-24 rounded-full border border-[#041635]/10" />
-            <div className="w-10 h-10 rounded-full border-2 border-[#9c440f]/30 flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-[#9c440f]/50" />
+        <div className="lg:hidden mx-auto my-8" style={{ width: 240 }} aria-hidden="true">
+          <div className="bg-[#6e2a00] rounded-2xl p-4 shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-white text-[11px] font-bold tracking-[0.15em] uppercase">My Bookings</span>
+              <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#ffb693]/70" />
+              </div>
             </div>
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-[#041635]/10" />
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 h-px w-full bg-[#041635]/10" />
+            <div className="flex mb-2.5">
+              <div className="flex flex-col items-center w-10 shrink-0">
+                <span className="text-[9px] font-mono text-white/40">19:00</span>
+                <div className="w-2 h-2 rounded-full bg-[#ffb693] my-1.5 shrink-0" />
+                <div className="flex-1 w-px bg-white/10 min-h-4" />
+              </div>
+              <div className="flex-1 ml-2">
+                <div className="bg-white/[0.07] border border-white/10 rounded-lg p-2.5">
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-white text-[11px] font-semibold">Rooftop Bar</p>
+                    <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">✓</span>
+                  </div>
+                  <p className="text-white/30 text-[10px]">2 guests · Soho</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex">
+              <div className="flex flex-col items-center w-10 shrink-0">
+                <span className="text-[9px] font-mono text-white/40">21:30</span>
+                <div className="w-2 h-2 rounded-full border border-white/30 my-1.5 shrink-0" />
+              </div>
+              <div className="flex-1 ml-2">
+                <div className="bg-white/[0.03] border border-white/[0.07] rounded-lg p-2.5">
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-white/60 text-[11px] font-semibold">Sakura Garden</p>
+                    <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400/70">Pending</span>
+                  </div>
+                  <p className="text-white/20 text-[10px]">4 guests · Covent Garden</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-8 max-w-md mx-auto lg:mx-0">
+        <div className="flex flex-col gap-6 max-w-md mx-auto lg:mx-0">
           <div className="flex flex-col gap-4">
             <span className="text-xs font-bold tracking-[0.2em] text-[#9c440f] uppercase">
-              Mediterranean Heritage
+              Discover &amp; Book
             </span>
-            <h1 style={{ fontFamily: "var(--font-serif)" }} className="text-5xl lg:text-[64px] font-bold text-[#041635] leading-[1.1] tracking-tight">
-              Experience the Heritage of Hydra
+            <h1 style={{ fontFamily: "var(--font-serif)" }} className="text-5xl lg:text-[44px] xl:text-[56px] 2xl:text-[64px] font-bold text-[#041635] leading-[1.1] tracking-tight">
+              Find &amp; Book the Best Around You
             </h1>
             <p className="text-lg text-[#44474e] leading-relaxed">
-              Navigate the timeless beauty of the Aegean. Discover curated venues through the cradle of civilization.
+              Browse restaurants, bars, cafés and activities. Book your next favourite experience in seconds.
             </p>
           </div>
 
           <div className="flex flex-col gap-3 w-full">
             <Link
               href="/signup"
-              className="w-full py-5 bg-[#041635] text-white text-sm font-bold tracking-[0.08em] flex items-center justify-center gap-3 hover:bg-[#1b2b4b] transition-all duration-300 active:scale-[0.98]"
+              className="w-full py-4 bg-[#9c440f] text-white text-sm font-bold tracking-[0.08em] flex items-center justify-center gap-3 hover:bg-[#7a3000] transition-all duration-300 active:scale-[0.98]"
             >
               CREATE ACCOUNT
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -70,88 +85,109 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/signin"
-              className="w-full py-5 border border-[#c5c6cf] text-[#041635] text-sm font-bold tracking-[0.08em] flex items-center justify-center hover:bg-[#f5f3f6] transition-all duration-300 active:scale-[0.98]"
+              className="w-full py-4 border border-[#9c440f] text-[#9c440f] text-sm font-bold tracking-[0.08em] flex items-center justify-center hover:bg-[#fff7f4] transition-all duration-300 active:scale-[0.98]"
             >
               SIGN IN
             </Link>
           </div>
 
-          <div className="pt-8 border-t border-[#c5c6cf]">
+          <div className="pt-5 border-t border-[#c5c6cf]">
             <p className="text-sm text-[#44474e] italic">
-              &ldquo;A journey of a thousand leagues begins with a single mast.&rdquo;
+              &ldquo;Great experiences don&rsquo;t happen by accident — they&rsquo;re discovered.&rdquo;
             </p>
           </div>
         </div>
 
-        <footer className="flex justify-between items-center pt-8">
-          <span className="text-xs text-[#75777f]/60">© 2024 HYDRA Mediterranean</span>
-          <div className="flex items-center gap-2 opacity-40">
-            <div className="w-6 h-px bg-[#75777f]" />
-            <span className="text-[10px] font-bold tracking-[0.2em] text-[#75777f]">EST. 1960</span>
-            <div className="w-6 h-px bg-[#75777f]" />
-          </div>
+        <footer className="flex justify-between items-center pt-5">
+          <span className="text-xs text-[#75777f]/60">© 2024 HYDRA</span>
         </footer>
       </section>
 
       {/* ── Right Panel — decorative (desktop only) ── */}
-      <section className="hidden lg:flex relative bg-[#041635] overflow-hidden items-end p-20" aria-hidden="true">
+      <section className="hidden lg:flex relative bg-[#6e2a00] overflow-hidden lg:h-full" aria-hidden="true">
 
-        {/* Star field */}
-        {STARS.map((s, i) => (
-          <div
-            key={i}
-            className="absolute w-[2px] h-[2px] rounded-full bg-white/30"
-            style={{ top: s.top, left: s.left }}
-          />
-        ))}
+        {/* Subtle grid */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.025]" style={{ backgroundImage: "linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
 
-        {/* Compass rose */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <svg
-            width="520" height="520" viewBox="0 0 100 100"
-            className="opacity-[0.15]"
-            style={{ animation: "spin 120s linear infinite" }}
-          >
-            <circle cx="50" cy="50" r="48" stroke="white" strokeWidth="0.5" strokeDasharray="1 3" fill="none" />
-            <circle cx="50" cy="50" r="38" stroke="white" strokeWidth="0.2" fill="none" />
-            <circle cx="50" cy="50" r="26" stroke="white" strokeWidth="0.3" strokeDasharray="2 2" fill="none" />
-            <circle cx="50" cy="50" r="12" stroke="white" strokeWidth="0.2" fill="none" />
-            <path d="M50 5 L52 45 L50 48 L48 45 Z" fill="white" />
-            <path d="M50 95 L48 55 L50 52 L52 55 Z" fill="white" />
-            <path d="M5 50 L45 52 L48 50 L45 48 Z" fill="white" />
-            <path d="M95 50 L55 48 L52 50 L55 52 Z" fill="white" />
-            <line x1="16" y1="16" x2="84" y2="84" stroke="white" strokeWidth="0.15" opacity="0.4" />
-            <line x1="84" y1="16" x2="16" y2="84" stroke="white" strokeWidth="0.15" opacity="0.4" />
-            <circle cx="50" cy="50" r="2" fill="white" opacity="0.7" />
-          </svg>
-        </div>
+        {/* Edge gradients */}
+        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#6e2a00] to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#6e2a00] to-transparent pointer-events-none" />
 
-        {/* Ambient rings */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[700px] h-[700px] rounded-full border border-white/[0.04]" />
-          <div className="absolute w-[480px] h-[480px] rounded-full border border-white/[0.03]" />
-        </div>
+        {/* Timeline */}
+        <div className="relative z-10 flex flex-col justify-center p-10 xl:p-16 w-full">
 
-        {/* Bottom gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#041635]/80 via-transparent to-transparent pointer-events-none" />
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-8 h-px bg-[#ffb693]" />
+            <span className="text-xs font-bold tracking-[0.2em] text-[#ffb693]/80 uppercase">Schedule</span>
+          </div>
 
-        {/* Quote */}
-        <div className="relative z-10 flex flex-col gap-6 max-w-lg">
-          <div className="w-24 h-px bg-[#ffb693]" />
-          <h2 style={{ fontFamily: "var(--font-serif)" }} className="text-4xl font-bold text-white leading-tight">
-            The sea, once it casts its spell, holds one in its net of wonder forever.
-          </h2>
-          <div className="flex items-center gap-4">
-            <div className="p-4 bg-white/10 border border-white/20">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="10" r="9" stroke="white" strokeWidth="1.2" />
-                <path d="M10 2v2M10 16v2M2 10h2M16 10h2" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
-                <path d="M10 6.5l1.2 4.8-1.2 1.2-1.2-1.2L10 6.5z" fill="white" />
-              </svg>
+          <p className="text-[10px] font-bold tracking-[0.2em] text-white/25 uppercase mb-4 pl-14">Today · May 24</p>
+
+          <div>
+            {/* Entry 1 — Confirmed */}
+            <div className="flex">
+              <div className="flex flex-col items-center w-14 shrink-0">
+                <span className="text-[11px] font-mono text-white/40 h-5 flex items-center">19:00</span>
+                <div className="w-2.5 h-2.5 rounded-full bg-[#ffb693] ring-[3px] ring-[#ffb693]/20 my-2 shrink-0 relative z-10" />
+                <div className="flex-1 w-px bg-white/10" />
+              </div>
+              <div className="flex-1 ml-3 mb-4">
+                <div className="bg-white/[0.06] border border-white/10 rounded-xl p-4">
+                  <div className="flex items-start justify-between mb-1.5">
+                    <p className="text-white font-semibold text-sm">The Rooftop Bar</p>
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 ml-2 shrink-0">Confirmed</span>
+                  </div>
+                  <p className="text-white/40 text-xs mb-2">Cocktail Lounge · Soho</p>
+                  <div className="flex items-center gap-1.5 text-[11px] text-white/25">
+                    <span>2 guests</span><span>·</span><span>Ref #A2F9</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-bold text-white tracking-wider">Currently Exploring</p>
-              <p className="text-sm text-[#ffb693]">The Saronic Gulf Passages</p>
+
+            {/* Entry 2 — Pending */}
+            <div className="flex">
+              <div className="flex flex-col items-center w-14 shrink-0">
+                <span className="text-[11px] font-mono text-white/40 h-5 flex items-center">21:30</span>
+                <div className="w-2 h-2 rounded-full border border-white/30 bg-transparent my-2 shrink-0 relative z-10" />
+                <div className="flex-1 w-px bg-white/[0.06]" />
+              </div>
+              <div className="flex-1 ml-3 mb-6">
+                <div className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-4">
+                  <div className="flex items-start justify-between mb-1.5">
+                    <p className="text-white/70 font-semibold text-sm">Sakura Garden</p>
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400/80 ml-2 shrink-0">Pending</span>
+                  </div>
+                  <p className="text-white/30 text-xs mb-2">Japanese · Covent Garden</p>
+                  <div className="flex items-center gap-1.5 text-[11px] text-white/20">
+                    <span>4 guests</span><span>·</span><span>Ref #B7C1</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-[10px] font-bold tracking-[0.2em] text-white/15 uppercase mb-4 pl-14">Tomorrow · May 25</p>
+
+          <div className="opacity-40">
+            {/* Entry 3 */}
+            <div className="flex">
+              <div className="flex flex-col items-center w-14 shrink-0">
+                <span className="text-[11px] font-mono text-white/40 h-5 flex items-center">20:00</span>
+                <div className="w-2 h-2 rounded-full border border-white/20 bg-transparent my-2 shrink-0" />
+              </div>
+              <div className="flex-1 ml-3">
+                <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-4">
+                  <div className="flex items-start justify-between mb-1.5">
+                    <p className="text-white/50 font-semibold text-sm">La Maison</p>
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400/60 ml-2 shrink-0">Pending</span>
+                  </div>
+                  <p className="text-white/25 text-xs mb-2">French Bistro · Chelsea</p>
+                  <div className="flex items-center gap-1.5 text-[11px] text-white/15">
+                    <span>3 guests</span><span>·</span><span>Ref #D4E8</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

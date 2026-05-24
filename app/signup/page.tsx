@@ -13,6 +13,7 @@ interface FormValues {
   email: string;
   phone: string;
   password: string;
+  website?: string;
 }
 
 function Spinner() {
@@ -71,10 +72,10 @@ export default function SignUpPage() {
               <h1 style={{ fontFamily: "var(--font-serif)" }} className="text-[32px] font-semibold text-[#041635] leading-tight mb-2">
                 Create Account
               </h1>
-              <p className="text-[#44474e]">Join the Aegean heritage journey</p>
+              <p className="text-[#44474e]">Create your free account</p>
             </div>
 
-            <form onSubmit={handleSubmit((data) => mutate(data))} className="space-y-5" noValidate>
+            <form onSubmit={handleSubmit(({ website, ...data }) => { if (website) return; mutate(data); })} className="space-y-5" noValidate>
 
               {/* Full Name */}
               <div className="space-y-2">
@@ -85,7 +86,7 @@ export default function SignUpPage() {
                   id="name"
                   type="text"
                   autoComplete="name"
-                  placeholder="Alex Papadopoulos"
+                  placeholder="Alex Johnson"
                   className={`w-full h-14 px-4 bg-[#f5f3f6] border rounded-lg text-[#1b1b1e] placeholder:text-[#75777f] outline-none transition-colors text-base
                     ${errors.name ? "border-red-500 focus:border-red-500" : "border-[#c5c6cf] focus:border-[#9c440f]"}`}
                   {...register("name", { required: "Name is required" })}
@@ -157,10 +158,14 @@ export default function SignUpPage() {
                 <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{errorMessage}</p>
               )}
 
+              <div className="absolute -left-[9999px] top-0 h-0 overflow-hidden" aria-hidden="true">
+                <input type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+              </div>
+
               <button
                 type="submit"
                 disabled={isPending}
-                className="w-full h-16 bg-[#041635] text-white font-bold tracking-[0.1em] text-sm rounded-lg hover:bg-[#1b2b4b] transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
+                className="w-full h-16 bg-[#9c440f] text-white font-bold tracking-[0.1em] text-sm rounded-lg hover:bg-[#7a3000] transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
               >
                 {isPending ? <Spinner /> : "CREATE ACCOUNT"}
               </button>
@@ -177,14 +182,6 @@ export default function SignUpPage() {
           </div>
         </div>
 
-        {/* Footer links */}
-        <div className="mt-8 flex justify-center items-center gap-5 text-xs text-[#75777f]/60">
-          <span className="hover:text-[#9c440f] transition-colors cursor-pointer">Privacy Policy</span>
-          <span className="w-1 h-1 bg-[#c5c6cf] rounded-full" />
-          <span className="hover:text-[#9c440f] transition-colors cursor-pointer">Terms of Service</span>
-          <span className="w-1 h-1 bg-[#c5c6cf] rounded-full" />
-          <span className="hover:text-[#9c440f] transition-colors cursor-pointer">Contact Support</span>
-        </div>
       </section>
     </div>
   );

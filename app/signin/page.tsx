@@ -12,6 +12,7 @@ import { extractErrorMessage } from "@/lib/axios";
 interface FormValues {
   email: string;
   password: string;
+  website?: string;
 }
 
 function Spinner() {
@@ -96,10 +97,10 @@ export default function SignInPage() {
               <h1 style={{ fontFamily: "var(--font-serif)" }} className="text-[32px] font-semibold text-[#041635] leading-tight mb-2">
                 Welcome Back
               </h1>
-              <p className="text-[#44474e]">Sign in to your Aegean heritage journey</p>
+              <p className="text-[#44474e]">Sign in to your account</p>
             </div>
 
-            <form onSubmit={handleSubmit((data) => mutate(data))} className="space-y-6" noValidate>
+            <form onSubmit={handleSubmit(({ website, ...data }) => { if (website) return; mutate(data); })} className="space-y-6" noValidate>
 
               {/* Email */}
               <div className="space-y-2">
@@ -158,10 +159,14 @@ export default function SignInPage() {
                 <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{errorMessage}</p>
               )}
 
+              <div className="absolute -left-[9999px] top-0 h-0 overflow-hidden" aria-hidden="true">
+                <input type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+              </div>
+
               <button
                 type="submit"
                 disabled={isPending}
-                className="w-full h-16 bg-[#041635] text-white font-bold tracking-[0.1em] text-sm rounded-lg hover:bg-[#1b2b4b] transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full h-16 bg-[#9c440f] text-white font-bold tracking-[0.1em] text-sm rounded-lg hover:bg-[#7a3000] transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isPending ? <Spinner /> : "SIGN IN"}
               </button>
@@ -178,14 +183,6 @@ export default function SignInPage() {
           </div>
         </div>
 
-        {/* Footer links */}
-        <div className="mt-8 flex justify-center items-center gap-5 text-xs text-[#75777f]/60">
-          <span className="hover:text-[#9c440f] transition-colors cursor-pointer">Privacy Policy</span>
-          <span className="w-1 h-1 bg-[#c5c6cf] rounded-full" />
-          <span className="hover:text-[#9c440f] transition-colors cursor-pointer">Terms of Service</span>
-          <span className="w-1 h-1 bg-[#c5c6cf] rounded-full" />
-          <span className="hover:text-[#9c440f] transition-colors cursor-pointer">Contact Support</span>
-        </div>
       </section>
     </div>
   );
