@@ -7,6 +7,8 @@ import {
   ReorderVenuePhotosRequest,
   VenueRulesDto,
   UpdateVenueRulesRequest,
+  PricingItemDto,
+  UpdateVenuePricingRequest,
 } from "@/types";
 
 export async function getVenue(venueId: string): Promise<VenueDto> {
@@ -58,5 +60,13 @@ export async function updateVenueRules(
   data: UpdateVenueRulesRequest
 ): Promise<VenueRulesDto> {
   const res = await api.patch<VenueRulesDto>(`/venues/${venueId}/rules`, data);
+  return res.data;
+}
+
+export async function updateVenuePricing(
+  venueId: string,
+  data: UpdateVenuePricingRequest
+): Promise<PricingItemDto[]> {
+  const res = await api.put<PricingItemDto[]>(`/venues/${venueId}/pricing`, data);
   return res.data;
 }

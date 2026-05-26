@@ -16,6 +16,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [partySize, setPartySize] = useState(2);
+  const [pricingOpen, setPricingOpen] = useState(false);
 
   const { data: venue, isLoading } = useQuery({
     queryKey: ["customerVenue", id],
@@ -51,6 +52,17 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
 
   const firstPhoto = [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.photoUrl);
   const sortedPhotos = [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).filter((p) => p.photoUrl);
+
+  const pricingGroups = [...venue.pricingItems]
+    .sort((a, b) => a.displayOrder - b.displayOrder)
+    .reduce((map, item) => {
+      const key = item.category ?? "";
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(item);
+      return map;
+    }, new Map<string, typeof venue.pricingItems>());
+
+  const hasPricing = venue.pricingItems.length > 0;
 
   return (
     <>
@@ -107,6 +119,20 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
               <p className="mt-4 text-sm leading-relaxed" style={{ color: "#4b4f5a" }}>{venue.description}</p>
             )}
           </div>
+
+          {hasPricing && (
+            <button
+              type="button"
+              onClick={() => setPricingOpen(true)}
+              className="flex items-center gap-2 w-full px-4 py-3 rounded-xl border font-semibold text-sm transition-colors"
+              style={{ background: "#fff7f4", borderColor: "#9c440f", color: "#9c440f" }}
+            >
+              <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              Menu &amp; Pricing
+            </button>
+          )}
 
           <div>
             <h2 className="text-base font-semibold text-[#1B2B4B] mb-3">Select a date</h2>
@@ -396,6 +422,20 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                     </div>
                   </div>
 
+                  {hasPricing && (
+                    <button
+                      type="button"
+                      onClick={() => setPricingOpen(true)}
+                      className="w-full py-3.5 text-sm font-semibold rounded-lg border transition-colors flex items-center justify-center gap-2"
+                      style={{ background: "#fff7f4", borderColor: "#9c440f", color: "#9c440f", fontFamily: "var(--font-sans)" }}
+                    >
+                      <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                      Menu &amp; Pricing
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     onClick={handleCheckAvailability}
@@ -415,6 +455,74 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
           </div>
         </main>
       </div>
+
+      {/* ═══ PRICING MODAL ══════════════════════════════════════════════ */}
+      {pricingOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-end lg:items-center justify-center"
+          onClick={() => setPricingOpen(false)}
+        >
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/50" />
+
+          {/* Sheet */}
+          <div
+            className="relative w-full lg:max-w-lg max-h-[85vh] overflow-y-auto rounded-t-2xl lg:rounded-2xl shadow-2xl"
+            style={{ background: "#ffffff" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div
+              className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b"
+              style={{ background: "#ffffff", borderColor: "#e4e2dd" }}
+            >
+              <h2 className="text-base font-bold" style={{ color: "#041635", fontFamily: "var(--font-serif)" }}>
+                Menu &amp; Pricing
+              </h2>
+              <button
+                onClick={() => setPricingOpen(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100"
+                style={{ color: "#75777f" }}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="px-6 pb-8 pt-4 flex flex-col gap-6">
+              {Array.from(pricingGroups.entries()).map(([category, items]) => (
+                <div key={category || "__uncategorised__"}>
+                  {category && (
+                    <div className="flex items-center gap-3 mb-3">
+                      <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color: "#9c440f" }}>
+                        {category}
+                      </h3>
+                      <div className="flex-1 h-px" style={{ background: "#f0d4c8" }} />
+                    </div>
+                  )}
+                  <div className="flex flex-col divide-y" style={{ borderColor: "#f0eee9" }}>
+                    {items.map((item) => (
+                      <div key={item.id} className="flex items-start justify-between gap-4 py-3">
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-sm font-semibold" style={{ color: "#1b2b4b" }}>{item.title}</span>
+                          {item.subtitle && (
+                            <span className="text-xs" style={{ color: "#75777f" }}>{item.subtitle}</span>
+                          )}
+                        </div>
+                        <span className="text-sm font-bold shrink-0" style={{ color: "#9c440f" }}>
+                          €{item.price.toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
