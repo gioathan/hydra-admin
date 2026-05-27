@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getAvailability } from "@/lib/api/customerBookings";
 import { getCustomerVenue } from "@/lib/api/customerVenues";
-import { getVenueTypes } from "@/lib/api/venueTypes";
+import { getCustomerVenueTypes as getVenueTypes } from "@/lib/api/customerVenues";
 import { AvailabilitySlot } from "@/types";
 import { formatLocalTime, formatLocalDate } from "@/lib/utils";
 

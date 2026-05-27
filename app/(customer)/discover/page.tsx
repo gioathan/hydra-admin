@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCustomerVenues, getVenueLocations } from "@/lib/api/customerVenues";
-import { getVenueTypes } from "@/lib/api/venueTypes";
+import { getCustomerVenueTypes as getVenueTypes } from "@/lib/api/customerVenues";
 import { getPendingRatings } from "@/lib/api/ratingsApi";
 import { useCustomerAuthStore } from "@/store/customerAuthStore";
 import { getCustomer } from "@/lib/api/customersApi";

@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import api from "@/lib/customerAxios";
 import { CustomerDto, UpdateCustomerRequest } from "@/types";
 
 export async function getCustomer(id: string): Promise<CustomerDto> {

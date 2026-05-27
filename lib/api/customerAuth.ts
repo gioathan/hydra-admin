@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import api from "@/lib/customerAxios";
 import {
   LoginRequest,
   LoginResponse,
@@ -8,6 +8,7 @@ import {
   ResendVerificationRequest,
   ForgotPasswordRequest,
   ResetPasswordRequest,
+  GoogleLoginRequest,
 } from "@/types";
 
 export async function customerLogin(data: LoginRequest): Promise<LoginResponse> {
@@ -34,4 +35,9 @@ export async function forgotPassword(data: ForgotPasswordRequest): Promise<void>
 
 export async function resetPassword(data: ResetPasswordRequest): Promise<void> {
   await api.post("/auth/reset-password", data);
+}
+
+export async function googleLogin(data: GoogleLoginRequest): Promise<LoginResponse> {
+  const res = await api.post<LoginResponse>("/auth/google", data);
+  return res.data;
 }

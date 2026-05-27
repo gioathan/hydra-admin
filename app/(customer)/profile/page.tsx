@@ -240,7 +240,7 @@ export default function ProfilePage() {
               <div>
                 <h2 className="text-xs font-bold tracking-widest uppercase mb-5" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>Account</h2>
                 <div className="flex flex-col gap-3">
-                  <DesktopCard href="/profile/edit" title="Edit Profile" subtitle="Update your name, phone, and language preferences" iconType="edit" />
+                  <DesktopCard href="/profile/edit" title="Edit Profile" subtitle="Update your name and phone number" iconType="edit" />
                   <DesktopCard href="/profile/password" title="Change Password" subtitle="Keep your account secure with a strong password" iconType="lock" />
                 </div>
               </div>
@@ -272,7 +272,6 @@ export default function ProfilePage() {
                 <div className="flex flex-col gap-3">
                   <SummaryRow label="Email" value={customer?.email ?? "—"} />
                   <SummaryRow label="Phone" value={customer?.phone ?? "—"} />
-                  <SummaryRow label="Language" value={customer?.locale === "el" ? "Ελληνικά" : "English"} />
                 </div>
                 <div style={{ height: 1, background: "#e4e2dd" }} />
                 <button

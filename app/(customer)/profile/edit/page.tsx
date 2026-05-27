@@ -29,7 +29,7 @@ export default function EditProfilePage() {
     useForm<UpdateCustomerRequest>();
 
   useEffect(() => {
-    if (customer) reset({ name: customer.name, phone: customer.phone, locale: customer.locale });
+    if (customer) reset({ name: customer.name, phone: customer.phone });
   }, [customer, reset]);
 
   const { mutate, isPending } = useMutation({
@@ -37,7 +37,7 @@ export default function EditProfilePage() {
     onSuccess: (updated) => {
       queryClient.setQueryData(["customer", customerId], updated);
       showToast("Profile updated.", "success");
-      reset({ name: updated.name, phone: updated.phone, locale: updated.locale });
+      reset({ name: updated.name, phone: updated.phone });
     },
     onError: (err) => showToast(extractErrorMessage(err), "error"),
   });
@@ -88,17 +88,6 @@ export default function EditProfilePage() {
                     {...register("phone")}
                   />
 
-                  <div>
-                    <label className="block text-sm font-medium text-[#1B2B4B] mb-1.5">Language</label>
-                    <select
-                      {...register("locale")}
-                      className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B2B4B] bg-white"
-                    >
-                      <option value="en">English</option>
-                      <option value="el">Ελληνικά</option>
-                    </select>
-                  </div>
-
                   <Button type="submit" loading={isPending} disabled={!isDirty} className="mt-2">
                     Save Changes
                   </Button>
@@ -118,10 +107,6 @@ export default function EditProfilePage() {
                   <TipItem
                     title="Phone Number"
                     body="Venues may contact you on this number to confirm or discuss your reservation."
-                  />
-                  <TipItem
-                    title="Language"
-                    body="Sets the language for notifications and communications sent to you."
                   />
                 </div>
               </div>

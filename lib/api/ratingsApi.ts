@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import api from "@/lib/customerAxios";
 import { PendingRatingDto } from "@/types";
 
 export async function getPendingRatings(): Promise<PendingRatingDto[]> {

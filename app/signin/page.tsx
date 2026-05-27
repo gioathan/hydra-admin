@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
+import { GoogleLogin } from "@react-oauth/google";
 import { useCustomerAuthStore } from "@/store/customerAuthStore";
-import { customerLogin } from "@/lib/api/customerAuth";
+import { customerLogin, googleLogin } from "@/lib/api/customerAuth";
 import { extractErrorMessage } from "@/lib/axios";
 
 interface FormValues {
@@ -61,7 +62,21 @@ export default function SignInPage() {
     },
   });
 
-  const errorMessage = extraError ?? (error ? extractErrorMessage(error) : null);
+  const { mutate: mutateGoogle, isPending: isGooglePending, error: googleError } = useMutation({
+    mutationFn: googleLogin,
+    onSuccess: (data) => {
+      if (!data.customerId) {
+        setExtraError("This Google account is not linked to a customer account.");
+        return;
+      }
+      setExtraError(null);
+      setAuth(data.token, data.user, data.customerId);
+      router.replace("/discover");
+    },
+  });
+
+  const errorMessage = extraError ?? (error ? extractErrorMessage(error) : null) ?? (googleError ? extractErrorMessage(googleError) : null);
+  const anyPending = isPending || isGooglePending;
 
   return (
     <div className="min-h-screen bg-[#dbdad5] flex items-center justify-center relative overflow-hidden px-4 py-12">
@@ -100,7 +115,38 @@ export default function SignInPage() {
               <p className="text-[#44474e]">Sign in to your account</p>
             </div>
 
-            <form onSubmit={handleSubmit(({ website, ...data }) => { if (website) return; mutate(data); })} className="space-y-6" noValidate>
+            {/* Google sign-in button */}
+            <div className="flex justify-center mb-6">
+              {isGooglePending ? (
+                <div className="flex items-center gap-2 text-[#44474e] text-sm h-11">
+                  <Spinner />
+                  Signing in with Google…
+                </div>
+              ) : (
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    if (!credentialResponse.credential) return;
+                    setExtraError(null);
+                    mutateGoogle({ idToken: credentialResponse.credential });
+                  }}
+                  onError={() => setExtraError("Google sign-in failed. Please try again.")}
+                  text="continue_with"
+                  shape="rectangular"
+                  size="large"
+                  width={460}
+                  useOneTap={false}
+                />
+              )}
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex-1 h-px bg-[#c5c6cf]/40" />
+              <span className="text-xs text-[#75777f] uppercase tracking-widest">or</span>
+              <div className="flex-1 h-px bg-[#c5c6cf]/40" />
+            </div>
+
+            <form onSubmit={handleSubmit(({ website, ...data }) => { if (website) return; setExtraError(null); mutate(data); })} className="space-y-6" noValidate>
 
               {/* Email */}
               <div className="space-y-2">
@@ -156,7 +202,13 @@ export default function SignInPage() {
               </div>
 
               {errorMessage && (
-                <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{errorMessage}</p>
+                errorMessage.includes("Google Sign-In") ? (
+                  <p className="text-sm text-[#9c440f] bg-[#fff7f4] border border-[#9c440f]/20 px-3 py-2 rounded-lg">
+                    ↑ This account was registered with Google. Use the &ldquo;Continue with Google&rdquo; button above.
+                  </p>
+                ) : (
+                  <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{errorMessage}</p>
+                )
               )}
 
               <div className="absolute -left-[9999px] top-0 h-0 overflow-hidden" aria-hidden="true">
@@ -165,7 +217,7 @@ export default function SignInPage() {
 
               <button
                 type="submit"
-                disabled={isPending}
+                disabled={anyPending}
                 className="w-full h-16 bg-[#9c440f] text-white font-bold tracking-[0.1em] text-sm rounded-lg hover:bg-[#7a3000] transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isPending ? <Spinner /> : "SIGN IN"}

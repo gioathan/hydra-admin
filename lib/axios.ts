@@ -5,11 +5,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  // Prefer the token that matches the context of this request.
-  // Customer endpoints must not receive the admin token or the backend returns 403.
-  const customerToken = localStorage.getItem("customer_token");
-  const adminToken = localStorage.getItem("token");
-  const token = customerToken ?? adminToken;
+  const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -21,24 +17,12 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       const url = error.config?.url ?? "";
-      // Never redirect on auth endpoints themselves — the form shows the error.
       const isAuthEndpoint = url.includes("/auth/login") || url.includes("/auth/register");
       if (!isAuthEndpoint) {
-        const hadAdminToken = !!localStorage.getItem("token");
-        const hadCustomerToken = !!localStorage.getItem("customer_token");
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         localStorage.removeItem("venueId");
-        if (hadCustomerToken) {
-          localStorage.removeItem("customer_token");
-          localStorage.removeItem("customer_user");
-          localStorage.removeItem("customer_customerId");
-        }
-        if (hadAdminToken) {
-          window.location.href = "/admin/login";
-        } else if (hadCustomerToken) {
-          window.location.href = "/signin";
-        }
+        window.location.href = "/admin/login";
       }
     }
     return Promise.reject(error);

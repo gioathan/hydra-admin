@@ -4,7 +4,7 @@ import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getCustomerVenue } from "@/lib/api/customerVenues";
-import { getVenueTypes } from "@/lib/api/venueTypes";
+import { getCustomerVenueTypes as getVenueTypes } from "@/lib/api/customerVenues";
 import { PhotoSlider } from "@/components/customer/PhotoSlider";
 import { StarRating } from "@/components/customer/StarRating";
 import { CalendarPicker } from "@/components/customer/CalendarPicker";

@@ -4,9 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { register as registerApi } from "@/lib/api/customerAuth";
+import { GoogleLogin } from "@react-oauth/google";
+import { useCustomerAuthStore } from "@/store/customerAuthStore";
+import { register as registerApi, googleLogin } from "@/lib/api/customerAuth";
 import { extractErrorMessage } from "@/lib/axios";
 import { validatePassword } from "@/lib/utils";
+import { useState } from "react";
 
 interface FormValues {
   name: string;
@@ -27,7 +30,9 @@ function Spinner() {
 
 export default function SignUpPage() {
   const router = useRouter();
+  const { setAuth } = useCustomerAuthStore();
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
+  const [googleError, setGoogleError] = useState<string | null>(null);
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: registerApi,
@@ -37,7 +42,22 @@ export default function SignUpPage() {
     },
   });
 
+  const { mutate: mutateGoogle, isPending: isGooglePending } = useMutation({
+    mutationFn: googleLogin,
+    onSuccess: (data) => {
+      if (!data.customerId) {
+        setGoogleError("This Google account could not be linked to a customer account.");
+        return;
+      }
+      setGoogleError(null);
+      setAuth(data.token, data.user, data.customerId);
+      router.replace("/discover");
+    },
+    onError: (err) => setGoogleError(extractErrorMessage(err)),
+  });
+
   const errorMessage = error ? extractErrorMessage(error) : null;
+  const anyPending = isPending || isGooglePending;
 
   return (
     <div className="min-h-screen bg-[#dbdad5] flex items-center justify-center relative overflow-hidden px-4 py-12">
@@ -73,6 +93,41 @@ export default function SignUpPage() {
                 Create Account
               </h1>
               <p className="text-[#44474e]">Create your free account</p>
+            </div>
+
+            {/* Google sign-up button */}
+            <div className="flex justify-center mb-6">
+              {isGooglePending ? (
+                <div className="flex items-center gap-2 text-[#44474e] text-sm h-11">
+                  <Spinner />
+                  Signing up with Google…
+                </div>
+              ) : (
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    if (!credentialResponse.credential) return;
+                    setGoogleError(null);
+                    mutateGoogle({ idToken: credentialResponse.credential });
+                  }}
+                  onError={() => setGoogleError("Google sign-up failed. Please try again.")}
+                  text="signup_with"
+                  shape="rectangular"
+                  size="large"
+                  width={460}
+                  useOneTap={false}
+                />
+              )}
+            </div>
+
+            {googleError && (
+              <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg mb-4">{googleError}</p>
+            )}
+
+            {/* Divider */}
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex-1 h-px bg-[#c5c6cf]/40" />
+              <span className="text-xs text-[#75777f] uppercase tracking-widest">or</span>
+              <div className="flex-1 h-px bg-[#c5c6cf]/40" />
             </div>
 
             <form onSubmit={handleSubmit(({ website, ...data }) => { if (website) return; mutate(data); })} className="space-y-5" noValidate>
@@ -164,7 +219,7 @@ export default function SignUpPage() {
 
               <button
                 type="submit"
-                disabled={isPending}
+                disabled={anyPending}
                 className="w-full h-16 bg-[#9c440f] text-white font-bold tracking-[0.1em] text-sm rounded-lg hover:bg-[#7a3000] transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
               >
                 {isPending ? <Spinner /> : "CREATE ACCOUNT"}

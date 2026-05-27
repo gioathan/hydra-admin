@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
+import { GoogleLogin } from "@react-oauth/google";
 import { useAuthStore } from "@/store/authStore";
-import { login } from "@/lib/api/auth";
+import { login, googleLogin } from "@/lib/api/auth";
 import { extractErrorMessage } from "@/lib/axios";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -18,6 +19,7 @@ interface FormValues {
 export default function AdminLoginPage() {
   const router = useRouter();
   const { token, setAuth, hydrate } = useAuthStore();
+  const [googleError, setGoogleError] = useState<string | null>(null);
 
   useEffect(() => { hydrate(); }, [hydrate]);
   useEffect(() => { if (token) router.replace("/admin/dashboard"); }, [token, router]);
@@ -32,7 +34,18 @@ export default function AdminLoginPage() {
     },
   });
 
-  const errorMessage = error ? extractErrorMessage(error) : null;
+  const { mutate: mutateGoogle, isPending: isGooglePending } = useMutation({
+    mutationFn: googleLogin,
+    onSuccess: (data) => {
+      setGoogleError(null);
+      setAuth(data.token, data.user, data.venueId);
+      router.replace("/admin/dashboard");
+    },
+    onError: (err) => setGoogleError(extractErrorMessage(err)),
+  });
+
+  const errorMessage = googleError ?? (error ? extractErrorMessage(error) : null);
+  const anyPending = isPending || isGooglePending;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F8F5F0] p-4">
@@ -40,6 +53,40 @@ export default function AdminLoginPage() {
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-[#C4622D]">Hydra</h1>
           <p className="text-sm text-[#6B7280] mt-1">Admin Dashboard</p>
+        </div>
+
+        {/* Google sign-in */}
+        <div className="flex justify-center mb-6">
+          {isGooglePending ? (
+            <div className="flex items-center gap-2 text-[#6B7280] text-sm h-10">
+              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              Signing in with Google…
+            </div>
+          ) : (
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                if (!credentialResponse.credential) return;
+                setGoogleError(null);
+                mutateGoogle({ idToken: credentialResponse.credential });
+              }}
+              onError={() => setGoogleError("Google sign-in failed. Please try again.")}
+              text="continue_with"
+              shape="rectangular"
+              size="large"
+              width={368}
+              useOneTap={false}
+            />
+          )}
+        </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex-1 h-px bg-gray-200" />
+          <span className="text-xs text-[#6B7280] uppercase tracking-widest">or</span>
+          <div className="flex-1 h-px bg-gray-200" />
         </div>
 
         <form onSubmit={handleSubmit((data) => mutate(data))} className="flex flex-col gap-5" noValidate>
@@ -64,9 +111,15 @@ export default function AdminLoginPage() {
             {...register("password", { required: "Password is required" })}
           />
           {errorMessage && (
-            <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-md">{errorMessage}</p>
+            errorMessage.includes("Google Sign-In") ? (
+              <p className="text-sm text-[#C4622D] bg-orange-50 border border-[#C4622D]/20 px-3 py-2 rounded-md">
+                ↑ This account was registered with Google. Use the &ldquo;Continue with Google&rdquo; button above.
+              </p>
+            ) : (
+              <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-md">{errorMessage}</p>
+            )
           )}
-          <Button type="submit" loading={isPending} className="w-full mt-1">Sign in</Button>
+          <Button type="submit" loading={anyPending} className="w-full mt-1">Sign in</Button>
         </form>
       </div>
     </div>
