@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getCustomerVenue } from "@/lib/api/customerVenues";
@@ -182,14 +183,12 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
           {sortedPhotos.length === 0 ? (
             <div className="w-full h-full" style={{ background: "#1b2b4b" }} />
           ) : sortedPhotos.length === 1 ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={sortedPhotos[0].photoUrl!} alt={venue.name} className="w-full h-full object-cover object-center" />
+            <Image src={sortedPhotos[0].photoUrl!} alt={venue.name} fill className="object-cover object-center" sizes="100vw" priority />
           ) : (
             <div className="flex h-full gap-0.5">
               {/* Main photo */}
-              <div className="flex-[3] overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={sortedPhotos[0].photoUrl!} alt={venue.name} className="w-full h-full object-cover" />
+              <div className="relative flex-[3] overflow-hidden">
+                <Image src={sortedPhotos[0].photoUrl!} alt={venue.name} fill className="object-cover" sizes="60vw" priority />
               </div>
               {/* Side grid — up to 4 thumbnails */}
               <div
@@ -200,9 +199,8 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 }}
               >
                 {sortedPhotos.slice(1, 5).map((photo, i) => (
-                  <div key={i} className="overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={photo.photoUrl!} alt={venue.name} className="w-full h-full object-cover" />
+                  <div key={i} className="relative overflow-hidden">
+                    <Image src={photo.photoUrl!} alt={venue.name} fill className="object-cover" sizes="20vw" />
                   </div>
                 ))}
               </div>

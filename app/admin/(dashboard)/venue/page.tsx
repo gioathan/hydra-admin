@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useAuthStore } from "@/store/authStore";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -223,11 +224,12 @@ function PhotoCard({
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col shadow-sm">
       <div className="relative h-40 bg-[#1B2B4B] flex items-center justify-center">
         {photo.photoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={photo.photoUrl}
             alt="Venue photo"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            sizes="300px"
           />
         ) : (
           <span className="text-white/60 text-2xl font-bold">

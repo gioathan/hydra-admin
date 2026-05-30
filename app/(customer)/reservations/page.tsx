@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getMyBookings } from "@/lib/api/customerBookings";
 import { getCustomerVenues } from "@/lib/api/customerVenues";
@@ -37,13 +38,14 @@ function DesktopBookingCard({ booking, venue }: { booking: BookingDto; venue?: C
       style={{ background: "#ffffff", borderColor: "#c5c6cf" }}
     >
       {/* Photo */}
-      <div className="w-full md:w-56 h-48 md:h-auto overflow-hidden shrink-0" style={{ background: "#1b2b4b" }}>
+      <div className="relative w-full md:w-56 h-48 md:h-auto overflow-hidden shrink-0" style={{ background: "#1b2b4b" }}>
         {firstPhoto?.photoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={firstPhoto.photoUrl}
             alt={venue?.name ?? ""}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 224px"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">

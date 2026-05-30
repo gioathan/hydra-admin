@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useState } from "react";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getAvailability } from "@/lib/api/customerBookings";
@@ -154,11 +155,13 @@ export default function SlotsPage({ params }: { params: Promise<{ id: string }> 
         {/* Hero */}
         <section className="relative h-[480px] w-full overflow-hidden">
           {firstPhoto?.photoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={firstPhoto.photoUrl}
               alt={venue?.name ?? ""}
-              className="w-full h-full object-cover object-center"
+              fill
+              className="object-cover object-center"
+              sizes="100vw"
+              priority
             />
           ) : (
             <div className="w-full h-full" style={{ background: "#1b2b4b" }} />

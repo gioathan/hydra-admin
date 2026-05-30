@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { CustomerVenuePhotoDto } from "@/types";
 import { getInitial } from "@/lib/utils";
 
@@ -26,11 +27,13 @@ export function PhotoSlider({ photos, name, height = "h-64" }: PhotoSliderProps)
 
   return (
     <div className={`relative ${height} bg-[#1B2B4B] overflow-hidden`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={sorted[current].photoUrl!}
         alt={name}
-        className="w-full h-full object-cover"
+        fill
+        className="object-cover"
+        sizes="100vw"
+        priority={current === 0}
       />
 
       {sorted.length > 1 && (

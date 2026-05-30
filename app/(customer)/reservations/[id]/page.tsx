@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getBooking, cancelBooking } from "@/lib/api/customerBookings";
@@ -146,11 +147,13 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
         {/* Hero */}
         <section className="relative h-[480px] w-full overflow-hidden">
           {firstPhoto?.photoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={firstPhoto.photoUrl}
               alt={venue?.name ?? ""}
-              className="w-full h-full object-cover object-center"
+              fill
+              className="object-cover object-center"
+              sizes="100vw"
+              priority
             />
           ) : (
             <div className="w-full h-full" style={{ background: "#1b2b4b" }} />

@@ -1,6 +1,7 @@
 "use client";
 
 import { use } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -111,10 +112,9 @@ export default function SuccessPage({ params }: { params: Promise<{ id: string }
             style={{ background: "#ffffff", borderColor: "#c5c6cf" }}
           >
             {/* Photo */}
-            <div className="md:w-1/3 h-48 md:h-auto overflow-hidden" style={{ background: "#1b2b4b" }}>
+            <div className="relative md:w-1/3 h-48 md:h-auto overflow-hidden" style={{ background: "#1b2b4b" }}>
               {firstPhoto?.photoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={firstPhoto.photoUrl} alt={venue?.name ?? ""} className="w-full h-full object-cover" />
+                <Image src={firstPhoto.photoUrl} alt={venue?.name ?? ""} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <span className="text-4xl font-bold" style={{ color: "rgba(255,255,255,0.2)", fontFamily: "var(--font-serif)" }}>
