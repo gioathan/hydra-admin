@@ -3,7 +3,6 @@ import {
   VenueDto,
   UpdateVenueRequest,
   VenuePhotoDto,
-  AddVenuePhotoRequest,
   ReorderVenuePhotosRequest,
   VenueRulesDto,
   UpdateVenueRulesRequest,
@@ -26,9 +25,13 @@ export async function updateVenue(
 
 export async function addVenuePhoto(
   venueId: string,
-  data: AddVenuePhotoRequest
+  file: File,
+  displayOrder: number
 ): Promise<VenuePhotoDto> {
-  const res = await api.post<VenuePhotoDto>(`/venues/${venueId}/photos`, data);
+  const form = new FormData();
+  form.append("file", file);
+  form.append("displayOrder", String(displayOrder));
+  const res = await api.post<VenuePhotoDto>(`/venues/${venueId}/photos`, form);
   return res.data;
 }
 

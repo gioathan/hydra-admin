@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useAuthStore } from "@/store/authStore";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { VenuePhotoDto, UpdateVenueRequest, AddVenuePhotoRequest, VenueRulesDto } from "@/types";
+import { VenuePhotoDto, UpdateVenueRequest, VenueRulesDto } from "@/types";
 
 // ─── Venue Details Form ──────────────────────────────────────────
 
@@ -223,19 +223,13 @@ function PhotoCard({
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col shadow-sm">
       <div className="relative h-40 bg-[#1B2B4B] flex items-center justify-center">
-        {photo.photoUrl ? (
-          <Image
-            src={photo.photoUrl}
-            alt="Venue photo"
-            fill
-            className="object-cover"
-            sizes="300px"
-          />
-        ) : (
-          <span className="text-white/60 text-2xl font-bold">
-            {getInitials(venueName)}
-          </span>
-        )}
+        <Image
+          src={photo.url}
+          alt="Venue photo"
+          fill
+          className="object-cover"
+          sizes="300px"
+        />
         <span className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-0.5 rounded-full">
           #{photo.displayOrder}
         </span>
@@ -272,11 +266,12 @@ function PhotoCard({
   );
 }
 
-// ─── Photos Section ───────────────────────────────────────────────
+// ─── Photos Section ─────────────────────────────────────────────────
 
 function PhotosSection({ venueId }: { venueId: string }) {
   const { showToast } = useToast();
   const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: venue } = useQuery({
     queryKey: ["venue", venueId],
@@ -287,27 +282,24 @@ function PhotosSection({ venueId }: { venueId: string }) {
   const [localPhotos, setLocalPhotos] = useState<VenuePhotoDto[]>([]);
   const [orderChanged, setOrderChanged] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-
-  const {
-    register: registerPhoto,
-    handleSubmit: handlePhotoSubmit,
-    reset: resetPhoto,
-    formState: { errors: photoErrors },
-  } = useForm<AddVenuePhotoRequest>();
+  const [displayOrder, setDisplayOrder] = useState(1);
 
   useEffect(() => {
     if (venue) {
-      setLocalPhotos([...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder));
+      const sorted = [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder);
+      setLocalPhotos(sorted);
       setOrderChanged(false);
+      setDisplayOrder(sorted.length + 1);
     }
   }, [venue]);
 
   const addMutation = useMutation({
-    mutationFn: (data: AddVenuePhotoRequest) => addVenuePhoto(venueId, data),
+    mutationFn: ({ file, order }: { file: File; order: number }) =>
+      addVenuePhoto(venueId, file, order),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["venue", venueId] });
-      resetPhoto();
-      showToast("Photo added.", "success");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      showToast("Photo uploaded.", "success");
     },
     onError: (err) => showToast(extractErrorMessage(err), "error"),
   });
@@ -354,6 +346,12 @@ function PhotosSection({ venueId }: { venueId: string }) {
     setOrderChanged(true);
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    addMutation.mutate({ file, order: displayOrder });
+  };
+
   return (
     <div className="flex flex-col gap-6">
       {/* Photo grid */}
@@ -389,50 +387,45 @@ function PhotosSection({ venueId }: { venueId: string }) {
         </div>
       )}
 
-      {/* Add photo form */}
+      {/* Upload photo */}
       <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-sm font-semibold text-[#1B2B4B] mb-4">
-          Add Photo
-        </h3>
-        <form
-          onSubmit={handlePhotoSubmit((data) =>
-            addMutation.mutate({ ...data, displayOrder: Number(data.displayOrder) })
-          )}
-          className="flex flex-col sm:flex-row gap-3 max-w-lg"
-          noValidate
-        >
-          <div className="flex-1">
-            <Input
-              placeholder="Google Place ID"
-              error={photoErrors.googlePlaceId?.message}
-              {...registerPhoto("googlePlaceId", {
-                required: "Google Place ID is required",
-              })}
-            />
-          </div>
-          <div className="w-28">
-            <Input
+        <h3 className="text-sm font-semibold text-[#1B2B4B] mb-4">Add Photo</h3>
+        <div className="flex flex-col sm:flex-row gap-3 max-w-lg items-end">
+          <div className="w-28 shrink-0">
+            <label className="text-sm font-medium text-[#1B2B4B] block mb-1.5">
+              Display order
+            </label>
+            <input
               type="number"
-              placeholder="Order"
               min={1}
-              error={photoErrors.displayOrder?.message}
-              {...registerPhoto("displayOrder", {
-                required: "Required",
-                valueAsNumber: true,
-                min: { value: 1, message: "Min 1" },
-              })}
+              value={displayOrder}
+              onChange={(e) => setDisplayOrder(Number(e.target.value))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-[#1B2B4B] outline-none focus:border-[#1B2B4B] focus:ring-1 focus:ring-[#1B2B4B]"
             />
           </div>
-          <Button type="submit" loading={addMutation.isPending}>
-            Add
-          </Button>
-        </form>
+          <div className="flex-1">
+            <label className="text-sm font-medium text-[#1B2B4B] block mb-1.5">
+              Photo file
+            </label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              disabled={addMutation.isPending}
+              className="w-full text-sm text-[#1B2B4B] file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#1B2B4B] file:text-white hover:file:bg-[#2d4070] disabled:opacity-50 cursor-pointer"
+            />
+          </div>
+          {addMutation.isPending && (
+            <span className="text-sm text-[#6B7280] shrink-0">Uploading…</span>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
-// ─── Booking Rules Section ────────────────────────────────────────
+// ─── Booking Rules Section ────────────────────────────────────────────
 
 function VenueRulesForm({ venueId, defaultValues }: { venueId: string; defaultValues: VenueRulesDto }) {
   const { showToast } = useToast();
@@ -578,7 +571,7 @@ function VenueRulesSection({ venueId }: { venueId: string }) {
   return <VenueRulesForm venueId={venueId} defaultValues={rules} />;
 }
 
-// ─── Pricing Section ──────────────────────────────────────────────
+// ─── Pricing Section ────────────────────────────────────────────────
 
 interface PricingFormRow {
   category: string;
@@ -759,7 +752,7 @@ function PricingSection({ venueId }: { venueId: string }) {
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────
+// ─── Page ───────────────────────────────────────────────────────────────
 
 export default function VenuePage() {
   const { venueId } = useAuthStore();
