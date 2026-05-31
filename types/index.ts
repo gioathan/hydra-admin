@@ -17,9 +17,8 @@ export interface UserDto {
 
 export interface VenuePhotoDto {
   id: string;
-  googlePlaceId: string;
+  url: string;
   displayOrder: number;
-  photoUrl: string | null;
 }
 
 export interface PricingItemDto {
@@ -70,11 +69,6 @@ export interface UpdateVenueRequest {
   latitude?: number | null;
   longitude?: number | null;
   description?: string | null;
-}
-
-export interface AddVenuePhotoRequest {
-  googlePlaceId: string;
-  displayOrder: number;
 }
 
 export interface ReorderVenuePhotosRequest {
@@ -163,7 +157,7 @@ export interface CustomerPagedResult<T> {
 }
 
 export interface CustomerVenuePhotoDto {
-  photoUrl: string | null;
+  url: string;
   displayOrder: number;
 }
 
