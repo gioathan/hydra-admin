@@ -59,6 +59,7 @@ export interface VenueDto {
   googleMapsUrl: string | null;
   description: string | null;
   pricingItems: PricingItemDto[];
+  bookingsEnabled: boolean;
 }
 
 export interface UpdateVenueRequest {

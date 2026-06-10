@@ -14,6 +14,7 @@ import {
   getVenueRules,
   updateVenueRules,
   updateVenuePricing,
+  toggleVenueBookings,
 } from "@/lib/api/venues";
 import { getVenueTypes } from "@/lib/api/venueTypes";
 import axios from "axios";
@@ -545,14 +546,36 @@ function VenueRulesForm({ venueId, defaultValues }: { venueId: string; defaultVa
 }
 
 function VenueRulesSection({ venueId }: { venueId: string }) {
-  const { data: rules, isLoading, isError, error } = useQuery({
+  const { showToast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { data: venue, isLoading: venueLoading } = useQuery({
+    queryKey: ["venue", venueId],
+    queryFn: () => getVenue(venueId),
+    staleTime: 60_000,
+  });
+
+  const { data: rules, isLoading: rulesLoading, isError, error } = useQuery({
     queryKey: ["venueRules", venueId],
     queryFn: () => getVenueRules(venueId),
     staleTime: 60_000,
     retry: false,
+    enabled: !!venue?.bookingsEnabled,
   });
 
-  if (isLoading) {
+  const { mutate: toggle, isPending: toggling } = useMutation({
+    mutationFn: (enabled: boolean) => toggleVenueBookings(venueId, enabled),
+    onSuccess: (updated) => {
+      queryClient.setQueryData(["venue", venueId], updated);
+      showToast(
+        updated.bookingsEnabled ? "Bookings enabled." : "Bookings disabled.",
+        "success"
+      );
+    },
+    onError: (err) => showToast(extractErrorMessage(err), "error"),
+  });
+
+  if (venueLoading) {
     return (
       <div className="flex flex-col gap-4">
         {[...Array(4)].map((_, i) => (
@@ -562,20 +585,62 @@ function VenueRulesSection({ venueId }: { venueId: string }) {
     );
   }
 
-  if (isError) {
-    const is404 = axios.isAxiosError(error) && error.response?.status === 404;
-    return (
-      <p className="text-sm text-[#6B7280]">
-        {is404
-          ? "No rules record found for this venue. Ask your backend to seed default rules for this venue ID."
-          : extractErrorMessage(error)}
-      </p>
-    );
-  }
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Bookings toggle */}
+      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <div>
+          <p className="text-sm font-semibold text-[#1B2B4B]">Accept Bookings</p>
+          <p className="text-xs text-[#6B7280] mt-0.5">
+            When disabled, this venue is informational only — customers cannot book or rate it.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => toggle(!venue?.bookingsEnabled)}
+          disabled={toggling}
+          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none disabled:opacity-50 ${
+            venue?.bookingsEnabled ? "bg-[#1B2B4B]" : "bg-gray-300"
+          }`}
+          role="switch"
+          aria-checked={!!venue?.bookingsEnabled}
+        >
+          <span
+            className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${
+              venue?.bookingsEnabled ? "translate-x-5" : "translate-x-0"
+            }`}
+          />
+        </button>
+      </div>
 
-  if (!rules) return null;
+      {/* Rules form — only shown when bookings are enabled */}
+      {venue?.bookingsEnabled && (
+        <>
+          {rulesLoading ? (
+            <div className="flex flex-col gap-4">
+              {[...Array(4)].map((_, i) => (
+                <Skeleton key={i} className="h-10 w-full" />
+              ))}
+            </div>
+          ) : isError ? (
+            <p className="text-sm text-[#6B7280]">
+              {axios.isAxiosError(error) && error.response?.status === 404
+                ? "No rules record found for this venue. Ask your backend to seed default rules for this venue ID."
+                : extractErrorMessage(error)}
+            </p>
+          ) : rules ? (
+            <VenueRulesForm venueId={venueId} defaultValues={rules} />
+          ) : null}
+        </>
+      )}
 
-  return <VenueRulesForm venueId={venueId} defaultValues={rules} />;
+      {!venue?.bookingsEnabled && (
+        <p className="text-sm text-[#6B7280]">
+          Enable bookings above to configure booking rules and time slots.
+        </p>
+      )}
+    </div>
+  );
 }
 
 // ─── Pricing Section ──────────────────────────────────────────────

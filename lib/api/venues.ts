@@ -70,3 +70,11 @@ export async function updateVenuePricing(
   const res = await api.put<PricingItemDto[]>(`/venues/${venueId}/pricing`, data);
   return res.data;
 }
+
+export async function toggleVenueBookings(
+  venueId: string,
+  enabled: boolean
+): Promise<VenueDto> {
+  const res = await api.patch<VenueDto>(`/venues/${venueId}/bookings-enabled`, { enabled });
+  return res.data;
+}
