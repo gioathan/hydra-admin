@@ -8,6 +8,10 @@ import {
   UpdateVenueRulesRequest,
   PricingItemDto,
   UpdateVenuePricingRequest,
+  VenueEventDto,
+  CreateVenueEventRequest,
+  UpdateVenueEventRequest,
+  AddEventPhotoRequest,
 } from "@/types";
 
 export async function getVenue(venueId: string): Promise<VenueDto> {
@@ -80,4 +84,71 @@ export async function toggleVenueBookings(
 ): Promise<VenueDto> {
   const res = await api.patch<VenueDto>(`/venues/${venueId}/bookings-enabled`, { enabled });
   return res.data;
+}
+
+export async function toggleVenueEvents(
+  venueId: string,
+  enabled: boolean
+): Promise<VenueDto> {
+  const res = await api.patch<VenueDto>(`/venues/${venueId}/events-enabled`, { enabled });
+  return res.data;
+}
+
+export async function getVenueEvents(
+  venueId: string,
+  includePast = false
+): Promise<VenueEventDto[]> {
+  const res = await api.get<VenueEventDto[]>(`/venues/${venueId}/events`, {
+    params: { includePast },
+  });
+  return res.data;
+}
+
+export async function createVenueEvent(
+  venueId: string,
+  data: CreateVenueEventRequest
+): Promise<VenueEventDto> {
+  const res = await api.post<VenueEventDto>(`/venues/${venueId}/events`, data);
+  return res.data;
+}
+
+export async function updateVenueEvent(
+  venueId: string,
+  eventId: string,
+  data: UpdateVenueEventRequest
+): Promise<VenueEventDto> {
+  const res = await api.put<VenueEventDto>(`/venues/${venueId}/events/${eventId}`, data);
+  return res.data;
+}
+
+export async function deleteVenueEvent(
+  venueId: string,
+  eventId: string
+): Promise<void> {
+  await api.delete(`/venues/${venueId}/events/${eventId}`);
+}
+
+export async function closeVenueEvent(
+  venueId: string,
+  eventId: string
+): Promise<VenueEventDto> {
+  const res = await api.post<VenueEventDto>(`/venues/${venueId}/events/${eventId}/close`);
+  return res.data;
+}
+
+export async function addEventPhoto(
+  venueId: string,
+  eventId: string,
+  data: AddEventPhotoRequest
+): Promise<VenueEventDto> {
+  const res = await api.post<VenueEventDto>(`/venues/${venueId}/events/${eventId}/photos`, data);
+  return res.data;
+}
+
+export async function deleteEventPhoto(
+  venueId: string,
+  eventId: string,
+  photoId: string
+): Promise<void> {
+  await api.delete(`/venues/${venueId}/events/${eventId}/photos/${photoId}`);
 }
