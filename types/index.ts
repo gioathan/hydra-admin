@@ -62,6 +62,18 @@ export interface VenueDto {
   eventsEnabled: boolean;
 }
 
+export interface EventListItemDto {
+  id: string;
+  venueId: string;
+  venueName: string;
+  venueLocation: string | null;
+  title: string;
+  description: string | null;
+  startsAtUtc: string;
+  endsAtUtc: string | null;
+  mainPhotoUrl: string | null;
+}
+
 export interface VenueEventPhotoDto {
   id: string;
   url: string;
