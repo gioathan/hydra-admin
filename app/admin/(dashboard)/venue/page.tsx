@@ -15,6 +15,14 @@ import {
   updateVenueRules,
   updateVenuePricing,
   toggleVenueBookings,
+  toggleVenueEvents,
+  getVenueEvents,
+  createVenueEvent,
+  updateVenueEvent,
+  deleteVenueEvent,
+  closeVenueEvent,
+  addEventPhoto,
+  deleteEventPhoto,
 } from "@/lib/api/venues";
 import { getVenueTypes } from "@/lib/api/venueTypes";
 import axios from "axios";
@@ -24,7 +32,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { VenuePhotoDto, UpdateVenueRequest, VenueRulesDto } from "@/types";
+import { VenuePhotoDto, UpdateVenueRequest, VenueRulesDto, VenueEventDto, CreateVenueEventRequest, UpdateVenueEventRequest } from "@/types";
 
 // ─── Venue Details Form ──────────────────────────────────────────
 
@@ -817,7 +825,452 @@ function PricingSection({ venueId }: { venueId: string }) {
   );
 }
 
-// ─── Page ───────────────────────────────────────────────────────────────
+// ─── Events Section ───────────────────────────────────────────────
+
+type EventFormData = {
+  title: string;
+  startsAtDate: string;
+  startsAtTime: string;
+  endsAtDate: string;
+  endsAtTime: string;
+  description: string;
+  mainPhotoUrl: string;
+};
+
+function formatLocal(iso: string) {
+  const d = new Date(iso);
+  return d.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+}
+
+function EventForm({
+  defaultValues,
+  onSubmit,
+  isPending,
+  onCancel,
+}: {
+  defaultValues?: Partial<EventFormData>;
+  onSubmit: (data: EventFormData) => void;
+  isPending: boolean;
+  onCancel: () => void;
+}) {
+  const { register, handleSubmit, formState: { errors } } = useForm<EventFormData>({
+    defaultValues: defaultValues ?? {
+      title: "",
+      startsAtDate: "",
+      startsAtTime: "",
+      endsAtDate: "",
+      endsAtTime: "",
+      description: "",
+      mainPhotoUrl: "",
+    },
+  });
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Title *</label>
+          <Input
+            {...register("title", { required: true })}
+            placeholder="e.g. Live Jazz Night"
+            error={errors.title ? "Required" : undefined}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Start Date *</label>
+          <input
+            type="date"
+            {...register("startsAtDate", { required: true })}
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Start Time *</label>
+          <input
+            type="time"
+            {...register("startsAtTime", { required: true })}
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">End Date <span className="font-normal text-[#6B7280]">(optional)</span></label>
+          <input
+            type="date"
+            {...register("endsAtDate")}
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">End Time <span className="font-normal text-[#6B7280]">(optional)</span></label>
+          <input
+            type="time"
+            {...register("endsAtTime")}
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+          />
+        </div>
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Main Photo URL <span className="font-normal text-[#6B7280]">(optional)</span></label>
+          <Input
+            {...register("mainPhotoUrl")}
+            placeholder="https://..."
+          />
+        </div>
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Description <span className="font-normal text-[#6B7280]">(optional)</span></label>
+          <textarea
+            {...register("description")}
+            rows={3}
+            placeholder="What's happening at this event?"
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors resize-none"
+          />
+        </div>
+      </div>
+      <div className="flex justify-end gap-3">
+        <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
+        <Button type="submit" loading={isPending}>Save Event</Button>
+      </div>
+    </form>
+  );
+}
+
+function toIso(date: string, time: string) {
+  if (!date || !time) return null;
+  return new Date(`${date}T${time}:00`).toISOString();
+}
+
+function toDateInput(iso: string | null) {
+  if (!iso) return "";
+  return new Date(iso).toISOString().slice(0, 10);
+}
+
+function toTimeInput(iso: string | null) {
+  if (!iso) return "";
+  return new Date(iso).toISOString().slice(11, 16);
+}
+
+function EventCard({
+  event,
+  venueId,
+  onRefresh,
+}: {
+  event: VenueEventDto;
+  venueId: string;
+  onRefresh: () => void;
+}) {
+  const { showToast } = useToast();
+  const queryClient = useQueryClient();
+  const [editing, setEditing] = useState(false);
+  const [addingPhoto, setAddingPhoto] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState("");
+  const [photoOrder, setPhotoOrder] = useState(0);
+
+  const { mutate: close, isPending: closing } = useMutation({
+    mutationFn: () => closeVenueEvent(venueId, event.id),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["venueEvents", venueId] }); showToast("Event closed.", "success"); },
+    onError: (err) => showToast(extractErrorMessage(err), "error"),
+  });
+
+  const { mutate: del, isPending: deleting } = useMutation({
+    mutationFn: () => deleteVenueEvent(venueId, event.id),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["venueEvents", venueId] }); showToast("Event deleted.", "success"); },
+    onError: (err) => showToast(extractErrorMessage(err), "error"),
+  });
+
+  const { mutate: saveEdit, isPending: saving } = useMutation({
+    mutationFn: (data: UpdateVenueEventRequest) => updateVenueEvent(venueId, event.id, data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["venueEvents", venueId] }); setEditing(false); showToast("Event updated.", "success"); },
+    onError: (err) => showToast(extractErrorMessage(err), "error"),
+  });
+
+  const { mutate: addPhoto, isPending: addingPhotoMutating } = useMutation({
+    mutationFn: () => addEventPhoto(venueId, event.id, { url: photoUrl, displayOrder: photoOrder }),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["venueEvents", venueId] }); setAddingPhoto(false); setPhotoUrl(""); showToast("Photo added.", "success"); },
+    onError: (err) => showToast(extractErrorMessage(err), "error"),
+  });
+
+  const { mutate: delPhoto } = useMutation({
+    mutationFn: (photoId: string) => deleteEventPhoto(venueId, event.id, photoId),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["venueEvents", venueId] }); showToast("Photo removed.", "success"); },
+    onError: (err) => showToast(extractErrorMessage(err), "error"),
+  });
+
+  if (editing) {
+    return (
+      <div className="border border-[#1B2B4B]/20 rounded-xl p-5">
+        <p className="text-sm font-semibold text-[#1B2B4B] mb-4">Edit Event</p>
+        <EventForm
+          defaultValues={{
+            title: event.title,
+            startsAtDate: toDateInput(event.startsAtUtc),
+            startsAtTime: toTimeInput(event.startsAtUtc),
+            endsAtDate: toDateInput(event.endsAtUtc),
+            endsAtTime: toTimeInput(event.endsAtUtc),
+            description: event.description ?? "",
+            mainPhotoUrl: event.mainPhotoUrl ?? "",
+          }}
+          onSubmit={(fd) => saveEdit({
+            title: fd.title,
+            startsAtUtc: toIso(fd.startsAtDate, fd.startsAtTime)!,
+            description: fd.description || null,
+            endsAtUtc: toIso(fd.endsAtDate, fd.endsAtTime),
+            mainPhotoUrl: fd.mainPhotoUrl || null,
+          })}
+          isPending={saving}
+          onCancel={() => setEditing(false)}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className={`border rounded-xl p-4 ${event.isPast ? "border-gray-200 bg-gray-50 opacity-70" : "border-[#1B2B4B]/20 bg-white"}`}>
+      <div className="flex items-start gap-4">
+        {event.mainPhotoUrl && (
+          <img src={event.mainPhotoUrl} alt={event.title} className="w-16 h-16 rounded-lg object-cover shrink-0" />
+        )}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <p className="text-sm font-semibold text-[#1B2B4B]">{event.title}</p>
+            {event.isPast && (
+              <span className="text-[10px] font-bold uppercase tracking-wider bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">Past</span>
+            )}
+          </div>
+          <p className="text-xs text-[#6B7280] mt-0.5">
+            Starts: {formatLocal(event.startsAtUtc)}
+            {event.endsAtUtc && ` · Ends: ${formatLocal(event.endsAtUtc)}`}
+          </p>
+          {event.description && (
+            <p className="text-xs text-[#6B7280] mt-1 line-clamp-2">{event.description}</p>
+          )}
+          {event.additionalPhotos.length > 0 && (
+            <div className="flex gap-1.5 mt-2 flex-wrap">
+              {event.additionalPhotos.map((p) => (
+                <div key={p.id} className="relative group">
+                  <img src={p.url} alt="" className="w-10 h-10 rounded object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => delPhoto(p.id)}
+                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-[10px] items-center justify-center hidden group-hover:flex"
+                  >×</button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        {!event.isPast && (
+          <div className="flex flex-col gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => setEditing(true)}
+              className="text-xs font-semibold text-[#1B2B4B] hover:underline"
+            >Edit</button>
+            <button
+              type="button"
+              onClick={() => close()}
+              disabled={closing}
+              className="text-xs font-semibold text-orange-600 hover:underline disabled:opacity-50"
+            >Close</button>
+            <button
+              type="button"
+              onClick={() => del()}
+              disabled={deleting}
+              className="text-xs font-semibold text-red-500 hover:underline disabled:opacity-50"
+            >Delete</button>
+          </div>
+        )}
+        {event.isPast && (
+          <button
+            type="button"
+            onClick={() => del()}
+            disabled={deleting}
+            className="text-xs font-semibold text-red-400 hover:underline disabled:opacity-50 shrink-0"
+          >Delete</button>
+        )}
+      </div>
+      {!event.isPast && (
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          {addingPhoto ? (
+            <div className="flex gap-2 items-end flex-wrap">
+              <div className="flex-1 min-w-[200px]">
+                <label className="block text-xs text-[#6B7280] mb-1">Photo URL</label>
+                <input
+                  type="text"
+                  value={photoUrl}
+                  onChange={(e) => setPhotoUrl(e.target.value)}
+                  placeholder="https://..."
+                  className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-[#6B7280] mb-1">Order</label>
+                <input
+                  type="number"
+                  value={photoOrder}
+                  onChange={(e) => setPhotoOrder(Number(e.target.value))}
+                  className="w-16 px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+                />
+              </div>
+              <Button size="sm" onClick={() => addPhoto()} loading={addingPhotoMutating} disabled={!photoUrl}>Add</Button>
+              <Button size="sm" variant="outline" onClick={() => setAddingPhoto(false)}>Cancel</Button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setAddingPhoto(true)}
+              className="text-xs font-semibold text-[#C4622D] hover:text-[#9c440f] flex items-center gap-1"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Add extra photo
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function EventsSection({ venueId }: { venueId: string }) {
+  const { showToast } = useToast();
+  const queryClient = useQueryClient();
+  const [showPast, setShowPast] = useState(false);
+  const [creating, setCreating] = useState(false);
+
+  const { data: venue, isLoading: venueLoading } = useQuery({
+    queryKey: ["venue", venueId],
+    queryFn: () => getVenue(venueId),
+    staleTime: 60_000,
+  });
+
+  const { data: events, isLoading: eventsLoading } = useQuery({
+    queryKey: ["venueEvents", venueId, showPast],
+    queryFn: () => getVenueEvents(venueId, showPast),
+    staleTime: 30_000,
+    enabled: !!venue?.eventsEnabled,
+  });
+
+  const { mutate: toggleEvents, isPending: toggling } = useMutation({
+    mutationFn: (enabled: boolean) => toggleVenueEvents(venueId, enabled),
+    onSuccess: (updated) => {
+      queryClient.setQueryData(["venue", venueId], updated);
+      showToast(updated.eventsEnabled ? "Events enabled." : "Events disabled.", "success");
+    },
+    onError: (err) => showToast(extractErrorMessage(err), "error"),
+  });
+
+  const { mutate: createEvent, isPending: creatingMutating } = useMutation({
+    mutationFn: (data: CreateVenueEventRequest) => createVenueEvent(venueId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["venueEvents", venueId] });
+      setCreating(false);
+      showToast("Event created.", "success");
+    },
+    onError: (err) => showToast(extractErrorMessage(err), "error"),
+  });
+
+  if (venueLoading) {
+    return (
+      <div className="flex flex-col gap-4">
+        {[...Array(2)].map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Events toggle */}
+      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <div>
+          <p className="text-sm font-semibold text-[#1B2B4B]">Enable Events</p>
+          <p className="text-xs text-[#6B7280] mt-0.5">
+            Show events on your venue page so customers know what&apos;s happening.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => toggleEvents(!venue?.eventsEnabled)}
+          disabled={toggling}
+          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none disabled:opacity-50 ${
+            venue?.eventsEnabled ? "bg-[#1B2B4B]" : "bg-gray-300"
+          }`}
+          role="switch"
+          aria-checked={!!venue?.eventsEnabled}
+        >
+          <span
+            className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${
+              venue?.eventsEnabled ? "translate-x-5" : "translate-x-0"
+            }`}
+          />
+        </button>
+      </div>
+
+      {venue?.eventsEnabled && (
+        <>
+          {creating ? (
+            <div className="border border-[#1B2B4B]/20 rounded-xl p-5">
+              <p className="text-sm font-semibold text-[#1B2B4B] mb-4">New Event</p>
+              <EventForm
+                onSubmit={(fd) => createEvent({
+                  title: fd.title,
+                  startsAtUtc: toIso(fd.startsAtDate, fd.startsAtTime)!,
+                  description: fd.description || null,
+                  endsAtUtc: toIso(fd.endsAtDate, fd.endsAtTime),
+                  mainPhotoUrl: fd.mainPhotoUrl || null,
+                })}
+                isPending={creatingMutating}
+                onCancel={() => setCreating(false)}
+              />
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setCreating(true)}
+              className="flex items-center gap-2 text-sm font-semibold text-[#C4622D] hover:text-[#9c440f] transition-colors self-start"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Create New Event
+            </button>
+          )}
+
+          {eventsLoading ? (
+            <div className="flex flex-col gap-3">
+              {[...Array(2)].map((_, i) => <Skeleton key={i} className="h-24 w-full" />)}
+            </div>
+          ) : (
+            <>
+              {(events ?? []).length === 0 && (
+                <p className="text-sm text-[#6B7280]">No {showPast ? "" : "upcoming "}events yet.</p>
+              )}
+              <div className="flex flex-col gap-3">
+                {(events ?? []).map((ev) => (
+                  <EventCard key={ev.id} event={ev} venueId={venueId} onRefresh={() => queryClient.invalidateQueries({ queryKey: ["venueEvents", venueId] })} />
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPast((p) => !p)}
+                className="text-xs text-[#6B7280] hover:text-[#1B2B4B] underline self-start"
+              >
+                {showPast ? "Hide past events" : "Show past events"}
+              </button>
+            </>
+          )}
+        </>
+      )}
+
+      {!venue?.eventsEnabled && (
+        <p className="text-sm text-[#6B7280]">
+          Enable events above to start creating events for your venue.
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ─── Page ─────────────────────────────────────────────────────────
 
 export default function VenuePage() {
   const { venueId } = useAuthStore();
@@ -860,6 +1313,14 @@ export default function VenuePage() {
           Set the menu and pricing items displayed to customers on the venue page.
         </p>
         <PricingSection venueId={venueId} />
+      </section>
+
+      <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+        <h2 className="text-lg font-semibold text-[#1B2B4B] mb-2">Events</h2>
+        <p className="text-sm text-[#6B7280] mb-6">
+          Create and manage events at your venue. One active event per day is allowed.
+        </p>
+        <EventsSection venueId={venueId} />
       </section>
     </div>
   );
