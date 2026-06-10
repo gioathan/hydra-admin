@@ -1,5 +1,6 @@
 import api from "@/lib/axios";
 import {
+  PagedResult,
   VenueDto,
   UpdateVenueRequest,
   VenuePhotoDto,
@@ -9,6 +10,7 @@ import {
   PricingItemDto,
   UpdateVenuePricingRequest,
   VenueEventDto,
+  EventListItemDto,
   CreateVenueEventRequest,
   UpdateVenueEventRequest,
   AddEventPhotoRequest,
@@ -151,4 +153,20 @@ export async function deleteEventPhoto(
   photoId: string
 ): Promise<void> {
   await api.delete(`/venues/${venueId}/events/${eventId}/photos/${photoId}`);
+}
+
+export async function getUpcomingEvents(
+  page = 1,
+  pageSize = 15,
+  location?: string | null
+): Promise<PagedResult<EventListItemDto>> {
+  const params: Record<string, string | number> = { page, pageSize };
+  if (location) params.location = location;
+  const res = await api.get<PagedResult<EventListItemDto>>("/events", { params });
+  return res.data;
+}
+
+export async function getVenueLocations(): Promise<string[]> {
+  const res = await api.get<string[]>("/venues/locations");
+  return res.data;
 }

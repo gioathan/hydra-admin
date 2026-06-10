@@ -1,0 +1,198 @@
+"use client";
+
+import { useState } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { getUpcomingEvents, getVenueLocations } from "@/lib/api/venues";
+import { EventListItemDto } from "@/types";
+
+const PAGE_SIZE = 15;
+
+function formatEventDate(startsAtUtc: string, endsAtUtc: string | null): string {
+  const start = new Date(startsAtUtc);
+  const dateStr = start.toLocaleDateString(undefined, {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+  const startTime = start.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  if (!endsAtUtc) return `${dateStr} at ${startTime}`;
+  const end = new Date(endsAtUtc);
+  const endTime = end.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+  return `${dateStr} · ${startTime} – ${endTime}`;
+}
+
+function EventCard({ event }: { event: EventListItemDto }) {
+  const startDate = new Date(event.startsAtUtc);
+  const day = startDate.toLocaleDateString(undefined, { day: "numeric" });
+  const month = startDate.toLocaleDateString(undefined, { month: "short" }).toUpperCase();
+
+  return (
+    <div className="flex gap-4 bg-white rounded-xl border border-[#E8E4DE] shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+      {/* Photo / date */}
+      <div className="relative flex-shrink-0 w-32 sm:w-44 bg-[#1B2B4B]">
+        {event.mainPhotoUrl ? (
+          <img
+            src={event.mainPhotoUrl}
+            alt={event.title}
+            className="w-full h-full object-cover absolute inset-0"
+          />
+        ) : null}
+        {/* date badge */}
+        <div className="absolute top-3 left-3 bg-[#C4622D] rounded-lg px-2.5 py-1.5 flex flex-col items-center shadow-lg">
+          <span className="text-white font-serif text-xl leading-none">{day}</span>
+          <span className="text-white/85 text-[9px] font-bold tracking-widest mt-0.5">{month}</span>
+        </div>
+        {/* scrim + venue name */}
+        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/70 to-transparent" />
+        <p className="absolute bottom-2 left-3 right-3 text-white/90 text-[11px] font-semibold truncate drop-shadow">
+          {event.venueName}
+        </p>
+      </div>
+
+      {/* Body */}
+      <div className="flex-1 py-4 pr-4 flex flex-col gap-1.5 min-w-0">
+        <h3 className="font-serif text-[#1B2B4B] text-lg leading-snug line-clamp-2">
+          {event.title}
+        </h3>
+
+        <div className="flex items-center gap-1.5 text-[#C4622D] text-sm font-semibold">
+          <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {formatEventDate(event.startsAtUtc, event.endsAtUtc)}
+        </div>
+
+        {event.description && (
+          <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">
+            {event.description}
+          </p>
+        )}
+
+        <div className="flex items-center justify-between mt-auto pt-1">
+          {event.venueLocation && (
+            <span className="inline-flex items-center gap-1 text-xs text-gray-400 bg-gray-50 border border-gray-200 rounded-full px-2.5 py-0.5">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              {event.venueLocation}
+            </span>
+          )}
+          <Link
+            href={`/admin/venue`}
+            className="text-xs font-semibold text-[#1B2B4B] hover:text-[#C4622D] transition-colors ml-auto"
+          >
+            Manage venue →
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function EventsPage() {
+  const [location, setLocation] = useState<string>("");
+
+  const { data: locations = [] } = useQuery({
+    queryKey: ["venueLocations"],
+    queryFn: getVenueLocations,
+    staleTime: 10 * 60_000,
+  });
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ["upcomingEvents", location],
+    queryFn: ({ pageParam = 1 }) =>
+      getUpcomingEvents(pageParam as number, PAGE_SIZE, location || null),
+    initialPageParam: 1,
+    getNextPageParam: (last) => (last.hasNextPage ? last.pageNumber + 1 : undefined),
+  });
+
+  const events: EventListItemDto[] = data?.pages.flatMap((p) => p.items) ?? [];
+  const totalCount = data?.pages[0]?.totalCount ?? 0;
+
+  return (
+    <div className="p-6 lg:p-8 flex flex-col gap-6">
+      {/* Header */}
+      <div className="flex items-start justify-between flex-wrap gap-4">
+        <div>
+          <p className="text-xs font-bold tracking-widest text-[#C4622D] uppercase mb-1">
+            Overview
+          </p>
+          <h1 className="text-2xl font-bold text-[#1B2B4B]">Upcoming Events</h1>
+        </div>
+
+        {/* Location filter */}
+        {locations.length > 0 && (
+          <select
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="text-sm border border-[#E8E4DE] rounded-lg px-3 py-2 bg-white text-[#1B2B4B] focus:outline-none focus:ring-2 focus:ring-[#C4622D]/30"
+          >
+            <option value="">All locations</option>
+            {locations.map((loc) => (
+              <option key={loc} value={loc}>{loc}</option>
+            ))}
+          </select>
+        )}
+      </div>
+
+      {/* Count */}
+      {!isLoading && (
+        <p className="text-sm text-gray-400 -mt-2">
+          {totalCount} upcoming event{totalCount !== 1 ? "s" : ""}
+          {location ? ` in ${location}` : ""}
+        </p>
+      )}
+
+      {/* List */}
+      {isLoading ? (
+        <div className="flex flex-col gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-32 bg-white rounded-xl border border-[#E8E4DE] animate-pulse" />
+          ))}
+        </div>
+      ) : events.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
+          <div className="w-16 h-16 rounded-full bg-[#F5F0EB] flex items-center justify-center">
+            <svg className="w-7 h-7 text-[#C4622D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <p className="text-[#1B2B4B] font-semibold">No upcoming events</p>
+          <p className="text-sm text-gray-400">
+            {location
+              ? `No events scheduled in ${location}.`
+              : "No events scheduled across any venues yet."}
+          </p>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {events.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+
+          {hasNextPage && (
+            <button
+              onClick={() => fetchNextPage()}
+              disabled={isFetchingNextPage}
+              className="self-center mt-2 px-6 py-2 text-sm font-semibold text-[#1B2B4B] border border-[#E8E4DE] rounded-lg hover:bg-[#F5F0EB] transition-colors disabled:opacity-50"
+            >
+              {isFetchingNextPage ? "Loading…" : "Load more"}
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
