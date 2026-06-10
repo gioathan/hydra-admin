@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { getUpcomingEvents, getVenueLocations } from "@/lib/api/venues";
+import { Select } from "@/components/ui/Select";
 import { EventListItemDto } from "@/types";
 
 const PAGE_SIZE = 15;
@@ -134,16 +135,16 @@ export default function EventsPage() {
 
         {/* Location filter */}
         {locations.length > 0 && (
-          <select
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="text-sm border border-[#E8E4DE] rounded-lg px-3 py-2 bg-white text-[#1B2B4B] focus:outline-none focus:ring-2 focus:ring-[#C4622D]/30"
-          >
-            <option value="">All locations</option>
-            {locations.map((loc) => (
-              <option key={loc} value={loc}>{loc}</option>
-            ))}
-          </select>
+          <div className="w-48">
+            <Select
+              options={[
+                { value: "", label: "All locations" },
+                ...locations.map((loc) => ({ value: loc, label: loc })),
+              ]}
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+          </div>
         )}
       </div>
 
