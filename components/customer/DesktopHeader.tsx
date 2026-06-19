@@ -9,6 +9,7 @@ import { getInitial } from "@/lib/utils";
 
 const NAV_LINKS = [
   { href: "/discover", label: "Discover" },
+  { href: "/events", label: "Events" },
   { href: "/reservations", label: "Bookings" },
 ];
 
