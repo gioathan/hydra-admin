@@ -29,15 +29,20 @@ export async function updateVenue(
   return res.data;
 }
 
+export async function uploadFile(file: File): Promise<string> {
+  const form = new FormData();
+  form.append("file", file);
+  const res = await api.post<{ url: string }>("/upload", form);
+  return res.data.url;
+}
+
 export async function addVenuePhoto(
   venueId: string,
   file: File,
   displayOrder: number
 ): Promise<VenuePhotoDto> {
-  const form = new FormData();
-  form.append("file", file);
-  form.append("displayOrder", String(displayOrder));
-  const res = await api.post<VenuePhotoDto>(`/venues/${venueId}/photos`, form);
+  const url = await uploadFile(file);
+  const res = await api.post<VenuePhotoDto>(`/venues/${venueId}/photos`, { url, displayOrder });
   return res.data;
 }
 
