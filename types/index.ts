@@ -313,3 +313,31 @@ export interface VenueRulesDto {
 }
 
 export type UpdateVenueRulesRequest = VenueRulesDto;
+
+export interface RegisterVenueAdminRequest {
+  email: string;
+  name: string;
+  address: string;
+  capacity: number;
+  venueTypeId: string;
+  password?: string | null;
+  description?: string | null;
+}
+
+export interface VenueAdminCreatedResponse {
+  user: UserDto;
+  venue: VenueDto;
+  token: string;
+}
+
+export interface CreateVenueTypeRequest {
+  name: string;
+  description?: string | null;
+  displayOrder?: number;
+}
+
+export interface UpdateVenueTypeRequest {
+  name: string;
+  description?: string | null;
+  displayOrder: number;
+}
