@@ -18,10 +18,15 @@ interface FormValues {
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const { token, setAuth, hydrate } = useAuthStore();
+  const { token, setAuth, clearAuth, hydrate } = useAuthStore();
   const [googleError, setGoogleError] = useState<string | null>(null);
 
-  useEffect(() => { hydrate(); }, [hydrate]);
+  useEffect(() => {
+    // Re-hydrate from localStorage — if localStorage was cleared on logout,
+    // this wipes any stale in-memory token from the Zustand singleton.
+    clearAuth();
+    hydrate();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (token) router.replace("/admin/dashboard"); }, [token, router]);
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
