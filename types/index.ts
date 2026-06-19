@@ -17,7 +17,7 @@ export interface UserDto {
 
 export interface VenuePhotoDto {
   id: string;
-  url: string;
+  url: string | null;
   displayOrder: number;
 }
 

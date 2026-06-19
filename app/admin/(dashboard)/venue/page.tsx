@@ -23,6 +23,7 @@ import {
   closeVenueEvent,
   addEventPhoto,
   deleteEventPhoto,
+  uploadFile,
 } from "@/lib/api/venues";
 import { getVenueTypes } from "@/lib/api/venueTypes";
 import axios from "axios";
@@ -232,13 +233,15 @@ function PhotoCard({
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col shadow-sm">
       <div className="relative h-40 bg-[#1B2B4B] flex items-center justify-center">
-        <Image
-          src={photo.url}
-          alt="Venue photo"
-          fill
-          className="object-cover"
-          sizes="300px"
-        />
+        {photo.url && (
+          <Image
+            src={photo.url}
+            alt="Venue photo"
+            fill
+            className="object-cover"
+            sizes="300px"
+          />
+        )}
         <span className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-0.5 rounded-full">
           #{photo.displayOrder}
         </span>
@@ -853,7 +856,7 @@ function EventForm({
   isPending: boolean;
   onCancel: () => void;
 }) {
-  const { register, handleSubmit, formState: { errors } } = useForm<EventFormData>({
+  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<EventFormData>({
     defaultValues: defaultValues ?? {
       title: "",
       startsAtDate: "",
@@ -864,6 +867,9 @@ function EventForm({
       mainPhotoUrl: "",
     },
   });
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const { showToast } = useToast();
+  const mainPhotoUrl = watch("mainPhotoUrl");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -909,11 +915,44 @@ function EventForm({
           />
         </div>
         <div className="sm:col-span-2">
-          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Main Photo URL <span className="font-normal text-[#6B7280]">(optional)</span></label>
-          <Input
-            {...register("mainPhotoUrl")}
-            placeholder="https://..."
-          />
+          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Main Photo <span className="font-normal text-[#6B7280]">(optional)</span></label>
+          {mainPhotoUrl ? (
+            <div className="relative w-full h-40 rounded-lg overflow-hidden border border-gray-200">
+              <img src={mainPhotoUrl} alt="Event photo" className="w-full h-full object-cover" />
+              <button
+                type="button"
+                onClick={() => setValue("mainPhotoUrl", "")}
+                className="absolute top-2 right-2 bg-black/50 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-black/70"
+              >✕</button>
+            </div>
+          ) : (
+            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[#C4622D] hover:bg-orange-50 transition-colors">
+              <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span className="text-sm text-gray-500">{uploadingPhoto ? "Uploading…" : "Click to upload photo"}</span>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                disabled={uploadingPhoto}
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  setUploadingPhoto(true);
+                  try {
+                    const url = await uploadFile(file);
+                    setValue("mainPhotoUrl", url);
+                  } catch {
+                    showToast("Photo upload failed", "error");
+                  } finally {
+                    setUploadingPhoto(false);
+                  }
+                }}
+              />
+            </label>
+          )}
+          <input type="hidden" {...register("mainPhotoUrl")} />
         </div>
         <div className="sm:col-span-2">
           <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Description <span className="font-normal text-[#6B7280]">(optional)</span></label>
@@ -1046,7 +1085,7 @@ function EventCard({
             <div className="flex gap-1.5 mt-2 flex-wrap">
               {event.additionalPhotos.map((p) => (
                 <div key={p.id} className="relative group">
-                  <img src={p.url} alt="" className="w-10 h-10 rounded object-cover" />
+                  {p.url && <img src={p.url} alt="" className="w-10 h-10 rounded object-cover" />}
                   <button
                     type="button"
                     onClick={() => delPhoto(p.id)}
