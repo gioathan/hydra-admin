@@ -170,3 +170,8 @@ export async function getVenueLocations(): Promise<string[]> {
   const res = await api.get<string[]>("/venues/locations");
   return res.data;
 }
+
+export async function getVenues(params: { page?: number; pageSize?: number; search?: string }): Promise<PagedResult<VenueDto>> {
+  const res = await api.get<PagedResult<VenueDto>>("/venues", { params });
+  return res.data;
+}
