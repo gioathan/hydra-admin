@@ -27,14 +27,14 @@ export function CustomerDesktopHeader() {
   return (
     <nav
       className="hidden lg:flex sticky top-0 z-50 border-b"
-      style={{ background: "#fbf9f4", borderColor: "#c5c6cf" }}
+      style={{ background: "#FAF6EF", borderColor: "#E1D7C6" }}
     >
       <div className="max-w-[1440px] mx-auto w-full px-20 flex justify-between items-center h-20">
         <div className="flex items-center gap-12">
           <Link
             href="/discover"
             className="font-bold tracking-[0.2em]"
-            style={{ fontSize: 28, fontFamily: "var(--font-serif)", color: "#041635" }}
+            style={{ fontSize: 28, fontFamily: "var(--font-serif)", color: "#0C5F7D" }}
           >
             HYDRA
           </Link>
@@ -45,11 +45,11 @@ export function CustomerDesktopHeader() {
                 <Link
                   key={href}
                   href={href}
-                  className="text-sm font-semibold uppercase tracking-widest transition-colors hover:text-[#041635]"
+                  className="text-sm font-semibold uppercase tracking-widest transition-colors hover:text-[#0C5F7D]"
                   style={
                     active
-                      ? { color: "#9c440f", borderBottom: "2px solid #9c440f", paddingBottom: 2 }
-                      : { color: "#44474e" }
+                      ? { color: "#C25B3C", borderBottom: "2px solid #C25B3C", paddingBottom: 2 }
+                      : { color: "#566572" }
                   }
                 >
                   {label}
@@ -61,7 +61,7 @@ export function CustomerDesktopHeader() {
         <Link
           href="/profile"
           className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white transition-opacity hover:opacity-80"
-          style={{ background: "#9c440f", fontFamily: "var(--font-sans)" }}
+          style={{ background: "#C25B3C", fontFamily: "var(--font-sans)" }}
         >
           {getInitial(customer?.name ?? "")}
         </Link>

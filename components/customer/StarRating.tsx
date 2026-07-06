@@ -24,7 +24,7 @@ export function StarRating({ rating, count, size = "sm" }: StarRatingProps) {
           </svg>
         ))}
       </div>
-      <span className={`${textSize} text-[#44474e]`}>
+      <span className={`${textSize} text-[#566572]`}>
         {rating.toFixed(1)}{count !== undefined && ` (${count})`}
       </span>
     </div>

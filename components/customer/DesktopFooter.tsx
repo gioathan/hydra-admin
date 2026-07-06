@@ -13,17 +13,17 @@ export function CustomerDesktopFooter() {
   };
 
   return (
-    <footer className="hidden lg:block py-16" style={{ background: "#041635" }}>
+    <footer className="hidden lg:block py-16" style={{ background: "#0C5F7D" }}>
       <div className="max-w-[1440px] mx-auto px-20 grid grid-cols-3 gap-8">
         {/* Brand + tagline */}
         <div className="flex flex-col gap-6">
           <span
             className="font-bold tracking-[0.2em]"
-            style={{ fontSize: 28, fontFamily: "var(--font-serif)", color: "#fbf9f4" }}
+            style={{ fontSize: 28, fontFamily: "var(--font-serif)", color: "#FAF6EF" }}
           >
             HYDRA
           </span>
-          <p className="text-sm leading-relaxed max-w-xs" style={{ color: "#8393b8", fontFamily: "var(--font-sans)" }}>
+          <p className="text-sm leading-relaxed max-w-xs" style={{ color: "#7FA7B5", fontFamily: "var(--font-sans)" }}>
             Curating the finest Mediterranean experiences for the modern traveler. From secret coves to world-class dining.
           </p>
         </div>
@@ -32,7 +32,7 @@ export function CustomerDesktopFooter() {
         <div className="flex flex-col gap-6">
           <h4
             className="text-xs font-semibold uppercase tracking-widest"
-            style={{ color: "#c5c6cf", fontFamily: "var(--font-sans)" }}
+            style={{ color: "#E1D7C6", fontFamily: "var(--font-sans)" }}
           >
             Navigation
           </h4>
@@ -40,14 +40,14 @@ export function CustomerDesktopFooter() {
             <Link
               href="/privacy-policy"
               className="text-sm transition-colors hover:text-white"
-              style={{ color: "#c5c6cf", fontFamily: "var(--font-sans)" }}
+              style={{ color: "#E1D7C6", fontFamily: "var(--font-sans)" }}
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms-of-service"
               className="text-sm transition-colors hover:text-white"
-              style={{ color: "#c5c6cf", fontFamily: "var(--font-sans)" }}
+              style={{ color: "#E1D7C6", fontFamily: "var(--font-sans)" }}
             >
               Terms of Service
             </Link>
@@ -58,7 +58,7 @@ export function CustomerDesktopFooter() {
         <div className="flex flex-col gap-6">
           <h4
             className="text-xs font-semibold uppercase tracking-widest"
-            style={{ color: "#c5c6cf", fontFamily: "var(--font-sans)" }}
+            style={{ color: "#E1D7C6", fontFamily: "var(--font-sans)" }}
           >
             Connect
           </h4>
@@ -66,7 +66,7 @@ export function CustomerDesktopFooter() {
             <a
               href="mailto:test@email.com"
               className="transition-colors hover:text-white"
-              style={{ color: "#c5c6cf" }}
+              style={{ color: "#E1D7C6" }}
               aria-label="Email us"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -76,7 +76,7 @@ export function CustomerDesktopFooter() {
             <button
               onClick={handleShare}
               className="transition-colors hover:text-white"
-              style={{ color: "#c5c6cf" }}
+              style={{ color: "#E1D7C6" }}
               aria-label="Share this page"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -84,7 +84,7 @@ export function CustomerDesktopFooter() {
               </svg>
             </button>
           </div>
-          <p className="text-xs mt-8" style={{ color: "#8393b8", fontFamily: "var(--font-sans)" }}>
+          <p className="text-xs mt-8" style={{ color: "#7FA7B5", fontFamily: "var(--font-sans)" }}>
             © {new Date().getFullYear()} HYDRA Mediterranean. All rights reserved.
           </p>
         </div>

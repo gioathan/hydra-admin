@@ -79,27 +79,27 @@ export default function SignInPage() {
   const anyPending = isPending || isGooglePending;
 
   return (
-    <div className="min-h-screen bg-[#dbdad5] flex items-center justify-center relative overflow-hidden px-4 py-12">
+    <div className="min-h-screen bg-[#E7DFD0] flex items-center justify-center relative overflow-hidden px-4 py-12">
       {/* Atmospheric blobs */}
-      <div className="absolute top-[-8%] right-[-4%] w-80 h-80 rounded-full bg-[#9c440f]/20 blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[-8%] left-[-4%] w-80 h-80 rounded-full bg-[#1b2b4b]/20 blur-[100px] pointer-events-none" />
+      <div className="absolute top-[-8%] right-[-4%] w-80 h-80 rounded-full bg-[#C25B3C]/20 blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[-8%] left-[-4%] w-80 h-80 rounded-full bg-[#0C5F7D]/20 blur-[100px] pointer-events-none" />
 
       <section className="relative z-10 w-full max-w-[520px]">
 
         {/* Brand */}
         <div className="text-center mb-6">
-          <Link href="/" style={{ fontFamily: "var(--font-serif)" }} className="text-2xl font-bold tracking-[0.2em] text-[#041635] hover:text-[#1b2b4b] transition-colors">
+          <Link href="/" style={{ fontFamily: "var(--font-serif)" }} className="text-2xl font-bold tracking-[0.2em] text-[#0C5F7D] hover:text-[#0C5F7D] transition-colors">
             HYDRA
           </Link>
         </div>
 
         {/* Card */}
-        <div className="bg-white shadow-sm rounded-xl border border-[#c5c6cf]/30 overflow-hidden">
+        <div className="bg-white shadow-sm rounded-xl border border-[#E1D7C6]/30 overflow-hidden">
           <div className="p-10 md:p-12">
 
             {/* Icon */}
             <div className="flex justify-center mb-8">
-              <div className="w-16 h-16 rounded-full border border-[#c5c6cf] flex items-center justify-center text-[#041635]">
+              <div className="w-16 h-16 rounded-full border border-[#E1D7C6] flex items-center justify-center text-[#0C5F7D]">
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
                   <path d="M14 3v15L6 17V14L14 3z" fill="currentColor" opacity="0.9" />
                   <path d="M14 9v9l6-1.5V12L14 9z" fill="currentColor" opacity="0.45" />
@@ -109,16 +109,16 @@ export default function SignInPage() {
             </div>
 
             <div className="text-center mb-10">
-              <h1 style={{ fontFamily: "var(--font-serif)" }} className="text-[32px] font-semibold text-[#041635] leading-tight mb-2">
+              <h1 style={{ fontFamily: "var(--font-serif)" }} className="text-[32px] font-semibold text-[#0C5F7D] leading-tight mb-2">
                 Welcome Back
               </h1>
-              <p className="text-[#44474e]">Sign in to your account</p>
+              <p className="text-[#566572]">Sign in to your account</p>
             </div>
 
             {/* Google sign-in button */}
             <div className="flex justify-center mb-6">
               {isGooglePending ? (
-                <div className="flex items-center gap-2 text-[#44474e] text-sm h-11">
+                <div className="flex items-center gap-2 text-[#566572] text-sm h-11">
                   <Spinner />
                   Signing in with Google…
                 </div>
@@ -141,16 +141,16 @@ export default function SignInPage() {
 
             {/* Divider */}
             <div className="flex items-center gap-4 mb-6">
-              <div className="flex-1 h-px bg-[#c5c6cf]/40" />
-              <span className="text-xs text-[#75777f] uppercase tracking-widest">or</span>
-              <div className="flex-1 h-px bg-[#c5c6cf]/40" />
+              <div className="flex-1 h-px bg-[#E1D7C6]/40" />
+              <span className="text-xs text-[#8B95A0] uppercase tracking-widest">or</span>
+              <div className="flex-1 h-px bg-[#E1D7C6]/40" />
             </div>
 
             <form onSubmit={handleSubmit(({ website, ...data }) => { if (website) return; setExtraError(null); mutate(data); })} className="space-y-6" noValidate>
 
               {/* Email */}
               <div className="space-y-2">
-                <label htmlFor="email" className="block text-xs font-bold tracking-[0.12em] text-[#44474e] uppercase">
+                <label htmlFor="email" className="block text-xs font-bold tracking-[0.12em] text-[#566572] uppercase">
                   Email Address
                 </label>
                 <input
@@ -158,8 +158,8 @@ export default function SignInPage() {
                   type="email"
                   autoComplete="email"
                   placeholder="name@example.com"
-                  className={`w-full h-14 px-4 bg-[#f5f3f6] border rounded-lg text-[#1b1b1e] placeholder:text-[#75777f] outline-none transition-colors text-base
-                    ${errors.email ? "border-red-500 focus:border-red-500" : "border-[#c5c6cf] focus:border-[#9c440f]"}`}
+                  className={`w-full h-14 px-4 bg-[#F4EDE1] border rounded-lg text-[#22303A] placeholder:text-[#8B95A0] outline-none transition-colors text-base
+                    ${errors.email ? "border-red-500 focus:border-red-500" : "border-[#E1D7C6] focus:border-[#C25B3C]"}`}
                   {...register("email", {
                     required: "Email is required",
                     pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email" },
@@ -171,10 +171,10 @@ export default function SignInPage() {
               {/* Password */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <label htmlFor="password" className="block text-xs font-bold tracking-[0.12em] text-[#44474e] uppercase">
+                  <label htmlFor="password" className="block text-xs font-bold tracking-[0.12em] text-[#566572] uppercase">
                     Password
                   </label>
-                  <Link href="/forgot-password" className="text-xs text-[#9c440f] hover:underline">
+                  <Link href="/forgot-password" className="text-xs text-[#C25B3C] hover:underline">
                     Forgot?
                   </Link>
                 </div>
@@ -184,15 +184,15 @@ export default function SignInPage() {
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
                     placeholder="••••••••"
-                    className={`w-full h-14 px-4 pr-12 bg-[#f5f3f6] border rounded-lg text-[#1b1b1e] placeholder:text-[#75777f] outline-none transition-colors text-base
-                      ${errors.password ? "border-red-500 focus:border-red-500" : "border-[#c5c6cf] focus:border-[#9c440f]"}`}
+                    className={`w-full h-14 px-4 pr-12 bg-[#F4EDE1] border rounded-lg text-[#22303A] placeholder:text-[#8B95A0] outline-none transition-colors text-base
+                      ${errors.password ? "border-red-500 focus:border-red-500" : "border-[#E1D7C6] focus:border-[#C25B3C]"}`}
                     {...register("password", { required: "Password is required" })}
                   />
                   <button
                     type="button"
                     tabIndex={-1}
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#75777f] hover:text-[#041635] transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8B95A0] hover:text-[#0C5F7D] transition-colors"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff /> : <EyeOpen />}
@@ -203,7 +203,7 @@ export default function SignInPage() {
 
               {errorMessage && (
                 errorMessage.includes("Google Sign-In") ? (
-                  <p className="text-sm text-[#9c440f] bg-[#fff7f4] border border-[#9c440f]/20 px-3 py-2 rounded-lg">
+                  <p className="text-sm text-[#C25B3C] bg-[#FBF2EC] border border-[#C25B3C]/20 px-3 py-2 rounded-lg">
                     ↑ This account was registered with Google. Use the &ldquo;Continue with Google&rdquo; button above.
                   </p>
                 ) : (
@@ -218,16 +218,16 @@ export default function SignInPage() {
               <button
                 type="submit"
                 disabled={anyPending}
-                className="w-full h-16 bg-[#9c440f] text-white font-bold tracking-[0.1em] text-sm rounded-lg hover:bg-[#7a3000] transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full h-16 bg-[#C25B3C] text-white font-bold tracking-[0.1em] text-sm rounded-lg hover:bg-[#9E4527] transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isPending ? <Spinner /> : "SIGN IN"}
               </button>
             </form>
 
-            <div className="mt-10 pt-10 border-t border-[#c5c6cf]/30 text-center">
-              <p className="text-[#44474e]">
+            <div className="mt-10 pt-10 border-t border-[#E1D7C6]/30 text-center">
+              <p className="text-[#566572]">
                 New to HYDRA?{" "}
-                <Link href="/signup" className="text-[#9c440f] font-bold hover:underline ml-1">
+                <Link href="/signup" className="text-[#C25B3C] font-bold hover:underline ml-1">
                   Create an account
                 </Link>
               </p>

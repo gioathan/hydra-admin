@@ -52,7 +52,7 @@ export function useToast() {
 const typeStyles: Record<ToastType, string> = {
   success: "bg-green-600 text-white",
   error: "bg-red-600 text-white",
-  info: "bg-[#1B2B4B] text-white",
+  info: "bg-[#0C5F7D] text-white",
 };
 
 const typeIcons: Record<ToastType, string> = {

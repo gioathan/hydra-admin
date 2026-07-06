@@ -85,21 +85,21 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
         <div className="px-4 py-5 flex flex-col gap-6">
           <div>
             <div className="flex items-start justify-between gap-2 mb-1">
-              <h1 className="text-2xl font-bold text-[#1B2B4B]">{venue.name}</h1>
+              <h1 className="text-2xl font-bold text-[#0C5F7D]">{venue.name}</h1>
               {venueType && (
-                <span className="text-xs font-medium bg-[#1B2B4B]/10 text-[#1B2B4B] px-2.5 py-0.5 rounded-full flex-shrink-0 mt-1">
+                <span className="text-xs font-medium bg-[#0C5F7D]/10 text-[#0C5F7D] px-2.5 py-0.5 rounded-full flex-shrink-0 mt-1">
                   {venueType.name}
                 </span>
               )}
             </div>
-            <p className="text-sm text-[#75777f]">{venue.address}</p>
+            <p className="text-sm text-[#8B95A0]">{venue.address}</p>
             <div className="flex items-center gap-3 mt-2">
               {venue.averageRating != null && venue.ratingCount > 0 ? (
                 <StarRating rating={venue.averageRating} count={venue.ratingCount} size="md" />
               ) : (
-                <span className="text-sm" style={{ color: "#75777f" }}>No reviews yet</span>
+                <span className="text-sm" style={{ color: "#8B95A0" }}>No reviews yet</span>
               )}
-              <span className="text-sm text-[#75777f]">· Capacity {venue.capacity}</span>
+              <span className="text-sm text-[#8B95A0]">· Capacity {venue.capacity}</span>
             </div>
             {venue.googleMapsUrl && (
               <a
@@ -107,7 +107,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 mt-3 text-sm font-medium hover:underline"
-                style={{ color: "#9c440f" }}
+                style={{ color: "#C25B3C" }}
               >
                 <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -117,7 +117,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
               </a>
             )}
             {venue.description && (
-              <p className="mt-4 text-sm leading-relaxed" style={{ color: "#4b4f5a" }}>{venue.description}</p>
+              <p className="mt-4 text-sm leading-relaxed" style={{ color: "#566572" }}>{venue.description}</p>
             )}
           </div>
 
@@ -126,7 +126,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
               type="button"
               onClick={() => setPricingOpen(true)}
               className="flex items-center gap-2 w-full px-4 py-3 rounded-xl border font-semibold text-sm transition-colors"
-              style={{ background: "#fff7f4", borderColor: "#9c440f", color: "#9c440f" }}
+              style={{ background: "#FBF2EC", borderColor: "#C25B3C", color: "#C25B3C" }}
             >
               <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -136,31 +136,31 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
           )}
 
           <div>
-            <h2 className="text-base font-semibold text-[#1B2B4B] mb-3">Select a date</h2>
+            <h2 className="text-base font-semibold text-[#0C5F7D] mb-3">Select a date</h2>
             <CalendarPicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
           </div>
 
           <div>
-            <h2 className="text-base font-semibold text-[#1B2B4B] mb-3">Party size</h2>
+            <h2 className="text-base font-semibold text-[#0C5F7D] mb-3">Party size</h2>
             <div className="flex items-center gap-5">
               <button
                 type="button"
                 onClick={() => setPartySize((s) => Math.max(1, s - 1))}
-                className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-xl text-[#1B2B4B] hover:bg-gray-50 disabled:opacity-30"
+                className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-xl text-[#0C5F7D] hover:bg-gray-50 disabled:opacity-30"
                 disabled={partySize <= 1}
               >
                 −
               </button>
-              <span className="text-2xl font-bold text-[#1B2B4B] w-8 text-center">{partySize}</span>
+              <span className="text-2xl font-bold text-[#0C5F7D] w-8 text-center">{partySize}</span>
               <button
                 type="button"
                 onClick={() => setPartySize((s) => Math.min(venue.capacity, s + 1))}
-                className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-xl text-[#1B2B4B] hover:bg-gray-50 disabled:opacity-30"
+                className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-xl text-[#0C5F7D] hover:bg-gray-50 disabled:opacity-30"
                 disabled={partySize >= venue.capacity}
               >
                 +
               </button>
-              <span className="text-sm text-[#75777f]">max {venue.capacity}</span>
+              <span className="text-sm text-[#8B95A0]">max {venue.capacity}</span>
             </div>
           </div>
 
@@ -168,7 +168,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
             type="button"
             onClick={handleCheckAvailability}
             disabled={!selectedDate}
-            className="w-full bg-[#C4622D] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#b0561f] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full bg-[#C25B3C] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#9E4527] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {selectedDate ? "See Available Slots" : "Select a date first"}
           </button>
@@ -176,12 +176,12 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
       </div>
 
       {/* ═══ DESKTOP (hidden on mobile) ══════════════════════════════════ */}
-      <div className="hidden lg:flex flex-col" style={{ background: "#fbf9f4" }}>
+      <div className="hidden lg:flex flex-col" style={{ background: "#FAF6EF" }}>
 
         {/* Hero */}
         <section className="relative h-[480px] w-full overflow-hidden">
           {sortedPhotos.length === 0 ? (
-            <div className="w-full h-full" style={{ background: "#1b2b4b" }} />
+            <div className="w-full h-full" style={{ background: "#0C5F7D" }} />
           ) : sortedPhotos.length === 1 ? (
             <Image src={sortedPhotos[0].photoUrl!} alt={venue.name} fill className="object-cover object-center" sizes="100vw" priority />
           ) : (
@@ -208,7 +208,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
           )}
           <div
             className="absolute inset-0"
-            style={{ background: "linear-gradient(to top, rgba(4,22,53,0.7) 0%, transparent 55%)" }}
+            style={{ background: "linear-gradient(to top, rgba(12, 54, 72,0.7) 0%, transparent 55%)" }}
           />
           <div className="absolute bottom-0 left-0 w-full">
             <div className="max-w-[1440px] mx-auto px-20 pb-12">
@@ -227,7 +227,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 <div className="flex items-center gap-4 text-white">
                   {venue.averageRating != null && venue.ratingCount > 0 ? (
                     <div className="flex items-center gap-1.5">
-                      <span style={{ color: "#ffdbcc" }}>★</span>
+                      <span style={{ color: "#F6D9CD" }}>★</span>
                       <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-sans)" }}>
                         {venue.averageRating.toFixed(1)} ({venue.ratingCount.toLocaleString()} Reviews)
                       </span>
@@ -253,7 +253,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
               <button
                 onClick={() => router.back()}
                 className="flex items-center gap-2 text-sm font-semibold transition-colors hover:opacity-70"
-                style={{ color: "#041635", fontFamily: "var(--font-sans)" }}
+                style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -266,24 +266,24 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 {/* Address */}
                 <div
                   className="flex items-start gap-4 p-6 rounded-xl border"
-                  style={{ background: "#ffffff", borderColor: "#e4e2dd" }}
+                  style={{ background: "#ffffff", borderColor: "#E6DCCC" }}
                 >
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#f0eee9" }}>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" style={{ color: "#9c440f" }}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#F0E9DD" }}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" style={{ color: "#C25B3C" }}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>Address</p>
-                    <p className="text-sm font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>{venue.address}</p>
+                    <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Address</p>
+                    <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{venue.address}</p>
                     {venue.googleMapsUrl && (
                       <a
                         href={venue.googleMapsUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 mt-2 text-xs font-semibold hover:underline"
-                        style={{ color: "#9c440f", fontFamily: "var(--font-sans)" }}
+                        style={{ color: "#C25B3C", fontFamily: "var(--font-sans)" }}
                       >
                         Open in Maps →
                       </a>
@@ -294,35 +294,35 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 {/* Capacity */}
                 <div
                   className="flex items-start gap-4 p-6 rounded-xl border"
-                  style={{ background: "#ffffff", borderColor: "#e4e2dd" }}
+                  style={{ background: "#ffffff", borderColor: "#E6DCCC" }}
                 >
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#f0eee9" }}>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" style={{ color: "#9c440f" }}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#F0E9DD" }}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" style={{ color: "#C25B3C" }}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>Capacity</p>
-                    <p className="text-sm font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>Up to {venue.capacity} guests</p>
+                    <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Capacity</p>
+                    <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>Up to {venue.capacity} guests</p>
                   </div>
                 </div>
 
                 {/* Rating */}
                 <div
                   className="flex items-start gap-4 p-6 rounded-xl border"
-                  style={{ background: "#ffffff", borderColor: "#e4e2dd" }}
+                  style={{ background: "#ffffff", borderColor: "#E6DCCC" }}
                 >
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#f0eee9" }}>
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: "#9c440f" }}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#F0E9DD" }}>
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: "#C25B3C" }}>
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>Rating</p>
+                    <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Rating</p>
                     {venue.averageRating != null && venue.ratingCount > 0 ? (
                       <StarRating rating={venue.averageRating} count={venue.ratingCount} size="md" />
                     ) : (
-                      <p className="text-sm font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>No reviews yet</p>
+                      <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>No reviews yet</p>
                     )}
                   </div>
                 </div>
@@ -331,16 +331,16 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 {venueType && (
                   <div
                     className="flex items-start gap-4 p-6 rounded-xl border"
-                    style={{ background: "#ffffff", borderColor: "#e4e2dd" }}
+                    style={{ background: "#ffffff", borderColor: "#E6DCCC" }}
                   >
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#f0eee9" }}>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" style={{ color: "#9c440f" }}>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#F0E9DD" }}>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" style={{ color: "#C25B3C" }}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                       </svg>
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>Venue Type</p>
-                      <p className="text-sm font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>{venueType.name}</p>
+                      <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Venue Type</p>
+                      <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{venueType.name}</p>
                     </div>
                   </div>
                 )}
@@ -349,16 +349,16 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 {venue.location && (
                   <div
                     className="flex items-start gap-4 p-6 rounded-xl border"
-                    style={{ background: "#ffffff", borderColor: "#e4e2dd" }}
+                    style={{ background: "#ffffff", borderColor: "#E6DCCC" }}
                   >
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#f0eee9" }}>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" style={{ color: "#9c440f" }}>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#F0E9DD" }}>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" style={{ color: "#C25B3C" }}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>Location</p>
-                      <p className="text-sm font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>{venue.location}</p>
+                      <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Location</p>
+                      <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{venue.location}</p>
                     </div>
                   </div>
                 )}
@@ -367,8 +367,8 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
               {/* Description */}
               {venue.description && (
                 <div>
-                  <h2 className="text-lg font-semibold mb-3" style={{ color: "#041635", fontFamily: "var(--font-serif)" }}>About</h2>
-                  <p className="text-sm leading-relaxed" style={{ color: "#4b4f5a", fontFamily: "var(--font-sans)" }}>{venue.description}</p>
+                  <h2 className="text-lg font-semibold mb-3" style={{ color: "#0C5F7D", fontFamily: "var(--font-serif)" }}>About</h2>
+                  <p className="text-sm leading-relaxed" style={{ color: "#566572", fontFamily: "var(--font-sans)" }}>{venue.description}</p>
                 </div>
               )}
             </div>
@@ -377,43 +377,43 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
             <div className="col-span-4">
               <div
                 className="sticky top-32 p-10 rounded-xl border shadow-lg"
-                style={{ background: "#f5f3ee", borderColor: "#c5c6cf" }}
+                style={{ background: "#F4EDE1", borderColor: "#E1D7C6" }}
               >
                 <h3
                   className="text-2xl font-semibold mb-6 pb-4 border-b"
-                  style={{ fontFamily: "var(--font-serif)", color: "#041635", borderColor: "#c5c6cf" }}
+                  style={{ fontFamily: "var(--font-serif)", color: "#0C5F7D", borderColor: "#E1D7C6" }}
                 >
                   Make a Reservation
                 </h3>
 
                 <div className="flex flex-col gap-6">
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>Select a Date</p>
+                    <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Select a Date</p>
                     <CalendarPicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
                   </div>
 
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>Party Size</p>
-                    <div className="flex items-center justify-between p-4 rounded-xl border bg-white" style={{ borderColor: "#e4e2dd" }}>
+                    <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Party Size</p>
+                    <div className="flex items-center justify-between p-4 rounded-xl border bg-white" style={{ borderColor: "#E6DCCC" }}>
                       <button
                         type="button"
                         onClick={() => setPartySize((s) => Math.max(1, s - 1))}
                         disabled={partySize <= 1}
                         className="w-10 h-10 rounded-full border flex items-center justify-center text-xl font-light transition hover:bg-gray-50 disabled:opacity-30"
-                        style={{ borderColor: "#c5c6cf", color: "#041635" }}
+                        style={{ borderColor: "#E1D7C6", color: "#0C5F7D" }}
                       >
                         −
                       </button>
                       <div className="text-center">
-                        <span className="text-3xl font-bold" style={{ color: "#041635", fontFamily: "var(--font-serif)" }}>{partySize}</span>
-                        <p className="text-xs mt-0.5" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>max {venue.capacity}</p>
+                        <span className="text-3xl font-bold" style={{ color: "#0C5F7D", fontFamily: "var(--font-serif)" }}>{partySize}</span>
+                        <p className="text-xs mt-0.5" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>max {venue.capacity}</p>
                       </div>
                       <button
                         type="button"
                         onClick={() => setPartySize((s) => Math.min(venue.capacity, s + 1))}
                         disabled={partySize >= venue.capacity}
                         className="w-10 h-10 rounded-full border flex items-center justify-center text-xl font-light transition hover:bg-gray-50 disabled:opacity-30"
-                        style={{ borderColor: "#c5c6cf", color: "#041635" }}
+                        style={{ borderColor: "#E1D7C6", color: "#0C5F7D" }}
                       >
                         +
                       </button>
@@ -425,7 +425,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                       type="button"
                       onClick={() => setPricingOpen(true)}
                       className="w-full py-3.5 text-sm font-semibold rounded-lg border transition-colors flex items-center justify-center gap-2"
-                      style={{ background: "#fff7f4", borderColor: "#9c440f", color: "#9c440f", fontFamily: "var(--font-sans)" }}
+                      style={{ background: "#FBF2EC", borderColor: "#C25B3C", color: "#C25B3C", fontFamily: "var(--font-sans)" }}
                     >
                       <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -439,7 +439,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                     onClick={handleCheckAvailability}
                     disabled={!selectedDate}
                     className="w-full py-5 text-white text-sm font-bold uppercase tracking-wider rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-40 disabled:cursor-not-allowed disabled:translate-y-0 flex items-center justify-center gap-3 shadow-xl"
-                    style={{ background: "#041635", fontFamily: "var(--font-sans)" }}
+                    style={{ background: "#0C5F7D", fontFamily: "var(--font-sans)" }}
                   >
                     {selectedDate ? "See Available Slots" : "Select a Date First"}
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -472,15 +472,15 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
             {/* Header */}
             <div
               className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b"
-              style={{ background: "#ffffff", borderColor: "#e4e2dd" }}
+              style={{ background: "#ffffff", borderColor: "#E6DCCC" }}
             >
-              <h2 className="text-base font-bold" style={{ color: "#041635", fontFamily: "var(--font-serif)" }}>
+              <h2 className="text-base font-bold" style={{ color: "#0C5F7D", fontFamily: "var(--font-serif)" }}>
                 Menu &amp; Pricing
               </h2>
               <button
                 onClick={() => setPricingOpen(false)}
                 className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100"
-                style={{ color: "#75777f" }}
+                style={{ color: "#8B95A0" }}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -494,22 +494,22 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 <div key={category || "__uncategorised__"}>
                   {category && (
                     <div className="flex items-center gap-3 mb-3">
-                      <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color: "#9c440f" }}>
+                      <h3 className="text-xs font-bold uppercase tracking-widest" style={{ color: "#C25B3C" }}>
                         {category}
                       </h3>
-                      <div className="flex-1 h-px" style={{ background: "#f0d4c8" }} />
+                      <div className="flex-1 h-px" style={{ background: "#EAD3C6" }} />
                     </div>
                   )}
-                  <div className="flex flex-col divide-y" style={{ borderColor: "#f0eee9" }}>
+                  <div className="flex flex-col divide-y" style={{ borderColor: "#F0E9DD" }}>
                     {items.map((item) => (
                       <div key={item.id} className="flex items-start justify-between gap-4 py-3">
                         <div className="flex flex-col gap-0.5">
-                          <span className="text-sm font-semibold" style={{ color: "#1b2b4b" }}>{item.title}</span>
+                          <span className="text-sm font-semibold" style={{ color: "#0C5F7D" }}>{item.title}</span>
                           {item.subtitle && (
-                            <span className="text-xs" style={{ color: "#75777f" }}>{item.subtitle}</span>
+                            <span className="text-xs" style={{ color: "#8B95A0" }}>{item.subtitle}</span>
                           )}
                         </div>
-                        <span className="text-sm font-bold shrink-0" style={{ color: "#9c440f" }}>
+                        <span className="text-sm font-bold shrink-0" style={{ color: "#C25B3C" }}>
                           €{item.price.toFixed(2)}
                         </span>
                       </div>

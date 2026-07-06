@@ -67,17 +67,17 @@ export function CalendarPicker({ selectedDate, onDateChange, minDate }: Calendar
           type="button"
           onClick={prevMonth}
           disabled={!canGoPrev}
-          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed text-[#1B2B4B] font-bold"
+          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed text-[#0C5F7D] font-bold"
         >
           ‹
         </button>
-        <span className="text-sm font-semibold text-[#1B2B4B]">
+        <span className="text-sm font-semibold text-[#0C5F7D]">
           {MONTHS[viewMonth]} {viewYear}
         </span>
         <button
           type="button"
           onClick={nextMonth}
-          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-[#1B2B4B] font-bold"
+          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-[#0C5F7D] font-bold"
         >
           ›
         </button>
@@ -86,7 +86,7 @@ export function CalendarPicker({ selectedDate, onDateChange, minDate }: Calendar
       {/* Day labels */}
       <div className="grid grid-cols-7 mb-1">
         {DAYS.map((d) => (
-          <div key={d} className="text-center text-xs text-[#75777f] font-medium py-1">{d}</div>
+          <div key={d} className="text-center text-xs text-[#8B95A0] font-medium py-1">{d}</div>
         ))}
       </div>
 
@@ -115,9 +115,9 @@ export function CalendarPicker({ selectedDate, onDateChange, minDate }: Calendar
               onClick={() => onDateChange(new Date(viewYear, viewMonth, day))}
               className={`w-full aspect-square flex items-center justify-center rounded-full text-sm transition-colors
                 ${isPast ? "text-gray-300 cursor-not-allowed" : ""}
-                ${isSelected ? "bg-[#1B2B4B] text-white font-semibold" : ""}
-                ${!isSelected && !isPast ? "hover:bg-gray-100 text-[#1B2B4B]" : ""}
-                ${isToday && !isSelected ? "font-bold text-[#C4622D]" : ""}
+                ${isSelected ? "bg-[#0C5F7D] text-white font-semibold" : ""}
+                ${!isSelected && !isPast ? "hover:bg-gray-100 text-[#0C5F7D]" : ""}
+                ${isToday && !isSelected ? "font-bold text-[#C25B3C]" : ""}
               `}
             >
               {day}

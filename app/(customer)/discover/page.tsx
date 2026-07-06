@@ -28,38 +28,38 @@ function LocationPickerModal({
   return (
     <div
       className="lg:hidden fixed inset-0 z-50 flex flex-col items-center justify-center px-6"
-      style={{ background: "rgba(4,22,53,0.85)", backdropFilter: "blur(6px)" }}
+      style={{ background: "rgba(12, 54, 72,0.85)", backdropFilter: "blur(6px)" }}
     >
       <div
         className="w-full max-w-sm rounded-3xl px-6 py-8 flex flex-col items-center gap-6"
-        style={{ background: "#fbf8fc" }}
+        style={{ background: "#FAF6EF" }}
       >
         <span
           className="text-[22px] font-bold tracking-[8px]"
-          style={{ fontFamily: "var(--font-serif)", color: "#041635" }}
+          style={{ fontFamily: "var(--font-serif)", color: "#0C5F7D" }}
         >
           HYDRA
         </span>
         <div className="text-center">
-          <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: "#9c440f", fontFamily: "var(--font-sans)" }}>
+          <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: "#C25B3C", fontFamily: "var(--font-sans)" }}>
             Welcome
           </p>
-          <h2 className="text-2xl" style={{ fontFamily: "var(--font-serif)", color: "#041635", fontWeight: 700 }}>
+          <h2 className="text-2xl" style={{ fontFamily: "var(--font-serif)", color: "#0C5F7D", fontWeight: 700 }}>
             Where are you visiting?
           </h2>
-          <p className="text-sm mt-1" style={{ color: "#44474e" }}>Choose a location to discover venues</p>
+          <p className="text-sm mt-1" style={{ color: "#566572" }}>Choose a location to discover venues</p>
         </div>
         <div className="w-full flex flex-col gap-3">
           {loading
             ? [...Array(2)].map((_, i) => (
-                <div key={i} className="h-14 rounded-2xl animate-pulse" style={{ background: "#e9e7eb" }} />
+                <div key={i} className="h-14 rounded-2xl animate-pulse" style={{ background: "#ECE3D4" }} />
               ))
             : locations.map((loc) => (
                 <button
                   key={loc}
                   onClick={() => onSelect(loc)}
                   className="w-full flex items-center justify-between px-5 h-14 rounded-2xl font-semibold text-base transition-all active:scale-[0.98]"
-                  style={{ background: "#041635", color: "#ffffff", fontFamily: "var(--font-sans)" }}
+                  style={{ background: "#0C5F7D", color: "#ffffff", fontFamily: "var(--font-sans)" }}
                 >
                   <span className="flex items-center gap-3">
                     <svg className="w-5 h-5 opacity-70" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -173,13 +173,13 @@ export default function DiscoverPage() {
               key={r.bookingId}
               href={`/venues/${r.venueId}/rate?bookingId=${r.bookingId}`}
               className="flex items-center justify-between px-4 py-3 rounded-xl"
-              style={{ background: "#FEF3C7", border: "1px solid #FDE68A" }}
+              style={{ background: "#FBEED6", border: "1px solid #EFD9A8" }}
             >
               <div>
-                <p className="text-sm font-semibold" style={{ color: "#92400E" }}>Rate your visit</p>
-                <p className="text-xs mt-0.5" style={{ color: "#B45309" }}>{r.venueName}</p>
+                <p className="text-sm font-semibold" style={{ color: "#9A6413" }}>Rate your visit</p>
+                <p className="text-xs mt-0.5" style={{ color: "#C77E2E" }}>{r.venueName}</p>
               </div>
-              <span style={{ color: "#B45309" }}>★</span>
+              <span style={{ color: "#C77E2E" }}>★</span>
             </Link>
           ))}
         </div>
@@ -187,10 +187,10 @@ export default function DiscoverPage() {
 
       {!location ? (
         <div className="hidden lg:flex flex-col items-center justify-center py-20 text-center gap-3">
-          <p className="text-base font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>
+          <p className="text-base font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>
             Select a location from the sidebar
           </p>
-          <p className="text-sm" style={{ color: "#44474e" }}>Choose a location to discover venues nearby.</p>
+          <p className="text-sm" style={{ color: "#566572" }}>Choose a location to discover venues nearby.</p>
         </div>
       ) : isLoading ? (
         <div
@@ -198,27 +198,27 @@ export default function DiscoverPage() {
           style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))" }}
         >
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="rounded-[16px] overflow-hidden" style={{ background: "#e9e7eb" }}>
-              <div className="animate-pulse" style={{ height: 256, background: "#e4e2e5" }} />
+            <div key={i} className="rounded-[16px] overflow-hidden" style={{ background: "#ECE3D4" }}>
+              <div className="animate-pulse" style={{ height: 256, background: "#E6DCCC" }} />
               <div className="p-4 flex flex-col gap-2">
-                <div className="h-5 rounded animate-pulse" style={{ background: "#e9e7eb", width: "60%" }} />
-                <div className="h-4 rounded animate-pulse" style={{ background: "#e9e7eb", width: "40%" }} />
+                <div className="h-5 rounded animate-pulse" style={{ background: "#ECE3D4", width: "60%" }} />
+                <div className="h-4 rounded animate-pulse" style={{ background: "#ECE3D4", width: "40%" }} />
               </div>
             </div>
           ))}
         </div>
       ) : venues.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
-          <div className="flex items-center justify-center mb-1 rounded-full" style={{ width: 72, height: 72, background: "#e9e7eb" }}>
-            <svg className="w-9 h-9" style={{ color: "#44474e" }} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+          <div className="flex items-center justify-center mb-1 rounded-full" style={{ width: 72, height: 72, background: "#ECE3D4" }}>
+            <svg className="w-9 h-9" style={{ color: "#566572" }} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
-          <p className="text-base font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>
+          <p className="text-base font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>
             {debouncedSearch ? `No results for "${debouncedSearch}"` : "No venues found"}
           </p>
-          <p className="text-sm" style={{ color: "#44474e" }}>
+          <p className="text-sm" style={{ color: "#566572" }}>
             {debouncedSearch ? "Try a different search term." : "Try a different category."}
           </p>
         </div>
@@ -236,7 +236,7 @@ export default function DiscoverPage() {
       {/* Pagination */}
       {data && data.totalPages > 1 && (
         <div className="flex items-center justify-between pt-4">
-          <span className="text-xs" style={{ color: "#75777f" }}>
+          <span className="text-xs" style={{ color: "#8B95A0" }}>
             Page {data.pageNumber} of {data.totalPages}
           </span>
           <div className="flex gap-2">
@@ -244,7 +244,7 @@ export default function DiscoverPage() {
               onClick={() => setPage((p) => p - 1)}
               disabled={!data.hasPreviousPage}
               className="px-3 py-1.5 text-sm rounded-lg border disabled:opacity-40"
-              style={{ borderColor: "#c5c6cf", color: "#041635", fontFamily: "var(--font-sans)" }}
+              style={{ borderColor: "#E1D7C6", color: "#0C5F7D", fontFamily: "var(--font-sans)" }}
             >
               Previous
             </button>
@@ -252,7 +252,7 @@ export default function DiscoverPage() {
               onClick={() => setPage((p) => p + 1)}
               disabled={!data.hasNextPage}
               className="px-3 py-1.5 text-sm rounded-lg border disabled:opacity-40"
-              style={{ borderColor: "#c5c6cf", color: "#041635", fontFamily: "var(--font-sans)" }}
+              style={{ borderColor: "#E1D7C6", color: "#0C5F7D", fontFamily: "var(--font-sans)" }}
             >
               Next
             </button>
@@ -263,7 +263,7 @@ export default function DiscoverPage() {
   );
 
   return (
-    <div className="flex flex-col min-h-full" style={{ background: "#fbf9f4" }}>
+    <div className="flex flex-col min-h-full" style={{ background: "#FAF6EF" }}>
 
       {/* ═══ MOBILE: location modal (hidden on desktop) ═══════════════ */}
       {showLocationPicker && (
@@ -279,21 +279,21 @@ export default function DiscoverPage() {
         className="lg:hidden sticky top-0 z-30 flex items-center justify-between px-5"
         style={{
           height: 64,
-          background: "rgba(251,249,244,0.97)",
-          borderBottom: "1px solid rgba(197,198,207,0.4)",
+          background: "rgba(250, 246, 239,0.97)",
+          borderBottom: "1px solid rgba(225, 215, 198,0.4)",
         }}
       >
         <button
           onClick={() => setShowLocationPicker(true)}
           className="flex items-center gap-1.5 px-3 h-8 rounded-full transition hover:bg-black/5"
-          style={{ border: "1px solid rgba(197,198,207,0.7)" }}
+          style={{ border: "1px solid rgba(225, 215, 198,0.7)" }}
         >
-          <svg className="w-4 h-4" style={{ color: "#9c440f" }} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <svg className="w-4 h-4" style={{ color: "#C25B3C" }} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
           {location && (
-            <span className="text-xs font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>
+            <span className="text-xs font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>
               {location}
             </span>
           )}
@@ -301,7 +301,7 @@ export default function DiscoverPage() {
 
         <span
           className="text-[22px] font-bold tracking-[8px]"
-          style={{ fontFamily: "var(--font-serif)", color: "#041635" }}
+          style={{ fontFamily: "var(--font-serif)", color: "#0C5F7D" }}
         >
           HYDRA
         </span>
@@ -309,7 +309,7 @@ export default function DiscoverPage() {
         <Link
           href="/profile"
           className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white"
-          style={{ background: "#9c440f", fontFamily: "var(--font-sans)" }}
+          style={{ background: "#C25B3C", fontFamily: "var(--font-sans)" }}
         >
           {getInitial(customer?.name ?? "")}
         </Link>
@@ -323,8 +323,8 @@ export default function DiscoverPage() {
           className="hidden lg:flex flex-col w-80 shrink-0 sticky top-20 overflow-y-auto border-r"
           style={{
             height: "calc(100vh - 80px)",
-            background: "#f5f3ee",
-            borderColor: "#c5c6cf",
+            background: "#F4EDE1",
+            borderColor: "#E1D7C6",
           }}
         >
           <div className="flex flex-col gap-4 p-8 h-full">
@@ -332,11 +332,11 @@ export default function DiscoverPage() {
             <div className="mb-4">
               <h2
                 className="text-2xl font-semibold"
-                style={{ fontFamily: "var(--font-serif)", color: "#041635" }}
+                style={{ fontFamily: "var(--font-serif)", color: "#0C5F7D" }}
               >
                 Filters
               </h2>
-              <p className="text-xs font-medium mt-1" style={{ color: "#44474e" }}>
+              <p className="text-xs font-medium mt-1" style={{ color: "#566572" }}>
                 Select your location
               </p>
             </div>
@@ -345,7 +345,7 @@ export default function DiscoverPage() {
             <nav className="flex flex-col gap-2">
               {locationsLoading
                 ? [...Array(3)].map((_, i) => (
-                    <div key={i} className="h-12 rounded-lg animate-pulse" style={{ background: "#e4e2dd" }} />
+                    <div key={i} className="h-12 rounded-lg animate-pulse" style={{ background: "#E6DCCC" }} />
                   ))
                 : (locationsList ?? []).map((loc) => {
                     const active = location === loc;
@@ -356,11 +356,11 @@ export default function DiscoverPage() {
                         className="flex items-center justify-between p-3 rounded-lg font-semibold text-sm transition-all active:scale-[0.98]"
                         style={
                           active
-                            ? { background: "#9c440f", color: "#ffffff" }
-                            : { color: "#44474e", background: "transparent" }
+                            ? { background: "#C25B3C", color: "#ffffff" }
+                            : { color: "#566572", background: "transparent" }
                         }
                         onMouseEnter={(e) => {
-                          if (!active) (e.currentTarget as HTMLButtonElement).style.background = "#e4e2dd";
+                          if (!active) (e.currentTarget as HTMLButtonElement).style.background = "#E6DCCC";
                         }}
                         onMouseLeave={(e) => {
                           if (!active) (e.currentTarget as HTMLButtonElement).style.background = "transparent";
@@ -407,15 +407,15 @@ export default function DiscoverPage() {
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full rounded-full py-5 px-8 pr-20 text-lg focus:outline-none focus:ring-2 shadow-sm"
                 style={{
-                  background: "#eae8e3",
-                  color: "#1b1c19",
+                  background: "#ECE3D4",
+                  color: "#22303A",
                   fontFamily: "var(--font-sans)",
-                  ["--tw-ring-color" as string]: "#041635",
+                  ["--tw-ring-color" as string]: "#0C5F7D",
                 }}
               />
               <div
                 className="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full flex items-center justify-center cursor-pointer hover:opacity-90 transition"
-                style={{ background: "#041635" }}
+                style={{ background: "#0C5F7D" }}
               >
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -425,7 +425,7 @@ export default function DiscoverPage() {
                 <button
                   onClick={() => setSearch("")}
                   className="absolute right-16 top-1/2 -translate-y-1/2"
-                  style={{ color: "#75777f" }}
+                  style={{ color: "#8B95A0" }}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -445,8 +445,8 @@ export default function DiscoverPage() {
                     className="px-6 py-2.5 rounded-full text-sm font-semibold uppercase tracking-wider whitespace-nowrap transition-all hover:opacity-90"
                     style={
                       active
-                        ? { background: "#041635", color: "#ffffff", fontFamily: "var(--font-sans)" }
-                        : { background: "#e4e2dd", color: "#44474e", fontFamily: "var(--font-sans)" }
+                        ? { background: "#0C5F7D", color: "#ffffff", fontFamily: "var(--font-sans)" }
+                        : { background: "#E6DCCC", color: "#566572", fontFamily: "var(--font-sans)" }
                     }
                   >
                     {type.name}
@@ -458,8 +458,8 @@ export default function DiscoverPage() {
 
           {/* MOBILE: search */}
           <div className="lg:hidden px-5 pb-2">
-            <div className="flex items-center gap-2 px-3 h-12 rounded-xl border bg-white" style={{ borderColor: "#c5c6cf" }}>
-              <svg className="w-5 h-5 shrink-0" style={{ color: "#75777f" }} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <div className="flex items-center gap-2 px-3 h-12 rounded-xl border bg-white" style={{ borderColor: "#E1D7C6" }}>
+              <svg className="w-5 h-5 shrink-0" style={{ color: "#8B95A0" }} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
@@ -468,10 +468,10 @@ export default function DiscoverPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="flex-1 bg-transparent text-sm focus:outline-none"
-                style={{ color: "#1b1b1e", fontFamily: "var(--font-sans)" }}
+                style={{ color: "#22303A", fontFamily: "var(--font-sans)" }}
               />
               {search && (
-                <button onClick={() => setSearch("")} style={{ color: "#75777f" }}>
+                <button onClick={() => setSearch("")} style={{ color: "#8B95A0" }}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
@@ -495,14 +495,14 @@ export default function DiscoverPage() {
                     >
                       <span
                         className="text-sm font-semibold whitespace-nowrap"
-                        style={{ color: active ? "#041635" : "#75777f" }}
+                        style={{ color: active ? "#0C5F7D" : "#8B95A0" }}
                       >
                         {type.name}
                       </span>
                       {active && (
                         <span
                           className="absolute bottom-0 left-0 right-0 rounded-t-sm"
-                          style={{ height: 2, background: "#9c440f" }}
+                          style={{ height: 2, background: "#C25B3C" }}
                         />
                       )}
                     </button>
@@ -510,7 +510,7 @@ export default function DiscoverPage() {
                 })}
               </div>
             </div>
-            <div className="absolute bottom-0 left-0 right-0" style={{ height: 1, background: "rgba(197,198,207,0.5)" }} />
+            <div className="absolute bottom-0 left-0 right-0" style={{ height: 1, background: "rgba(225, 215, 198,0.5)" }} />
           </div>
 
           {/* Venue content area */}

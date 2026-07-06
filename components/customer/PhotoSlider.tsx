@@ -19,14 +19,14 @@ export function PhotoSlider({ photos, name, height = "h-64" }: PhotoSliderProps)
 
   if (sorted.length === 0) {
     return (
-      <div className={`${height} bg-[#1B2B4B] flex items-center justify-center`}>
+      <div className={`${height} bg-[#0C5F7D] flex items-center justify-center`}>
         <span className="text-white/30 text-5xl font-bold">{getInitial(name)}</span>
       </div>
     );
   }
 
   return (
-    <div className={`relative ${height} bg-[#1B2B4B] overflow-hidden`}>
+    <div className={`relative ${height} bg-[#0C5F7D] overflow-hidden`}>
       <Image
         src={sorted[current].photoUrl!}
         alt={name}

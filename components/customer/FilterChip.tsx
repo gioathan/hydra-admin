@@ -13,8 +13,8 @@ export function FilterChip({ label, selected, onPress }: FilterChipProps) {
       onClick={onPress}
       className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors
         ${selected
-          ? "bg-[#C4622D] text-white border-transparent"
-          : "bg-white border border-gray-200 text-[#44474e] hover:border-[#C4622D]"
+          ? "bg-[#C25B3C] text-white border-transparent"
+          : "bg-white border border-gray-200 text-[#566572] hover:border-[#C25B3C]"
         }`}
     >
       {label}
