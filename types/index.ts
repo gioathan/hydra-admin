@@ -246,12 +246,12 @@ export interface RegisterResponse {
 }
 
 export interface VerifyEmailRequest {
-  email: string;
+  userId: string;
   code: string;
 }
 
 export interface ResendVerificationRequest {
-  email: string;
+  userId: string;
 }
 
 export interface ForgotPasswordRequest {

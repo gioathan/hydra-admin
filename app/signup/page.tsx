@@ -37,6 +37,7 @@ export default function SignUpPage() {
   const { mutate, isPending, error } = useMutation({
     mutationFn: registerApi,
     onSuccess: (data, variables) => {
+      localStorage.setItem("pending_verify_userId", data.user.id);
       localStorage.setItem("pending_verify_email", variables.email);
       router.push("/verify-email");
     },
