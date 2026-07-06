@@ -52,9 +52,9 @@ export function Modal({
       }}
     >
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-        <h2 className="text-lg font-semibold text-[#1B2B4B] mb-1">{title}</h2>
+        <h2 className="text-lg font-semibold text-[#0C5F7D] mb-1">{title}</h2>
         {description && (
-          <p className="text-sm text-[#6B7280] mb-4">{description}</p>
+          <p className="text-sm text-[#566572] mb-4">{description}</p>
         )}
         {children && <div className="mb-4">{children}</div>}
         <div className="flex justify-end gap-3 mt-6">

@@ -67,19 +67,19 @@ export function BookingsTable({
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-[#6B7280] uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-[#566572] uppercase tracking-wider">
                 Reference
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-[#6B7280] uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-[#566572] uppercase tracking-wider">
                 Date &amp; Time
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-[#6B7280] uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-[#566572] uppercase tracking-wider">
                 Guests
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-[#6B7280] uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-[#566572] uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-[#6B7280] uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-[#566572] uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -91,7 +91,7 @@ export function BookingsTable({
               <tr>
                 <td
                   colSpan={5}
-                  className="px-4 py-10 text-center text-[#6B7280]"
+                  className="px-4 py-10 text-center text-[#566572]"
                 >
                   {emptyMessage}
                 </td>
@@ -101,13 +101,13 @@ export function BookingsTable({
                 const actions = getActions(booking.status);
                 return (
                   <tr key={booking.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3 font-mono text-xs text-[#1B2B4B] font-medium">
+                    <td className="px-4 py-3 font-mono text-xs text-[#0C5F7D] font-medium">
                       {formatRef(booking.id)}
                     </td>
-                    <td className="px-4 py-3 text-[#1B2B4B]">
+                    <td className="px-4 py-3 text-[#0C5F7D]">
                       {formatDateTime(booking.startUtc)}
                     </td>
-                    <td className="px-4 py-3 text-[#1B2B4B]">
+                    <td className="px-4 py-3 text-[#0C5F7D]">
                       {booking.partySize}
                     </td>
                     <td className="px-4 py-3">

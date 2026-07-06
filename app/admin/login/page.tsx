@@ -53,17 +53,17 @@ export default function AdminLoginPage() {
   const anyPending = isPending || isGooglePending;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F8F5F0] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#FAF6EF] p-4">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-[#C4622D]">Hydra</h1>
-          <p className="text-sm text-[#6B7280] mt-1">Admin Dashboard</p>
+          <h1 className="text-3xl font-bold text-[#C25B3C]">Hydra</h1>
+          <p className="text-sm text-[#566572] mt-1">Admin Dashboard</p>
         </div>
 
         {/* Google sign-in */}
         <div className="flex justify-center mb-6">
           {isGooglePending ? (
-            <div className="flex items-center gap-2 text-[#6B7280] text-sm h-10">
+            <div className="flex items-center gap-2 text-[#566572] text-sm h-10">
               <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -90,7 +90,7 @@ export default function AdminLoginPage() {
         {/* Divider */}
         <div className="flex items-center gap-3 mb-6">
           <div className="flex-1 h-px bg-gray-200" />
-          <span className="text-xs text-[#6B7280] uppercase tracking-widest">or</span>
+          <span className="text-xs text-[#566572] uppercase tracking-widest">or</span>
           <div className="flex-1 h-px bg-gray-200" />
         </div>
 
@@ -117,7 +117,7 @@ export default function AdminLoginPage() {
           />
           {errorMessage && (
             errorMessage.includes("Google Sign-In") ? (
-              <p className="text-sm text-[#C4622D] bg-orange-50 border border-[#C4622D]/20 px-3 py-2 rounded-md">
+              <p className="text-sm text-[#C25B3C] bg-orange-50 border border-[#C25B3C]/20 px-3 py-2 rounded-md">
                 ↑ This account was registered with Google. Use the &ldquo;Continue with Google&rdquo; button above.
               </p>
             ) : (

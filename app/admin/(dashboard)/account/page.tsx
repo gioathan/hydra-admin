@@ -69,25 +69,25 @@ export default function AccountPage() {
 
   return (
     <div className="p-6 lg:p-8 flex flex-col gap-8 max-w-2xl">
-      <h1 className="text-2xl font-bold text-[#1B2B4B]">Account</h1>
+      <h1 className="text-2xl font-bold text-[#0C5F7D]">Account</h1>
 
       {/* Account info */}
       <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex flex-col gap-4">
-        <h2 className="text-lg font-semibold text-[#1B2B4B]">
+        <h2 className="text-lg font-semibold text-[#0C5F7D]">
           Account Information
         </h2>
         <div className="flex flex-col gap-3">
           <div>
-            <p className="text-xs text-[#6B7280] uppercase tracking-wider mb-1">
+            <p className="text-xs text-[#566572] uppercase tracking-wider mb-1">
               Email
             </p>
-            <p className="text-sm text-[#1B2B4B] font-medium">{user?.email}</p>
+            <p className="text-sm text-[#0C5F7D] font-medium">{user?.email}</p>
           </div>
           <div>
-            <p className="text-xs text-[#6B7280] uppercase tracking-wider mb-1">
+            <p className="text-xs text-[#566572] uppercase tracking-wider mb-1">
               Role
             </p>
-            <p className="text-sm text-[#1B2B4B] font-medium capitalize">
+            <p className="text-sm text-[#0C5F7D] font-medium capitalize">
               {user?.role}
             </p>
           </div>
@@ -96,7 +96,7 @@ export default function AccountPage() {
 
       {/* Change password */}
       <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-[#1B2B4B] mb-6">
+        <h2 className="text-lg font-semibold text-[#0C5F7D] mb-6">
           Change Password
         </h2>
 
@@ -128,8 +128,8 @@ export default function AccountPage() {
             />
             <ul className="mt-1 flex flex-col gap-0.5">
               {passwordRules.map((rule) => (
-                <li key={rule} className="text-xs text-[#6B7280] flex items-center gap-1.5">
-                  <span className="text-[#6B7280]">•</span>
+                <li key={rule} className="text-xs text-[#566572] flex items-center gap-1.5">
+                  <span className="text-[#566572]">•</span>
                   {rule}
                 </li>
               ))}
@@ -164,24 +164,24 @@ export default function AccountPage() {
 
       {/* Legal */}
       <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-[#1B2B4B] mb-4">Legal</h2>
+        <h2 className="text-lg font-semibold text-[#0C5F7D] mb-4">Legal</h2>
         <div className="flex flex-col gap-3">
           <Link
             href="/admin/privacy-policy"
-            className="flex items-center justify-between py-2 text-sm text-[#1B2B4B] hover:text-[#C4622D] transition-colors"
+            className="flex items-center justify-between py-2 text-sm text-[#0C5F7D] hover:text-[#C25B3C] transition-colors"
           >
             <span>Privacy Policy</span>
-            <svg className="w-4 h-4 text-[#6B7280]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-[#566572]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </Link>
           <div className="border-t border-gray-100" />
           <Link
             href="/admin/terms-of-service"
-            className="flex items-center justify-between py-2 text-sm text-[#1B2B4B] hover:text-[#C4622D] transition-colors"
+            className="flex items-center justify-between py-2 text-sm text-[#0C5F7D] hover:text-[#C25B3C] transition-colors"
           >
             <span>Terms of Service</span>
-            <svg className="w-4 h-4 text-[#6B7280]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-[#566572]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </Link>
@@ -190,10 +190,10 @@ export default function AccountPage() {
 
       {/* Sign out */}
       <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-[#1B2B4B] mb-2">
+        <h2 className="text-lg font-semibold text-[#0C5F7D] mb-2">
           Sign Out
         </h2>
-        <p className="text-sm text-[#6B7280] mb-4">
+        <p className="text-sm text-[#566572] mb-4">
           You will be redirected to the login page.
         </p>
         <Button variant="secondary" onClick={handleSignOut}>
