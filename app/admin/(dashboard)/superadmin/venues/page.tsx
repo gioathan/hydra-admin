@@ -18,7 +18,7 @@ export default function SuperAdminVenuesPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["superadmin-venues", page, search],
-    queryFn: () => getVenues({ page, pageSize: 25, search: search || undefined }),
+    queryFn: () => getVenues({ page, pageSize: 25, name: search || undefined }),
   });
 
   return (

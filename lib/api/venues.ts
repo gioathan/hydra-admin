@@ -176,7 +176,7 @@ export async function getVenueLocations(): Promise<string[]> {
   return res.data;
 }
 
-export async function getVenues(params: { page?: number; pageSize?: number; search?: string }): Promise<PagedResult<VenueDto>> {
+export async function getVenues(params: { page?: number; pageSize?: number; name?: string }): Promise<PagedResult<VenueDto>> {
   const res = await api.get<PagedResult<VenueDto>>("/venues", { params });
   return res.data;
 }

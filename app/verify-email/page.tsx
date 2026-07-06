@@ -13,19 +13,23 @@ export default function VerifyEmailPage() {
   const email = typeof window !== "undefined"
     ? localStorage.getItem("pending_verify_email") ?? ""
     : "";
+  const userId = typeof window !== "undefined"
+    ? localStorage.getItem("pending_verify_userId") ?? ""
+    : "";
 
   const [code, setCode] = useState("");
 
   const { mutate: verify, isPending, error } = useMutation({
-    mutationFn: () => verifyEmail({ email, code }),
+    mutationFn: () => verifyEmail({ userId, code }),
     onSuccess: () => {
+      localStorage.removeItem("pending_verify_userId");
       localStorage.removeItem("pending_verify_email");
       router.replace("/signin");
     },
   });
 
   const { mutate: resend, isPending: resending, isSuccess: resent } = useMutation({
-    mutationFn: () => resendVerification({ email }),
+    mutationFn: () => resendVerification({ userId }),
   });
 
   const errorMessage = error ? extractErrorMessage(error) : null;
@@ -78,7 +82,7 @@ export default function VerifyEmailPage() {
             <button
               type="button"
               onClick={() => resend()}
-              disabled={resending || !email}
+              disabled={resending || !userId}
               className="text-sm text-[#C4622D] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {resent ? "Code sent!" : resending ? "Sending…" : "Resend code"}
