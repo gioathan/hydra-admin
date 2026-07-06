@@ -36,27 +36,27 @@ export default function ForgotPasswordPage() {
   const errorMessage = error ? extractErrorMessage(error) : null;
 
   return (
-    <div className="min-h-screen bg-[#dbdad5] flex items-center justify-center relative overflow-hidden px-4 py-12">
+    <div className="min-h-screen bg-[#E7DFD0] flex items-center justify-center relative overflow-hidden px-4 py-12">
       {/* Atmospheric blobs */}
-      <div className="absolute top-[-8%] right-[-4%] w-80 h-80 rounded-full bg-[#9c440f]/20 blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[-8%] left-[-4%] w-80 h-80 rounded-full bg-[#1b2b4b]/20 blur-[100px] pointer-events-none" />
+      <div className="absolute top-[-8%] right-[-4%] w-80 h-80 rounded-full bg-[#C25B3C]/20 blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[-8%] left-[-4%] w-80 h-80 rounded-full bg-[#0C5F7D]/20 blur-[100px] pointer-events-none" />
 
       <section className="relative z-10 w-full max-w-[520px]">
 
         {/* Brand */}
         <div className="text-center mb-6">
-          <Link href="/" style={{ fontFamily: "var(--font-serif)" }} className="text-2xl font-bold tracking-[0.2em] text-[#041635] hover:text-[#1b2b4b] transition-colors">
+          <Link href="/" style={{ fontFamily: "var(--font-serif)" }} className="text-2xl font-bold tracking-[0.2em] text-[#0C5F7D] hover:text-[#0C5F7D] transition-colors">
             HYDRA
           </Link>
         </div>
 
         {/* Card */}
-        <div className="bg-white shadow-sm rounded-xl border border-[#c5c6cf]/30 overflow-hidden">
+        <div className="bg-white shadow-sm rounded-xl border border-[#E1D7C6]/30 overflow-hidden">
           <div className="p-10 md:p-12">
 
             {/* Icon */}
             <div className="flex justify-center mb-8">
-              <div className="w-16 h-16 rounded-full border border-[#c5c6cf] flex items-center justify-center text-[#041635]">
+              <div className="w-16 h-16 rounded-full border border-[#E1D7C6] flex items-center justify-center text-[#0C5F7D]">
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
                   <rect x="4" y="11" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="1.5" />
                   <path d="M8 11V8a5 5 0 0110 0v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -67,17 +67,17 @@ export default function ForgotPasswordPage() {
             </div>
 
             <div className="text-center mb-10">
-              <h1 style={{ fontFamily: "var(--font-serif)" }} className="text-[32px] font-semibold text-[#041635] leading-tight mb-2">
+              <h1 style={{ fontFamily: "var(--font-serif)" }} className="text-[32px] font-semibold text-[#0C5F7D] leading-tight mb-2">
                 Forgot Password?
               </h1>
-              <p className="text-[#44474e]">Enter your email and we&apos;ll send you a reset code.</p>
+              <p className="text-[#566572]">Enter your email and we&apos;ll send you a reset code.</p>
             </div>
 
             <form onSubmit={handleSubmit(({ website, ...data }) => { if (website) return; mutate(data); })} className="space-y-6" noValidate>
 
               {/* Email */}
               <div className="space-y-2">
-                <label htmlFor="email" className="block text-xs font-bold tracking-[0.12em] text-[#44474e] uppercase">
+                <label htmlFor="email" className="block text-xs font-bold tracking-[0.12em] text-[#566572] uppercase">
                   Email Address
                 </label>
                 <input
@@ -85,8 +85,8 @@ export default function ForgotPasswordPage() {
                   type="email"
                   autoComplete="email"
                   placeholder="you@example.com"
-                  className={`w-full h-14 px-4 bg-[#f5f3f6] border rounded-lg text-[#1b1b1e] placeholder:text-[#75777f] outline-none transition-colors text-base
-                    ${errors.email ? "border-red-500 focus:border-red-500" : "border-[#c5c6cf] focus:border-[#9c440f]"}`}
+                  className={`w-full h-14 px-4 bg-[#F4EDE1] border rounded-lg text-[#22303A] placeholder:text-[#8B95A0] outline-none transition-colors text-base
+                    ${errors.email ? "border-red-500 focus:border-red-500" : "border-[#E1D7C6] focus:border-[#C25B3C]"}`}
                   {...register("email", {
                     required: "Email is required",
                     pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email" },
@@ -106,14 +106,14 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={isPending}
-                className="w-full h-16 bg-[#9c440f] text-white font-bold tracking-[0.1em] text-sm rounded-lg hover:bg-[#7a3000] transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full h-16 bg-[#C25B3C] text-white font-bold tracking-[0.1em] text-sm rounded-lg hover:bg-[#9E4527] transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isPending ? <Spinner /> : "SEND RESET CODE"}
               </button>
             </form>
 
-            <div className="mt-10 pt-10 border-t border-[#c5c6cf]/30 text-center">
-              <Link href="/signin" className="text-[#9c440f] font-bold hover:underline">
+            <div className="mt-10 pt-10 border-t border-[#E1D7C6]/30 text-center">
+              <Link href="/signin" className="text-[#C25B3C] font-bold hover:underline">
                 ← Back to sign in
               </Link>
             </div>

@@ -19,10 +19,10 @@ const statusStyles: Record<BookingStatus, string> = {
 };
 
 const statusDesktop: Record<BookingStatus, { bg: string; color: string; border: string }> = {
-  Pending:   { bg: "#FEF3C7", color: "#B45309", border: "#FDE68A" },
-  Confirmed: { bg: "#DCFCE7", color: "#15803D", border: "#BBF7D0" },
-  Declined:  { bg: "#FEE2E2", color: "#DC2626", border: "#FECACA" },
-  Cancelled: { bg: "#F3F4F6", color: "#6B7280", border: "#E5E7EB" },
+  Pending:   { bg: "#FBEED6", color: "#C77E2E", border: "#EFD9A8" },
+  Confirmed: { bg: "#E4F0E2", color: "#4E8A5B", border: "#CFE6CE" },
+  Declined:  { bg: "#F7DED9", color: "#C6453D", border: "#EEC7C1" },
+  Cancelled: { bg: "#EFEAE0", color: "#8B95A0", border: "#E0D8CA" },
 };
 
 export default function ReservationDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -59,7 +59,7 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
     return (
       <div className="flex flex-col gap-4 p-4 pt-10 lg:max-w-[1440px] lg:mx-auto lg:px-20 lg:py-16">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-16 rounded-xl animate-pulse" style={{ background: "#e4e2dd" }} />
+          <div key={i} className="h-16 rounded-xl animate-pulse" style={{ background: "#E6DCCC" }} />
         ))}
       </div>
     );
@@ -73,9 +73,9 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
     <>
       {/* ═══ MOBILE (hidden on desktop) ══════════════════════════════════ */}
       <div className="lg:hidden flex flex-col min-h-full">
-        <div style={{ padding: "48px 20px 16px", background: "#ffffff", borderBottom: "1px solid rgba(197,198,207,0.4)", display: "flex", alignItems: "center", gap: 12 }}>
-          <button onClick={() => router.back()} className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-black/5 transition text-xl" style={{ color: "#041635" }}>‹</button>
-          <h1 className="text-lg font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>Reservation</h1>
+        <div style={{ padding: "48px 20px 16px", background: "#ffffff", borderBottom: "1px solid rgba(225, 215, 198,0.4)", display: "flex", alignItems: "center", gap: 12 }}>
+          <button onClick={() => router.back()} className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-black/5 transition text-xl" style={{ color: "#0C5F7D" }}>‹</button>
+          <h1 className="text-lg font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>Reservation</h1>
         </div>
 
         <div className="flex-1 px-4 py-5 flex flex-col gap-4">
@@ -93,15 +93,15 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
           </div>
 
           {booking.venueComment && (
-            <div className="rounded-2xl p-4 flex gap-3" style={{ background: "#fef3c7", border: "1px solid #fde68a" }}>
-              <svg className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "#b45309" }} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+            <div className="rounded-2xl p-4 flex gap-3" style={{ background: "#FBEED6", border: "1px solid #EFD9A8" }}>
+              <svg className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "#C77E2E" }} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
               </svg>
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "#b45309", fontFamily: "var(--font-sans)" }}>
+                <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "#C77E2E", fontFamily: "var(--font-sans)" }}>
                   Message from {venue?.name ?? "Venue"}
                 </p>
-                <p className="text-sm leading-relaxed" style={{ color: "#92400e", fontFamily: "var(--font-sans)" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "#9A6413", fontFamily: "var(--font-sans)" }}>
                   {booking.venueComment}
                 </p>
               </div>
@@ -119,8 +119,8 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
 
           {showCancel && (
             <div className="bg-white rounded-2xl border border-red-100 shadow-sm p-4 flex flex-col gap-3">
-              <p className="text-sm font-semibold text-[#1B2B4B]">Cancel this reservation?</p>
-              <p className="text-xs" style={{ color: "#75777f" }}>This action cannot be undone.</p>
+              <p className="text-sm font-semibold text-[#0C5F7D]">Cancel this reservation?</p>
+              <p className="text-xs" style={{ color: "#8B95A0" }}>This action cannot be undone.</p>
               {cancelError && (
                 <p className="text-xs text-red-600">{extractErrorMessage(cancelError)}</p>
               )}
@@ -142,7 +142,7 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
       </div>
 
       {/* ═══ DESKTOP (hidden on mobile) ══════════════════════════════════ */}
-      <div className="hidden lg:flex flex-col" style={{ background: "#fbf9f4" }}>
+      <div className="hidden lg:flex flex-col" style={{ background: "#FAF6EF" }}>
 
         {/* Hero */}
         <section className="relative h-[480px] w-full overflow-hidden">
@@ -156,11 +156,11 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
               priority
             />
           ) : (
-            <div className="w-full h-full" style={{ background: "#1b2b4b" }} />
+            <div className="w-full h-full" style={{ background: "#0C5F7D" }} />
           )}
           <div
             className="absolute inset-0"
-            style={{ background: "linear-gradient(to top, rgba(4,22,53,0.7) 0%, transparent 55%)" }}
+            style={{ background: "linear-gradient(to top, rgba(12, 54, 72,0.7) 0%, transparent 55%)" }}
           />
           <div className="absolute bottom-0 left-0 w-full">
             <div className="max-w-[1440px] mx-auto px-20 pb-12">
@@ -200,7 +200,7 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
               <button
                 onClick={() => router.back()}
                 className="flex items-center gap-2 text-sm font-semibold transition-colors hover:opacity-70"
-                style={{ color: "#041635", fontFamily: "var(--font-sans)" }}
+                style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -246,16 +246,16 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
                   <div
                     key={label}
                     className="flex items-start gap-4 p-6 rounded-xl border"
-                    style={{ background: "#ffffff", borderColor: "#e4e2dd" }}
+                    style={{ background: "#ffffff", borderColor: "#E6DCCC" }}
                   >
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#f0eee9" }}>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" style={{ color: "#9c440f" }}>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#F0E9DD" }}>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" style={{ color: "#C25B3C" }}>
                         {icon}
                       </svg>
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>{label}</p>
-                      <p className="text-sm font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>{value}</p>
+                      <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>{label}</p>
+                      <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{value}</p>
                     </div>
                   </div>
                 ))}
@@ -265,18 +265,18 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
               {booking.venueComment && (
                 <div
                   className="flex items-start gap-4 p-6 rounded-xl border"
-                  style={{ background: "#fffbeb", borderColor: "#fde68a" }}
+                  style={{ background: "#FBEED6", borderColor: "#EFD9A8" }}
                 >
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#fef3c7" }}>
-                    <svg className="w-5 h-5" style={{ color: "#b45309" }} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#FBEED6" }}>
+                    <svg className="w-5 h-5" style={{ color: "#C77E2E" }} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "#b45309", fontFamily: "var(--font-sans)" }}>
+                    <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "#C77E2E", fontFamily: "var(--font-sans)" }}>
                       Message from {venue?.name ?? "Venue"}
                     </p>
-                    <p className="text-sm leading-relaxed" style={{ color: "#92400e", fontFamily: "var(--font-sans)" }}>
+                    <p className="text-sm leading-relaxed" style={{ color: "#9A6413", fontFamily: "var(--font-sans)" }}>
                       {booking.venueComment}
                     </p>
                   </div>
@@ -287,23 +287,23 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
               {venue?.address && (
                 <div
                   className="flex items-start gap-4 p-6 rounded-xl border"
-                  style={{ background: "#ffffff", borderColor: "#e4e2dd" }}
+                  style={{ background: "#ffffff", borderColor: "#E6DCCC" }}
                 >
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#f0eee9" }}>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" style={{ color: "#9c440f" }}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#F0E9DD" }}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" style={{ color: "#C25B3C" }}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>Full Address</p>
-                    <p className="text-sm font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>{venue.address}</p>
+                    <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Full Address</p>
+                    <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{venue.address}</p>
                     {venue.googleMapsUrl && (
                       <a
                         href={venue.googleMapsUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 mt-2 text-xs font-semibold hover:underline"
-                        style={{ color: "#9c440f", fontFamily: "var(--font-sans)" }}
+                        style={{ color: "#C25B3C", fontFamily: "var(--font-sans)" }}
                       >
                         Open in Maps →
                       </a>
@@ -317,22 +317,22 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
             <div className="col-span-4">
               <div
                 className="sticky top-32 p-10 rounded-xl border shadow-lg"
-                style={{ background: "#f5f3ee", borderColor: "#c5c6cf" }}
+                style={{ background: "#F4EDE1", borderColor: "#E1D7C6" }}
               >
                 <h3
                   className="text-2xl font-semibold mb-6 pb-4 border-b"
-                  style={{ fontFamily: "var(--font-serif)", color: "#041635", borderColor: "#c5c6cf" }}
+                  style={{ fontFamily: "var(--font-serif)", color: "#0C5F7D", borderColor: "#E1D7C6" }}
                 >
                   Booking Summary
                 </h3>
 
                 <div className="flex flex-col gap-4 mb-8">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm" style={{ color: "#44474e", fontFamily: "var(--font-sans)" }}>Reference</span>
-                    <span className="text-sm font-mono font-bold" style={{ color: "#041635" }}>#{shortId(booking.id)}</span>
+                    <span className="text-sm" style={{ color: "#566572", fontFamily: "var(--font-sans)" }}>Reference</span>
+                    <span className="text-sm font-mono font-bold" style={{ color: "#0C5F7D" }}>#{shortId(booking.id)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm" style={{ color: "#44474e", fontFamily: "var(--font-sans)" }}>Status</span>
+                    <span className="text-sm" style={{ color: "#566572", fontFamily: "var(--font-sans)" }}>Status</span>
                     <span
                       className="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border"
                       style={{ background: st.bg, color: st.color, borderColor: st.border, fontFamily: "var(--font-sans)" }}
@@ -341,16 +341,16 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm" style={{ color: "#44474e", fontFamily: "var(--font-sans)" }}>Venue</span>
-                    <span className="text-sm font-bold text-right max-w-[55%]" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>{venue?.name ?? "—"}</span>
+                    <span className="text-sm" style={{ color: "#566572", fontFamily: "var(--font-sans)" }}>Venue</span>
+                    <span className="text-sm font-bold text-right max-w-[55%]" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{venue?.name ?? "—"}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm" style={{ color: "#44474e", fontFamily: "var(--font-sans)" }}>Date</span>
-                    <span className="text-sm font-bold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>{formatLocalDate(booking.startUtc)}</span>
+                    <span className="text-sm" style={{ color: "#566572", fontFamily: "var(--font-sans)" }}>Date</span>
+                    <span className="text-sm font-bold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{formatLocalDate(booking.startUtc)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm" style={{ color: "#44474e", fontFamily: "var(--font-sans)" }}>Guests</span>
-                    <span className="text-sm font-bold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>{booking.partySize}</span>
+                    <span className="text-sm" style={{ color: "#566572", fontFamily: "var(--font-sans)" }}>Guests</span>
+                    <span className="text-sm font-bold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{booking.partySize}</span>
                   </div>
                 </div>
 
@@ -359,18 +359,18 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
                   <button
                     onClick={() => setShowCancel(true)}
                     className="w-full py-3.5 rounded-lg border text-sm font-bold uppercase tracking-wider transition-all hover:bg-red-50"
-                    style={{ borderColor: "#FECACA", color: "#DC2626", fontFamily: "var(--font-sans)" }}
+                    style={{ borderColor: "#EEC7C1", color: "#C6453D", fontFamily: "var(--font-sans)" }}
                   >
                     Cancel Reservation
                   </button>
                 )}
 
                 {showCancel && (
-                  <div className="flex flex-col gap-4 pt-4 border-t" style={{ borderColor: "#e4e2dd" }}>
-                    <p className="text-sm font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>
+                  <div className="flex flex-col gap-4 pt-4 border-t" style={{ borderColor: "#E6DCCC" }}>
+                    <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>
                       Cancel this reservation?
                     </p>
-                    <p className="text-xs" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>This action cannot be undone.</p>
+                    <p className="text-xs" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>This action cannot be undone.</p>
                     {cancelError && (
                       <p className="text-xs text-red-600">{extractErrorMessage(cancelError)}</p>
                     )}
@@ -378,7 +378,7 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
                       <button
                         onClick={() => setShowCancel(false)}
                         className="flex-1 py-2.5 rounded-lg border text-sm font-semibold transition hover:bg-gray-50"
-                        style={{ borderColor: "#c5c6cf", color: "#041635", fontFamily: "var(--font-sans)" }}
+                        style={{ borderColor: "#E1D7C6", color: "#0C5F7D", fontFamily: "var(--font-sans)" }}
                       >
                         Keep it
                       </button>
@@ -386,7 +386,7 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
                         onClick={() => doCancel()}
                         disabled={cancelling}
                         className="flex-1 py-2.5 rounded-lg text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-60"
-                        style={{ background: "#DC2626", fontFamily: "var(--font-sans)" }}
+                        style={{ background: "#C6453D", fontFamily: "var(--font-sans)" }}
                       >
                         {cancelling ? "Cancelling…" : "Yes, cancel"}
                       </button>
@@ -395,7 +395,7 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
                 )}
 
                 {!canCancel && (
-                  <p className="text-xs text-center pt-4" style={{ color: "#75777f", fontFamily: "var(--font-sans)" }}>
+                  <p className="text-xs text-center pt-4" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>
                     This reservation cannot be modified.
                   </p>
                 )}
@@ -412,8 +412,8 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-3">
-      <span className="text-sm text-[#75777f]">{label}</span>
-      <span className="text-sm font-medium text-[#1B2B4B] text-right">{value}</span>
+      <span className="text-sm text-[#8B95A0]">{label}</span>
+      <span className="text-sm font-medium text-[#0C5F7D] text-right">{value}</span>
     </div>
   );
 }

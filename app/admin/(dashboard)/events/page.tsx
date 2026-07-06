@@ -33,9 +33,9 @@ function EventCard({ event }: { event: EventListItemDto }) {
   const month = startDate.toLocaleDateString(undefined, { month: "short" }).toUpperCase();
 
   return (
-    <div className="flex gap-4 bg-white rounded-xl border border-[#E8E4DE] shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+    <div className="flex gap-4 bg-white rounded-xl border border-[#E1D7C6] shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       {/* Photo / date */}
-      <div className="relative flex-shrink-0 w-32 sm:w-44 bg-[#1B2B4B]">
+      <div className="relative flex-shrink-0 w-32 sm:w-44 bg-[#0C5F7D]">
         {event.mainPhotoUrl ? (
           <img
             src={event.mainPhotoUrl}
@@ -44,7 +44,7 @@ function EventCard({ event }: { event: EventListItemDto }) {
           />
         ) : null}
         {/* date badge */}
-        <div className="absolute top-3 left-3 bg-[#C4622D] rounded-lg px-2.5 py-1.5 flex flex-col items-center shadow-lg">
+        <div className="absolute top-3 left-3 bg-[#C25B3C] rounded-lg px-2.5 py-1.5 flex flex-col items-center shadow-lg">
           <span className="text-white font-serif text-xl leading-none">{day}</span>
           <span className="text-white/85 text-[9px] font-bold tracking-widest mt-0.5">{month}</span>
         </div>
@@ -57,11 +57,11 @@ function EventCard({ event }: { event: EventListItemDto }) {
 
       {/* Body */}
       <div className="flex-1 py-4 pr-4 flex flex-col gap-1.5 min-w-0">
-        <h3 className="font-serif text-[#1B2B4B] text-lg leading-snug line-clamp-2">
+        <h3 className="font-serif text-[#0C5F7D] text-lg leading-snug line-clamp-2">
           {event.title}
         </h3>
 
-        <div className="flex items-center gap-1.5 text-[#C4622D] text-sm font-semibold">
+        <div className="flex items-center gap-1.5 text-[#C25B3C] text-sm font-semibold">
           <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -86,7 +86,7 @@ function EventCard({ event }: { event: EventListItemDto }) {
           )}
           <Link
             href={`/admin/venue`}
-            className="text-xs font-semibold text-[#1B2B4B] hover:text-[#C4622D] transition-colors ml-auto"
+            className="text-xs font-semibold text-[#0C5F7D] hover:text-[#C25B3C] transition-colors ml-auto"
           >
             Manage venue →
           </Link>
@@ -127,10 +127,14 @@ export default function EventsPage() {
       {/* Header */}
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <p className="text-xs font-bold tracking-widest text-[#C4622D] uppercase mb-1">
-            Overview
+          <p className="text-xs font-bold tracking-widest text-[#C25B3C] uppercase mb-1">
+            Across all venues
           </p>
-          <h1 className="text-2xl font-bold text-[#1B2B4B]">Upcoming Events</h1>
+          <h1 className="text-2xl font-bold text-[#0C5F7D]">Upcoming Events</h1>
+          <p className="text-sm text-[#566572] mt-1 max-w-xl">
+            Browse upcoming events from every venue on Hydra. To create or edit your
+            own events, go to <Link href="/admin/venue" className="text-[#C25B3C] font-medium hover:underline">your Venue page</Link>.
+          </p>
         </div>
 
         {/* Location filter */}
@@ -160,17 +164,17 @@ export default function EventsPage() {
       {isLoading ? (
         <div className="flex flex-col gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-32 bg-white rounded-xl border border-[#E8E4DE] animate-pulse" />
+            <div key={i} className="h-32 bg-white rounded-xl border border-[#E1D7C6] animate-pulse" />
           ))}
         </div>
       ) : events.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
-          <div className="w-16 h-16 rounded-full bg-[#F5F0EB] flex items-center justify-center">
-            <svg className="w-7 h-7 text-[#C4622D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-16 h-16 rounded-full bg-[#F4EDE1] flex items-center justify-center">
+            <svg className="w-7 h-7 text-[#C25B3C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
-          <p className="text-[#1B2B4B] font-semibold">No upcoming events</p>
+          <p className="text-[#0C5F7D] font-semibold">No upcoming events</p>
           <p className="text-sm text-gray-400">
             {location
               ? `No events scheduled in ${location}.`
@@ -187,7 +191,7 @@ export default function EventsPage() {
             <button
               onClick={() => fetchNextPage()}
               disabled={isFetchingNextPage}
-              className="self-center mt-2 px-6 py-2 text-sm font-semibold text-[#1B2B4B] border border-[#E8E4DE] rounded-lg hover:bg-[#F5F0EB] transition-colors disabled:opacity-50"
+              className="self-center mt-2 px-6 py-2 text-sm font-semibold text-[#0C5F7D] border border-[#E1D7C6] rounded-lg hover:bg-[#F4EDE1] transition-colors disabled:opacity-50"
             >
               {isFetchingNextPage ? "Loading…" : "Load more"}
             </button>

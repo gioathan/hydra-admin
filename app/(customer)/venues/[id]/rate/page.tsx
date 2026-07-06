@@ -40,11 +40,11 @@ export default function RatePage({ params }: { params: Promise<{ id: string }> }
     <div className="flex flex-col min-h-full items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm text-center flex flex-col items-center gap-6">
         <div>
-          <h1 className="text-2xl font-bold text-[#1B2B4B] mb-1">Rate your visit</h1>
+          <h1 className="text-2xl font-bold text-[#0C5F7D] mb-1">Rate your visit</h1>
           {venue?.name && (
-            <p className="text-base font-semibold text-[#1B2B4B] mb-1">{venue.name}</p>
+            <p className="text-base font-semibold text-[#0C5F7D] mb-1">{venue.name}</p>
           )}
-          <p className="text-sm text-[#44474e]">How was your experience?</p>
+          <p className="text-sm text-[#566572]">How was your experience?</p>
         </div>
 
         {/* Stars */}
@@ -70,7 +70,7 @@ export default function RatePage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         {display && (
-          <p className="text-base font-medium text-[#1B2B4B]">{LABELS[display - 1]}</p>
+          <p className="text-base font-medium text-[#0C5F7D]">{LABELS[display - 1]}</p>
         )}
 
         {errorMessage && (
@@ -81,7 +81,7 @@ export default function RatePage({ params }: { params: Promise<{ id: string }> }
           type="button"
           onClick={() => mutate()}
           disabled={!rating || isPending}
-          className="w-full bg-[#C4622D] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#b0561f] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full bg-[#C25B3C] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#9E4527] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {isPending ? "Submitting…" : "Submit Rating"}
         </button>
@@ -89,7 +89,7 @@ export default function RatePage({ params }: { params: Promise<{ id: string }> }
         <button
           type="button"
           onClick={() => router.replace("/discover")}
-          className="text-sm text-[#75777f] hover:underline"
+          className="text-sm text-[#8B95A0] hover:underline"
         >
           Skip for now
         </button>

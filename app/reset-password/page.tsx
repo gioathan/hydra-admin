@@ -35,17 +35,17 @@ export default function ResetPasswordPage() {
   const errorMessage = error ? extractErrorMessage(error) : null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#fbf8fc] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#FAF6EF] px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <Link href="/" className="text-2xl font-bold text-[#1B2B4B] tracking-widest">
+          <Link href="/" className="text-2xl font-bold text-[#0C5F7D] tracking-widest">
             HYDRA
           </Link>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-7">
-          <h2 className="text-lg font-semibold text-[#1B2B4B] mb-1">Reset your password</h2>
-          <p className="text-sm text-[#44474e] mb-6">
+          <h2 className="text-lg font-semibold text-[#0C5F7D] mb-1">Reset your password</h2>
+          <p className="text-sm text-[#566572] mb-6">
             Enter the code from your email and choose a new password.
           </p>
 
@@ -55,7 +55,7 @@ export default function ResetPasswordPage() {
             noValidate
           >
             <div>
-              <label className="block text-sm font-medium text-[#1B2B4B] mb-1.5">
+              <label className="block text-sm font-medium text-[#0C5F7D] mb-1.5">
                 Reset code
               </label>
               <input
@@ -63,7 +63,7 @@ export default function ResetPasswordPage() {
                 inputMode="numeric"
                 maxLength={6}
                 placeholder="000000"
-                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-center text-xl tracking-[0.5em] font-mono focus:outline-none focus:ring-2 focus:ring-[#1B2B4B]"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-center text-xl tracking-[0.5em] font-mono focus:outline-none focus:ring-2 focus:ring-[#0C5F7D]"
                 {...register("code", { required: "Code is required", minLength: { value: 6, message: "Enter the full 6-digit code" } })}
               />
               {errors.code && <p className="text-xs text-red-600 mt-1">{errors.code.message}</p>}

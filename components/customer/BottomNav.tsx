@@ -53,10 +53,10 @@ export function CustomerBottomNav() {
     <nav
       className="lg:hidden fixed bottom-0 left-0 right-0 z-40 flex"
       style={{
-        background: "rgba(251, 248, 252, 0.95)",
+        background: "rgba(250, 246, 239, 0.95)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
-        borderTop: "1px solid rgba(197, 198, 207, 0.3)",
+        borderTop: "1px solid rgba(225, 215, 198, 0.3)",
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         height: 72,
@@ -74,15 +74,15 @@ export function CustomerBottomNav() {
             {active && (
               <span
                 className="absolute top-0 left-1/2 -translate-x-1/2 rounded-b-sm"
-                style={{ width: 32, height: 2, backgroundColor: "#9c440f" }}
+                style={{ width: 32, height: 2, backgroundColor: "#C25B3C" }}
               />
             )}
-            <span style={{ color: active ? "#9c440f" : "#44474e" }}>
+            <span style={{ color: active ? "#C25B3C" : "#566572" }}>
               {item.icon(active)}
             </span>
             <span
               className="text-[10px] font-bold tracking-wide uppercase"
-              style={{ color: active ? "#9c440f" : "#44474e", fontFamily: "var(--font-sans)" }}
+              style={{ color: active ? "#C25B3C" : "#566572", fontFamily: "var(--font-sans)" }}
             >
               {item.label}
             </span>

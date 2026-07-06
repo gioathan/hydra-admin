@@ -67,11 +67,11 @@ export function Sidebar() {
   });
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 min-h-screen bg-[#1B2B4B] text-white flex-shrink-0">
+    <aside className="hidden lg:flex flex-col w-64 min-h-screen bg-[#0C5F7D] text-white flex-shrink-0">
       {/* Logo / Venue name */}
       <div className="px-6 py-6 border-b border-white/10">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-[#C4622D] font-bold text-xl">Hydra</span>
+          <span className="text-[#C25B3C] font-bold text-xl">Hydra</span>
           <span className="text-white/60 text-sm">Admin</span>
         </div>
         <p className="text-sm text-white/80 font-medium truncate">

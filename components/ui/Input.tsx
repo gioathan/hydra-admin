@@ -19,7 +19,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-col gap-1">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-[#1B2B4B]">
+          <label htmlFor={inputId} className="text-sm font-medium text-[#0C5F7D]">
             {label}
           </label>
         )}
@@ -28,8 +28,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             type={resolvedType}
-            className={`w-full px-3 py-2 border rounded-md text-sm text-[#1B2B4B] bg-white placeholder:text-[#6B7280] outline-none transition-colors
-              ${error ? "border-red-500 focus:ring-1 focus:ring-red-500" : "border-gray-300 focus:border-[#1B2B4B] focus:ring-1 focus:ring-[#1B2B4B]"}
+            className={`w-full px-3 py-2 border rounded-md text-sm text-[#0C5F7D] bg-white placeholder:text-[#8B95A0] outline-none transition-colors
+              ${error ? "border-red-500 focus:ring-1 focus:ring-red-500" : "border-gray-300 focus:border-[#0C5F7D] focus:ring-1 focus:ring-[#0C5F7D]"}
               disabled:bg-gray-100 disabled:cursor-not-allowed
               ${showPasswordToggle ? "pr-10" : ""}
               ${className}`}
@@ -40,7 +40,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               type="button"
               tabIndex={-1}
               onClick={() => setVisible((v) => !v)}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#6B7280] hover:text-[#1B2B4B] transition-colors"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8B95A0] hover:text-[#0C5F7D] transition-colors"
               aria-label={visible ? "Hide password" : "Show password"}
             >
               {visible ? (
@@ -57,7 +57,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
         {error && <p className="text-xs text-red-600">{error}</p>}
-        {helperText && !error && <p className="text-xs text-[#6B7280]">{helperText}</p>}
+        {helperText && !error && <p className="text-xs text-[#8B95A0]">{helperText}</p>}
       </div>
     );
   }

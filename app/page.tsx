@@ -9,10 +9,10 @@ export default function LandingPage() {
       <section className="flex flex-col justify-between p-10 lg:p-10 xl:p-16 bg-white lg:h-full lg:overflow-hidden">
 
         <div className="flex items-center justify-between">
-          <span style={{ fontFamily: "var(--font-serif)" }} className="text-2xl font-bold tracking-[0.2em] text-[#041635]">
+          <span style={{ fontFamily: "var(--font-serif)" }} className="text-2xl font-bold tracking-[0.2em] text-[#0C5F7D]">
             HYDRA
           </span>
-          <a href="mailto:test@mail.com" className="text-sm text-[#44474e] hover:text-[#9c440f] transition-colors">
+          <a href="mailto:test@mail.com" className="text-sm text-[#566572] hover:text-[#C25B3C] transition-colors">
             Support
           </a>
         </div>
@@ -23,13 +23,13 @@ export default function LandingPage() {
             <div className="flex items-center justify-between mb-4">
               <span className="text-white text-[11px] font-bold tracking-[0.15em] uppercase">My Bookings</span>
               <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#ffb693]/70" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#EDB49B]/70" />
               </div>
             </div>
             <div className="flex mb-2.5">
               <div className="flex flex-col items-center w-10 shrink-0">
                 <span className="text-[9px] font-mono text-white/40">19:00</span>
-                <div className="w-2 h-2 rounded-full bg-[#ffb693] my-1.5 shrink-0" />
+                <div className="w-2 h-2 rounded-full bg-[#EDB49B] my-1.5 shrink-0" />
                 <div className="flex-1 w-px bg-white/10 min-h-4" />
               </div>
               <div className="flex-1 ml-2">
@@ -62,13 +62,13 @@ export default function LandingPage() {
 
         <div className="flex flex-col gap-6 max-w-md mx-auto lg:mx-0">
           <div className="flex flex-col gap-4">
-            <span className="text-xs font-bold tracking-[0.2em] text-[#9c440f] uppercase">
+            <span className="text-xs font-bold tracking-[0.2em] text-[#C25B3C] uppercase">
               Discover &amp; Book
             </span>
-            <h1 style={{ fontFamily: "var(--font-serif)" }} className="text-5xl lg:text-[44px] xl:text-[56px] 2xl:text-[64px] font-bold text-[#041635] leading-[1.1] tracking-tight">
+            <h1 style={{ fontFamily: "var(--font-serif)" }} className="text-5xl lg:text-[44px] xl:text-[56px] 2xl:text-[64px] font-bold text-[#0C5F7D] leading-[1.1] tracking-tight">
               Find &amp; Book the Best Around You
             </h1>
-            <p className="text-lg text-[#44474e] leading-relaxed">
+            <p className="text-lg text-[#566572] leading-relaxed">
               Browse restaurants, bars, cafés and activities. Book your next favourite experience in seconds.
             </p>
           </div>
@@ -76,7 +76,7 @@ export default function LandingPage() {
           <div className="flex flex-col gap-3 w-full">
             <Link
               href="/signup"
-              className="w-full py-4 bg-[#9c440f] text-white text-sm font-bold tracking-[0.08em] flex items-center justify-center gap-3 hover:bg-[#7a3000] transition-all duration-300 active:scale-[0.98]"
+              className="w-full py-4 bg-[#C25B3C] text-white text-sm font-bold tracking-[0.08em] flex items-center justify-center gap-3 hover:bg-[#9E4527] transition-all duration-300 active:scale-[0.98]"
             >
               CREATE ACCOUNT
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -85,21 +85,21 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/signin"
-              className="w-full py-4 border border-[#9c440f] text-[#9c440f] text-sm font-bold tracking-[0.08em] flex items-center justify-center hover:bg-[#fff7f4] transition-all duration-300 active:scale-[0.98]"
+              className="w-full py-4 border border-[#C25B3C] text-[#C25B3C] text-sm font-bold tracking-[0.08em] flex items-center justify-center hover:bg-[#FBF2EC] transition-all duration-300 active:scale-[0.98]"
             >
               SIGN IN
             </Link>
           </div>
 
-          <div className="pt-5 border-t border-[#c5c6cf]">
-            <p className="text-sm text-[#44474e] italic">
+          <div className="pt-5 border-t border-[#E1D7C6]">
+            <p className="text-sm text-[#566572] italic">
               &ldquo;Great experiences don&rsquo;t happen by accident — they&rsquo;re discovered.&rdquo;
             </p>
           </div>
         </div>
 
         <footer className="flex justify-between items-center pt-5">
-          <span className="text-xs text-[#75777f]/60">© 2024 HYDRA</span>
+          <span className="text-xs text-[#8B95A0]/60">© 2024 HYDRA</span>
         </footer>
       </section>
 
@@ -117,8 +117,8 @@ export default function LandingPage() {
         <div className="relative z-10 flex flex-col justify-center p-10 xl:p-16 w-full">
 
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-8 h-px bg-[#ffb693]" />
-            <span className="text-xs font-bold tracking-[0.2em] text-[#ffb693]/80 uppercase">Schedule</span>
+            <div className="w-8 h-px bg-[#EDB49B]" />
+            <span className="text-xs font-bold tracking-[0.2em] text-[#EDB49B]/80 uppercase">Schedule</span>
           </div>
 
           <p className="text-[10px] font-bold tracking-[0.2em] text-white/25 uppercase mb-4 pl-14">Today · May 24</p>
@@ -128,7 +128,7 @@ export default function LandingPage() {
             <div className="flex">
               <div className="flex flex-col items-center w-14 shrink-0">
                 <span className="text-[11px] font-mono text-white/40 h-5 flex items-center">19:00</span>
-                <div className="w-2.5 h-2.5 rounded-full bg-[#ffb693] ring-[3px] ring-[#ffb693]/20 my-2 shrink-0 relative z-10" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#EDB49B] ring-[3px] ring-[#EDB49B]/20 my-2 shrink-0 relative z-10" />
                 <div className="flex-1 w-px bg-white/10" />
               </div>
               <div className="flex-1 ml-3 mb-4">

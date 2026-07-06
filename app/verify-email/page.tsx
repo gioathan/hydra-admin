@@ -35,24 +35,24 @@ export default function VerifyEmailPage() {
   const errorMessage = error ? extractErrorMessage(error) : null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#fbf8fc] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#FAF6EF] px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <Link href="/" className="text-2xl font-bold text-[#1B2B4B] tracking-widest">
+          <Link href="/" className="text-2xl font-bold text-[#0C5F7D] tracking-widest">
             HYDRA
           </Link>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-7">
-          <h2 className="text-lg font-semibold text-[#1B2B4B] mb-1">Verify your email</h2>
-          <p className="text-sm text-[#44474e] mb-6">
+          <h2 className="text-lg font-semibold text-[#0C5F7D] mb-1">Verify your email</h2>
+          <p className="text-sm text-[#566572] mb-6">
             We sent a 6-digit code to{" "}
-            <span className="font-medium text-[#1B2B4B]">{email || "your email"}</span>.
+            <span className="font-medium text-[#0C5F7D]">{email || "your email"}</span>.
           </p>
 
           <div className="flex flex-col gap-4">
             <div>
-              <label className="block text-sm font-medium text-[#1B2B4B] mb-1.5">
+              <label className="block text-sm font-medium text-[#0C5F7D] mb-1.5">
                 Verification code
               </label>
               <input
@@ -62,7 +62,7 @@ export default function VerifyEmailPage() {
                 value={code}
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
                 placeholder="000000"
-                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-center text-xl tracking-[0.5em] font-mono focus:outline-none focus:ring-2 focus:ring-[#1B2B4B]"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-center text-xl tracking-[0.5em] font-mono focus:outline-none focus:ring-2 focus:ring-[#0C5F7D]"
               />
             </div>
 
@@ -83,7 +83,7 @@ export default function VerifyEmailPage() {
               type="button"
               onClick={() => resend()}
               disabled={resending || !userId}
-              className="text-sm text-[#C4622D] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-sm text-[#C25B3C] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {resent ? "Code sent!" : resending ? "Sending…" : "Resend code"}
             </button>

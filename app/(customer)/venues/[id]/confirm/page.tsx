@@ -45,15 +45,15 @@ export default function ConfirmPage({ params }: { params: Promise<{ id: string }
 
   return (
     <div className="flex flex-col min-h-full">
-      <div style={{ padding: "48px 20px 16px", background: "#ffffff", borderBottom: "1px solid rgba(197,198,207,0.4)", display: "flex", alignItems: "center", gap: 12 }}>
-        <button onClick={() => router.back()} className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-black/5 transition text-xl" style={{ color: "#041635" }}>‹</button>
-        <h1 className="text-lg font-semibold" style={{ color: "#041635", fontFamily: "var(--font-sans)" }}>Confirm Booking</h1>
+      <div style={{ padding: "48px 20px 16px", background: "#ffffff", borderBottom: "1px solid rgba(225, 215, 198,0.4)", display: "flex", alignItems: "center", gap: 12 }}>
+        <button onClick={() => router.back()} className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-black/5 transition text-xl" style={{ color: "#0C5F7D" }}>‹</button>
+        <h1 className="text-lg font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>Confirm Booking</h1>
       </div>
 
       <div className="flex-1 px-4 py-5 flex flex-col gap-4">
         {/* Booking summary */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex flex-col gap-3">
-          <h2 className="text-sm font-semibold text-[#1B2B4B] uppercase tracking-wider">Booking Details</h2>
+          <h2 className="text-sm font-semibold text-[#0C5F7D] uppercase tracking-wider">Booking Details</h2>
           <div className="flex flex-col gap-2 text-sm">
             <Row label="Venue" value={venue?.name ?? "—"} />
             <Row label="Date" value={startUtc ? formatLocalDate(startUtc) : "—"} />
@@ -65,13 +65,13 @@ export default function ConfirmPage({ params }: { params: Promise<{ id: string }
         {/* Customer info */}
         {customer && (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#C4622D] flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-[#C25B3C] flex items-center justify-center flex-shrink-0">
               <span className="text-white font-bold text-sm">{getInitial(customer.name)}</span>
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#1B2B4B]">{customer.name}</p>
-              <p className="text-xs text-[#75777f]">{customer.email}</p>
-              <p className="text-xs text-[#75777f]">{customer.phone}</p>
+              <p className="text-sm font-semibold text-[#0C5F7D]">{customer.name}</p>
+              <p className="text-xs text-[#8B95A0]">{customer.email}</p>
+              <p className="text-xs text-[#8B95A0]">{customer.phone}</p>
             </div>
           </div>
         )}
@@ -86,7 +86,7 @@ export default function ConfirmPage({ params }: { params: Promise<{ id: string }
           type="button"
           onClick={() => mutate()}
           disabled={isPending}
-          className="w-full bg-[#C4622D] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#b0561f] transition-colors disabled:opacity-60"
+          className="w-full bg-[#C25B3C] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#9E4527] transition-colors disabled:opacity-60"
         >
           {isPending ? "Booking…" : "Confirm Booking"}
         </button>
@@ -98,8 +98,8 @@ export default function ConfirmPage({ params }: { params: Promise<{ id: string }
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-[#75777f]">{label}</span>
-      <span className="font-medium text-[#1B2B4B]">{value}</span>
+      <span className="text-[#8B95A0]">{label}</span>
+      <span className="font-medium text-[#0C5F7D]">{value}</span>
     </div>
   );
 }

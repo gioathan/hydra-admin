@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 import { Select } from "@/components/ui/Select";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { useToast } from "@/components/ui/Toast";
 import { extractErrorMessage } from "@/lib/axios";
 import { RegisterVenueAdminRequest } from "@/types";
 
@@ -22,7 +23,7 @@ export default function SuperAdminUsersPage() {
   const [page, setPage] = useState(1);
   const [showCreate, setShowCreate] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [form, setForm] = useState<RegisterVenueAdminRequest>({
     email: "", name: "", address: "", capacity: 0, venueTypeId: "", password: "", description: "",
   });
@@ -37,17 +38,15 @@ export default function SuperAdminUsersPage() {
     queryFn: () => getVenueTypes(1, 100),
   });
 
-  const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
-
   const createMutation = useMutation({
     mutationFn: createVenueAdmin,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["superadmin-users"] });
       setShowCreate(false);
-      showToast("Venue admin created successfully");
+      showToast("Venue admin created successfully", "success");
       setForm({ email: "", name: "", address: "", capacity: 0, venueTypeId: "", password: "", description: "" });
     },
-    onError: (err) => showToast(extractErrorMessage(err)),
+    onError: (err) => showToast(extractErrorMessage(err), "error"),
   });
 
   const deleteMutation = useMutation({
@@ -55,24 +54,19 @@ export default function SuperAdminUsersPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["superadmin-users"] });
       setDeleteId(null);
-      showToast("User deleted");
+      showToast("User deleted", "success");
     },
-    onError: (err) => showToast(extractErrorMessage(err)),
+    onError: (err) => showToast(extractErrorMessage(err), "error"),
   });
 
   const venueTypeOptions = (venueTypesData?.items ?? []).map(vt => ({ value: vt.id, label: vt.name }));
 
   return (
     <div className="p-6 lg:p-8 flex flex-col gap-6">
-      {toast && (
-        <div className="fixed top-4 right-4 z-50 bg-[#1B2B4B] text-white px-4 py-3 rounded-lg shadow-lg text-sm">
-          {toast}
-        </div>
-      )}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#1B2B4B]">Users</h1>
-          <p className="text-sm text-[#6B7280] mt-1">All registered users in the system</p>
+          <h1 className="text-2xl font-bold text-[#0C5F7D]">Users</h1>
+          <p className="text-sm text-[#566572] mt-1">All registered users in the system</p>
         </div>
         <Button onClick={() => setShowCreate(true)}>Create Venue Admin</Button>
       </div>
@@ -81,10 +75,10 @@ export default function SuperAdminUsersPage() {
         <table className="w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th className="text-left text-xs font-semibold text-[#6B7280] uppercase tracking-wide pb-3 pt-4 px-6">Email</th>
-              <th className="text-left text-xs font-semibold text-[#6B7280] uppercase tracking-wide pb-3 pt-4 px-4">Role</th>
-              <th className="text-left text-xs font-semibold text-[#6B7280] uppercase tracking-wide pb-3 pt-4 px-4">Verified</th>
-              <th className="text-left text-xs font-semibold text-[#6B7280] uppercase tracking-wide pb-3 pt-4 px-4">Actions</th>
+              <th className="text-left text-xs font-semibold text-[#566572] uppercase tracking-wide pb-3 pt-4 px-6">Email</th>
+              <th className="text-left text-xs font-semibold text-[#566572] uppercase tracking-wide pb-3 pt-4 px-4">Role</th>
+              <th className="text-left text-xs font-semibold text-[#566572] uppercase tracking-wide pb-3 pt-4 px-4">Verified</th>
+              <th className="text-left text-xs font-semibold text-[#566572] uppercase tracking-wide pb-3 pt-4 px-4">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -99,13 +93,13 @@ export default function SuperAdminUsersPage() {
                 ))
               : (data?.items ?? []).map((user) => (
                   <tr key={user.id} className="hover:bg-gray-50">
-                    <td className="py-3 border-t border-gray-100 px-6 text-[#1B2B4B]">{user.email}</td>
+                    <td className="py-3 border-t border-gray-100 px-6 text-[#0C5F7D]">{user.email}</td>
                     <td className="py-3 border-t border-gray-100 px-4">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${roleBadgeClass(user.role)}`}>
                         {user.role}
                       </span>
                     </td>
-                    <td className="py-3 border-t border-gray-100 px-4 text-[#6B7280]">
+                    <td className="py-3 border-t border-gray-100 px-4 text-[#566572]">
                       {user.isEmailVerified ? "Yes" : "No"}
                     </td>
                     <td className="py-3 border-t border-gray-100 px-4">
@@ -122,7 +116,7 @@ export default function SuperAdminUsersPage() {
         </table>
         {!isLoading && data && (
           <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
-            <p className="text-sm text-[#6B7280]">
+            <p className="text-sm text-[#566572]">
               Page {data.pageNumber} of {data.totalPages} — {data.totalCount} users
             </p>
             <div className="flex gap-2">
@@ -155,9 +149,9 @@ export default function SuperAdminUsersPage() {
             options={venueTypeOptions}
           />
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-[#1B2B4B]">Description</label>
+            <label className="text-sm font-medium text-[#0C5F7D]">Description</label>
             <textarea
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#1B2B4B] resize-none"
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0C5F7D] resize-none"
               rows={3}
               value={form.description ?? ""}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}

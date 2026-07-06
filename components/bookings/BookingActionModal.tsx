@@ -85,6 +85,20 @@ export function BookingActionModal({
 
   const config = action ? actionConfig[action] : null;
 
+  const summary = booking
+    ? {
+        when: new Date(booking.startUtc).toLocaleString(undefined, {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+        }),
+        guests: `${booking.partySize} ${booking.partySize === 1 ? "guest" : "guests"}`,
+        ref: booking.id.slice(0, 8).toUpperCase(),
+      }
+    : null;
+
   return (
     <Modal
       open={!!booking && !!action}
@@ -96,12 +110,18 @@ export function BookingActionModal({
       onConfirm={() => mutation.mutate()}
       onCancel={handleClose}
     >
+      {summary && (
+        <div className="mb-3 rounded-lg bg-[#F4EDE1] border border-[#E1D7C6] px-3 py-2 text-sm text-[#22303A]">
+          <span className="font-semibold">{summary.when}</span>
+          <span className="text-[#566572]"> · {summary.guests} · #{summary.ref}</span>
+        </div>
+      )}
       <textarea
         value={note}
         onChange={(e) => setNote(e.target.value)}
         placeholder={config?.noteLabel}
         rows={3}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-[#1B2B4B] placeholder:text-[#6B7280] outline-none focus:border-[#1B2B4B] focus:ring-1 focus:ring-[#1B2B4B] resize-none"
+        className="w-full px-3 py-2 border border-[#E1D7C6] rounded-md text-sm text-[#0C5F7D] placeholder:text-[#566572] outline-none focus:border-[#0C5F7D] focus:ring-1 focus:ring-[#0C5F7D] resize-none"
       />
     </Modal>
   );

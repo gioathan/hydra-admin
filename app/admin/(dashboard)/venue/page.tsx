@@ -32,6 +32,7 @@ import { useToast } from "@/components/ui/Toast";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
+import { Modal } from "@/components/ui/Modal";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { VenuePhotoDto, UpdateVenueRequest, VenueRulesDto, VenueEventDto, CreateVenueEventRequest, UpdateVenueEventRequest } from "@/types";
 
@@ -166,7 +167,7 @@ function VenueDetailsSection({ venueId }: { venueId: string }) {
       </div>
       {venue?.googleMapsUrl && (
         <div className="flex items-center gap-2 text-sm">
-          <svg className="w-4 h-4 shrink-0 text-[#6B7280]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <svg className="w-4 h-4 shrink-0 text-[#566572]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
@@ -174,18 +175,18 @@ function VenueDetailsSection({ venueId }: { venueId: string }) {
             href={venue.googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#C4622D] hover:underline truncate"
+            className="text-[#C25B3C] hover:underline truncate"
           >
             View on Google Maps
           </a>
         </div>
       )}
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-[#1B2B4B]">Description</label>
+        <label className="text-sm font-medium text-[#0C5F7D]">Description</label>
         <textarea
           rows={4}
           placeholder="A short description of the venue (optional)"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-[#1B2B4B] placeholder:text-[#6B7280] outline-none focus:border-[#1B2B4B] focus:ring-1 focus:ring-[#1B2B4B] resize-none"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-[#0C5F7D] placeholder:text-[#566572] outline-none focus:border-[#0C5F7D] focus:ring-1 focus:ring-[#0C5F7D] resize-none"
           {...register("description")}
         />
       </div>
@@ -232,7 +233,7 @@ function PhotoCard({
 }: PhotoCardProps) {
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col shadow-sm">
-      <div className="relative h-40 bg-[#1B2B4B] flex items-center justify-center">
+      <div className="relative h-40 bg-[#0C5F7D] flex items-center justify-center">
         {photo.url && (
           <Image
             src={photo.url}
@@ -251,7 +252,7 @@ function PhotoCard({
           <button
             onClick={onMoveUp}
             disabled={isFirst}
-            className="p-1.5 rounded-md text-[#6B7280] hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
+            className="p-1.5 rounded-md text-[#566572] hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
             title="Move up"
           >
             ↑
@@ -259,7 +260,7 @@ function PhotoCard({
           <button
             onClick={onMoveDown}
             disabled={isLast}
-            className="p-1.5 rounded-md text-[#6B7280] hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
+            className="p-1.5 rounded-md text-[#566572] hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
             title="Move down"
           >
             ↓
@@ -295,6 +296,7 @@ function PhotosSection({ venueId }: { venueId: string }) {
   const [orderChanged, setOrderChanged] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [displayOrder, setDisplayOrder] = useState(1);
+  const [confirm, setConfirm] = useState<{ title: string; message: string; confirmLabel: string; onConfirm: () => void } | null>(null);
 
   useEffect(() => {
     if (venue) {
@@ -378,13 +380,20 @@ function PhotosSection({ venueId }: { venueId: string }) {
               isLast={idx === localPhotos.length - 1}
               onMoveUp={() => movePhoto(idx, "up")}
               onMoveDown={() => movePhoto(idx, "down")}
-              onDelete={() => deleteMutation.mutate(photo.id)}
+              onDelete={() =>
+                setConfirm({
+                  title: "Delete photo",
+                  message: "Delete this photo? This can't be undone.",
+                  confirmLabel: "Delete",
+                  onConfirm: () => deleteMutation.mutate(photo.id),
+                })
+              }
               deleting={deletingId === photo.id}
             />
           ))}
         </div>
       ) : (
-        <p className="text-sm text-[#6B7280]">No photos added yet.</p>
+        <p className="text-sm text-[#566572]">No photos added yet.</p>
       )}
 
       {/* Save order button */}
@@ -401,10 +410,10 @@ function PhotosSection({ venueId }: { venueId: string }) {
 
       {/* Upload photo */}
       <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-sm font-semibold text-[#1B2B4B] mb-4">Add Photo</h3>
+        <h3 className="text-sm font-semibold text-[#0C5F7D] mb-4">Add Photo</h3>
         <div className="flex flex-col sm:flex-row gap-3 max-w-lg items-end">
           <div className="w-28 shrink-0">
-            <label className="text-sm font-medium text-[#1B2B4B] block mb-1.5">
+            <label className="text-sm font-medium text-[#0C5F7D] block mb-1.5">
               Display order
             </label>
             <input
@@ -412,11 +421,11 @@ function PhotosSection({ venueId }: { venueId: string }) {
               min={1}
               value={displayOrder}
               onChange={(e) => setDisplayOrder(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-[#1B2B4B] outline-none focus:border-[#1B2B4B] focus:ring-1 focus:ring-[#1B2B4B]"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-[#0C5F7D] outline-none focus:border-[#0C5F7D] focus:ring-1 focus:ring-[#0C5F7D]"
             />
           </div>
           <div className="flex-1">
-            <label className="text-sm font-medium text-[#1B2B4B] block mb-1.5">
+            <label className="text-sm font-medium text-[#0C5F7D] block mb-1.5">
               Photo file
             </label>
             <input
@@ -425,14 +434,27 @@ function PhotosSection({ venueId }: { venueId: string }) {
               accept="image/*"
               onChange={handleFileChange}
               disabled={addMutation.isPending}
-              className="w-full text-sm text-[#1B2B4B] file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#1B2B4B] file:text-white hover:file:bg-[#2d4070] disabled:opacity-50 cursor-pointer"
+              className="w-full text-sm text-[#0C5F7D] file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#0C5F7D] file:text-white hover:file:bg-[#0E6E8E] disabled:opacity-50 cursor-pointer"
             />
           </div>
           {addMutation.isPending && (
-            <span className="text-sm text-[#6B7280] shrink-0">Uploading…</span>
+            <span className="text-sm text-[#566572] shrink-0">Uploading…</span>
           )}
         </div>
       </div>
+
+      <Modal
+        open={!!confirm}
+        title={confirm?.title ?? ""}
+        description={confirm?.message}
+        confirmLabel={confirm?.confirmLabel ?? "Confirm"}
+        confirmVariant="danger"
+        onConfirm={() => {
+          confirm?.onConfirm();
+          setConfirm(null);
+        }}
+        onCancel={() => setConfirm(null)}
+      />
     </div>
   );
 }
@@ -473,8 +495,8 @@ function VenueRulesForm({ venueId, defaultValues }: { venueId: string; defaultVa
       {/* Auto-confirm toggle */}
       <div className="flex items-center justify-between gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50">
         <div>
-          <p className="text-sm font-medium text-[#1B2B4B]">Auto-confirm bookings</p>
-          <p className="text-xs text-[#6B7280] mt-0.5">
+          <p className="text-sm font-medium text-[#0C5F7D]">Auto-confirm bookings</p>
+          <p className="text-xs text-[#566572] mt-0.5">
             {autoConfirm
               ? "Bookings are confirmed instantly."
               : "Bookings land in Pending — you confirm or decline manually."}
@@ -485,8 +507,8 @@ function VenueRulesForm({ venueId, defaultValues }: { venueId: string; defaultVa
           role="switch"
           aria-checked={autoConfirm}
           onClick={() => setValue("autoConfirm", !autoConfirm, { shouldDirty: true })}
-          className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-[#C4622D] focus:ring-offset-2
-            ${autoConfirm ? "bg-[#C4622D]" : "bg-gray-300"}`}
+          className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-[#C25B3C] focus:ring-offset-2
+            ${autoConfirm ? "bg-[#C25B3C]" : "bg-gray-300"}`}
         >
           <span
             className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform
@@ -594,8 +616,8 @@ function VenueRulesSection({ venueId }: { venueId: string }) {
       {/* Bookings toggle */}
       <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
         <div>
-          <p className="text-sm font-semibold text-[#1B2B4B]">Accept Bookings</p>
-          <p className="text-xs text-[#6B7280] mt-0.5">
+          <p className="text-sm font-semibold text-[#0C5F7D]">Accept Bookings</p>
+          <p className="text-xs text-[#566572] mt-0.5">
             When disabled, this venue is informational only — customers cannot book or rate it.
           </p>
         </div>
@@ -604,7 +626,7 @@ function VenueRulesSection({ venueId }: { venueId: string }) {
           onClick={() => toggle(!venue?.bookingsEnabled)}
           disabled={toggling}
           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none disabled:opacity-50 ${
-            venue?.bookingsEnabled ? "bg-[#1B2B4B]" : "bg-gray-300"
+            venue?.bookingsEnabled ? "bg-[#0C5F7D]" : "bg-gray-300"
           }`}
           role="switch"
           aria-checked={!!venue?.bookingsEnabled}
@@ -627,9 +649,9 @@ function VenueRulesSection({ venueId }: { venueId: string }) {
               ))}
             </div>
           ) : isError ? (
-            <p className="text-sm text-[#6B7280]">
+            <p className="text-sm text-[#566572]">
               {axios.isAxiosError(error) && error.response?.status === 404
-                ? "No rules record found for this venue. Ask your backend to seed default rules for this venue ID."
+                ? "Booking rules aren't set up for your venue yet. Contact support to enable bookings."
                 : extractErrorMessage(error)}
             </p>
           ) : rules ? (
@@ -639,7 +661,7 @@ function VenueRulesSection({ venueId }: { venueId: string }) {
       )}
 
       {!venue?.bookingsEnabled && (
-        <p className="text-sm text-[#6B7280]">
+        <p className="text-sm text-[#566572]">
           Enable bookings above to configure booking rules and time slots.
         </p>
       )}
@@ -719,7 +741,7 @@ function PricingSection({ venueId }: { venueId: string }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-[#6B7280]">
+      <p className="text-sm text-[#566572]">
         Items are grouped by category on the customer venue page. Leave category blank for uncategorised items.
       </p>
 
@@ -727,7 +749,7 @@ function PricingSection({ venueId }: { venueId: string }) {
         {fields.length > 0 && (
           <div className="overflow-x-auto">
             <div className="min-w-[580px]">
-              <div className="grid grid-cols-[1fr_1.2fr_1fr_96px_80px] gap-2 pb-2 border-b border-gray-200 text-xs font-bold uppercase tracking-wider text-[#6B7280]">
+              <div className="grid grid-cols-[1fr_1.2fr_1fr_96px_80px] gap-2 pb-2 border-b border-gray-200 text-xs font-bold uppercase tracking-wider text-[#566572]">
                 <span>Category</span>
                 <span>Title *</span>
                 <span>Subtitle</span>
@@ -740,27 +762,27 @@ function PricingSection({ venueId }: { venueId: string }) {
                     <input
                       {...register(`items.${idx}.category`)}
                       placeholder="e.g. Coffees"
-                      className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+                      className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
                     />
                     <input
                       {...register(`items.${idx}.title`, { required: true })}
                       placeholder="e.g. Espresso"
-                      className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+                      className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
                     />
                     <input
                       {...register(`items.${idx}.subtitle`)}
                       placeholder="e.g. Oat milk"
-                      className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+                      className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
                     />
                     <div className="relative">
-                      <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-[#6B7280] pointer-events-none">€</span>
+                      <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-[#566572] pointer-events-none">€</span>
                       <input
                         {...register(`items.${idx}.price`, { required: true })}
                         type="number"
                         step="0.01"
                         min="0"
                         placeholder="0.00"
-                        className="w-full pl-6 pr-2 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+                        className="w-full pl-6 pr-2 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
                       />
                     </div>
                     <div className="flex items-center justify-end gap-0.5">
@@ -768,7 +790,7 @@ function PricingSection({ venueId }: { venueId: string }) {
                         type="button"
                         onClick={() => move(idx, idx - 1)}
                         disabled={idx === 0}
-                        className="p-1.5 text-[#6B7280] hover:text-[#1B2B4B] disabled:opacity-20 disabled:cursor-not-allowed rounded transition-colors"
+                        className="p-1.5 text-[#566572] hover:text-[#0C5F7D] disabled:opacity-20 disabled:cursor-not-allowed rounded transition-colors"
                         title="Move up"
                       >
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -779,7 +801,7 @@ function PricingSection({ venueId }: { venueId: string }) {
                         type="button"
                         onClick={() => move(idx, idx + 1)}
                         disabled={idx === fields.length - 1}
-                        className="p-1.5 text-[#6B7280] hover:text-[#1B2B4B] disabled:opacity-20 disabled:cursor-not-allowed rounded transition-colors"
+                        className="p-1.5 text-[#566572] hover:text-[#0C5F7D] disabled:opacity-20 disabled:cursor-not-allowed rounded transition-colors"
                         title="Move down"
                       >
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -789,7 +811,7 @@ function PricingSection({ venueId }: { venueId: string }) {
                       <button
                         type="button"
                         onClick={() => remove(idx)}
-                        className="p-1.5 text-[#6B7280] hover:text-red-500 rounded transition-colors"
+                        className="p-1.5 text-[#566572] hover:text-red-500 rounded transition-colors"
                         title="Remove"
                       >
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -805,14 +827,14 @@ function PricingSection({ venueId }: { venueId: string }) {
         )}
 
         {fields.length === 0 && (
-          <p className="text-sm text-[#6B7280] py-2">No items yet. Add your first pricing item.</p>
+          <p className="text-sm text-[#566572] py-2">No items yet. Add your first pricing item.</p>
         )}
 
         <div className="flex items-center justify-between flex-wrap gap-3 pt-3 border-t border-gray-100">
           <button
             type="button"
             onClick={() => append({ category: "", title: "", subtitle: "", price: "" })}
-            className="flex items-center gap-1.5 text-sm font-semibold text-[#C4622D] hover:text-[#9c440f] transition-colors"
+            className="flex items-center gap-1.5 text-sm font-semibold text-[#C25B3C] hover:text-[#9E4527] transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -875,7 +897,7 @@ function EventForm({
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="sm:col-span-2">
-          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Title *</label>
+          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">Title *</label>
           <Input
             {...register("title", { required: true })}
             placeholder="e.g. Live Jazz Night"
@@ -883,39 +905,39 @@ function EventForm({
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Start Date *</label>
+          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">Start Date *</label>
           <input
             type="date"
             {...register("startsAtDate", { required: true })}
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Start Time *</label>
+          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">Start Time *</label>
           <input
             type="time"
             {...register("startsAtTime", { required: true })}
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">End Date <span className="font-normal text-[#6B7280]">(optional)</span></label>
+          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">End Date <span className="font-normal text-[#566572]">(optional)</span></label>
           <input
             type="date"
             {...register("endsAtDate")}
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">End Time <span className="font-normal text-[#6B7280]">(optional)</span></label>
+          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">End Time <span className="font-normal text-[#566572]">(optional)</span></label>
           <input
             type="time"
             {...register("endsAtTime")}
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
           />
         </div>
         <div className="sm:col-span-2">
-          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Main Photo <span className="font-normal text-[#6B7280]">(optional)</span></label>
+          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">Main Photo <span className="font-normal text-[#566572]">(optional)</span></label>
           {mainPhotoUrl ? (
             <div className="relative w-full h-40 rounded-lg overflow-hidden border border-gray-200">
               <img src={mainPhotoUrl} alt="Event photo" className="w-full h-full object-cover" />
@@ -926,7 +948,7 @@ function EventForm({
               >✕</button>
             </div>
           ) : (
-            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[#C4622D] hover:bg-orange-50 transition-colors">
+            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[#C25B3C] hover:bg-orange-50 transition-colors">
               <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
@@ -955,17 +977,17 @@ function EventForm({
           <input type="hidden" {...register("mainPhotoUrl")} />
         </div>
         <div className="sm:col-span-2">
-          <label className="block text-xs font-semibold text-[#1B2B4B] mb-1.5">Description <span className="font-normal text-[#6B7280]">(optional)</span></label>
+          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">Description <span className="font-normal text-[#566572]">(optional)</span></label>
           <textarea
             {...register("description")}
             rows={3}
             placeholder="What's happening at this event?"
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors resize-none"
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors resize-none"
           />
         </div>
       </div>
       <div className="flex justify-end gap-3">
-        <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
+        <Button type="button" variant="ghost" onClick={onCancel}>Cancel</Button>
         <Button type="submit" loading={isPending}>Save Event</Button>
       </div>
     </form>
@@ -1000,8 +1022,8 @@ function EventCard({
   const queryClient = useQueryClient();
   const [editing, setEditing] = useState(false);
   const [addingPhoto, setAddingPhoto] = useState(false);
-  const [photoUrl, setPhotoUrl] = useState("");
-  const [photoOrder, setPhotoOrder] = useState(0);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [confirm, setConfirm] = useState<{ title: string; message: string; confirmLabel: string; onConfirm: () => void } | null>(null);
 
   const { mutate: close, isPending: closing } = useMutation({
     mutationFn: () => closeVenueEvent(venueId, event.id),
@@ -1022,8 +1044,8 @@ function EventCard({
   });
 
   const { mutate: addPhoto, isPending: addingPhotoMutating } = useMutation({
-    mutationFn: () => addEventPhoto(venueId, event.id, { url: photoUrl, displayOrder: photoOrder }),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["venueEvents", venueId] }); setAddingPhoto(false); setPhotoUrl(""); showToast("Photo added.", "success"); },
+    mutationFn: (url: string) => addEventPhoto(venueId, event.id, { url, displayOrder: event.additionalPhotos.length }),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["venueEvents", venueId] }); setAddingPhoto(false); showToast("Photo added.", "success"); },
     onError: (err) => showToast(extractErrorMessage(err), "error"),
   });
 
@@ -1035,8 +1057,8 @@ function EventCard({
 
   if (editing) {
     return (
-      <div className="border border-[#1B2B4B]/20 rounded-xl p-5">
-        <p className="text-sm font-semibold text-[#1B2B4B] mb-4">Edit Event</p>
+      <div className="border border-[#0C5F7D]/20 rounded-xl p-5">
+        <p className="text-sm font-semibold text-[#0C5F7D] mb-4">Edit Event</p>
         <EventForm
           defaultValues={{
             title: event.title,
@@ -1062,24 +1084,24 @@ function EventCard({
   }
 
   return (
-    <div className={`border rounded-xl p-4 ${event.isPast ? "border-gray-200 bg-gray-50 opacity-70" : "border-[#1B2B4B]/20 bg-white"}`}>
+    <div className={`border rounded-xl p-4 ${event.isPast ? "border-gray-200 bg-gray-50 opacity-70" : "border-[#0C5F7D]/20 bg-white"}`}>
       <div className="flex items-start gap-4">
         {event.mainPhotoUrl && (
           <img src={event.mainPhotoUrl} alt={event.title} className="w-16 h-16 rounded-lg object-cover shrink-0" />
         )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className="text-sm font-semibold text-[#1B2B4B]">{event.title}</p>
+            <p className="text-sm font-semibold text-[#0C5F7D]">{event.title}</p>
             {event.isPast && (
               <span className="text-[10px] font-bold uppercase tracking-wider bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">Past</span>
             )}
           </div>
-          <p className="text-xs text-[#6B7280] mt-0.5">
+          <p className="text-xs text-[#566572] mt-0.5">
             Starts: {formatLocal(event.startsAtUtc)}
             {event.endsAtUtc && ` · Ends: ${formatLocal(event.endsAtUtc)}`}
           </p>
           {event.description && (
-            <p className="text-xs text-[#6B7280] mt-1 line-clamp-2">{event.description}</p>
+            <p className="text-xs text-[#566572] mt-1 line-clamp-2">{event.description}</p>
           )}
           {event.additionalPhotos.length > 0 && (
             <div className="flex gap-1.5 mt-2 flex-wrap">
@@ -1088,7 +1110,14 @@ function EventCard({
                   {p.url && <img src={p.url} alt="" className="w-10 h-10 rounded object-cover" />}
                   <button
                     type="button"
-                    onClick={() => delPhoto(p.id)}
+                    onClick={() =>
+                      setConfirm({
+                        title: "Delete photo",
+                        message: "Delete this photo? This can't be undone.",
+                        confirmLabel: "Delete",
+                        onConfirm: () => delPhoto(p.id),
+                      })
+                    }
                     className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-[10px] items-center justify-center hidden group-hover:flex"
                   >×</button>
                 </div>
@@ -1101,17 +1130,31 @@ function EventCard({
             <button
               type="button"
               onClick={() => setEditing(true)}
-              className="text-xs font-semibold text-[#1B2B4B] hover:underline"
+              className="text-xs font-semibold text-[#0C5F7D] hover:underline"
             >Edit</button>
             <button
               type="button"
-              onClick={() => close()}
+              onClick={() =>
+                setConfirm({
+                  title: "Close event",
+                  message: "Close this event? Customers will no longer see it.",
+                  confirmLabel: "Close event",
+                  onConfirm: () => close(),
+                })
+              }
               disabled={closing}
               className="text-xs font-semibold text-orange-600 hover:underline disabled:opacity-50"
             >Close</button>
             <button
               type="button"
-              onClick={() => del()}
+              onClick={() =>
+                setConfirm({
+                  title: "Delete event",
+                  message: "Delete this event? This can't be undone.",
+                  confirmLabel: "Delete",
+                  onConfirm: () => del(),
+                })
+              }
               disabled={deleting}
               className="text-xs font-semibold text-red-500 hover:underline disabled:opacity-50"
             >Delete</button>
@@ -1120,7 +1163,14 @@ function EventCard({
         {event.isPast && (
           <button
             type="button"
-            onClick={() => del()}
+            onClick={() =>
+              setConfirm({
+                title: "Delete event",
+                message: "Delete this event? This can't be undone.",
+                confirmLabel: "Delete",
+                onConfirm: () => del(),
+              })
+            }
             disabled={deleting}
             className="text-xs font-semibold text-red-400 hover:underline disabled:opacity-50 shrink-0"
           >Delete</button>
@@ -1129,34 +1179,39 @@ function EventCard({
       {!event.isPast && (
         <div className="mt-3 pt-3 border-t border-gray-100">
           {addingPhoto ? (
-            <div className="flex gap-2 items-end flex-wrap">
-              <div className="flex-1 min-w-[200px]">
-                <label className="block text-xs text-[#6B7280] mb-1">Photo URL</label>
+            <div className="flex flex-col gap-2 max-w-xs">
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[#C25B3C] hover:bg-orange-50 transition-colors">
+                <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span className="text-sm text-gray-500">{uploadingPhoto || addingPhotoMutating ? "Uploading…" : "Click to upload photo"}</span>
                 <input
-                  type="text"
-                  value={photoUrl}
-                  onChange={(e) => setPhotoUrl(e.target.value)}
-                  placeholder="https://..."
-                  className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  disabled={uploadingPhoto || addingPhotoMutating}
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    setUploadingPhoto(true);
+                    try {
+                      const url = await uploadFile(file);
+                      addPhoto(url);
+                    } catch {
+                      showToast("Photo upload failed", "error");
+                    } finally {
+                      setUploadingPhoto(false);
+                    }
+                  }}
                 />
-              </div>
-              <div>
-                <label className="block text-xs text-[#6B7280] mb-1">Order</label>
-                <input
-                  type="number"
-                  value={photoOrder}
-                  onChange={(e) => setPhotoOrder(Number(e.target.value))}
-                  className="w-16 px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#1B2B4B] transition-colors"
-                />
-              </div>
-              <Button size="sm" onClick={() => addPhoto()} loading={addingPhotoMutating} disabled={!photoUrl}>Add</Button>
-              <Button size="sm" variant="outline" onClick={() => setAddingPhoto(false)}>Cancel</Button>
+              </label>
+              <Button size="sm" variant="ghost" onClick={() => setAddingPhoto(false)}>Cancel</Button>
             </div>
           ) : (
             <button
               type="button"
               onClick={() => setAddingPhoto(true)}
-              className="text-xs font-semibold text-[#C4622D] hover:text-[#9c440f] flex items-center gap-1"
+              className="text-xs font-semibold text-[#C25B3C] hover:text-[#9E4527] flex items-center gap-1"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -1166,6 +1221,19 @@ function EventCard({
           )}
         </div>
       )}
+
+      <Modal
+        open={!!confirm}
+        title={confirm?.title ?? ""}
+        description={confirm?.message}
+        confirmLabel={confirm?.confirmLabel ?? "Confirm"}
+        confirmVariant="danger"
+        onConfirm={() => {
+          confirm?.onConfirm();
+          setConfirm(null);
+        }}
+        onCancel={() => setConfirm(null)}
+      />
     </div>
   );
 }
@@ -1221,8 +1289,8 @@ function EventsSection({ venueId }: { venueId: string }) {
       {/* Events toggle */}
       <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
         <div>
-          <p className="text-sm font-semibold text-[#1B2B4B]">Enable Events</p>
-          <p className="text-xs text-[#6B7280] mt-0.5">
+          <p className="text-sm font-semibold text-[#0C5F7D]">Enable Events</p>
+          <p className="text-xs text-[#566572] mt-0.5">
             Show events on your venue page so customers know what&apos;s happening.
           </p>
         </div>
@@ -1231,7 +1299,7 @@ function EventsSection({ venueId }: { venueId: string }) {
           onClick={() => toggleEvents(!venue?.eventsEnabled)}
           disabled={toggling}
           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none disabled:opacity-50 ${
-            venue?.eventsEnabled ? "bg-[#1B2B4B]" : "bg-gray-300"
+            venue?.eventsEnabled ? "bg-[#0C5F7D]" : "bg-gray-300"
           }`}
           role="switch"
           aria-checked={!!venue?.eventsEnabled}
@@ -1247,8 +1315,8 @@ function EventsSection({ venueId }: { venueId: string }) {
       {venue?.eventsEnabled && (
         <>
           {creating ? (
-            <div className="border border-[#1B2B4B]/20 rounded-xl p-5">
-              <p className="text-sm font-semibold text-[#1B2B4B] mb-4">New Event</p>
+            <div className="border border-[#0C5F7D]/20 rounded-xl p-5">
+              <p className="text-sm font-semibold text-[#0C5F7D] mb-4">New Event</p>
               <EventForm
                 onSubmit={(fd) => createEvent({
                   title: fd.title,
@@ -1265,7 +1333,7 @@ function EventsSection({ venueId }: { venueId: string }) {
             <button
               type="button"
               onClick={() => setCreating(true)}
-              className="flex items-center gap-2 text-sm font-semibold text-[#C4622D] hover:text-[#9c440f] transition-colors self-start"
+              className="flex items-center gap-2 text-sm font-semibold text-[#C25B3C] hover:text-[#9E4527] transition-colors self-start"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -1281,7 +1349,7 @@ function EventsSection({ venueId }: { venueId: string }) {
           ) : (
             <>
               {(events ?? []).length === 0 && (
-                <p className="text-sm text-[#6B7280]">No {showPast ? "" : "upcoming "}events yet.</p>
+                <p className="text-sm text-[#566572]">No {showPast ? "" : "upcoming "}events yet.</p>
               )}
               <div className="flex flex-col gap-3">
                 {(events ?? []).map((ev) => (
@@ -1291,7 +1359,7 @@ function EventsSection({ venueId }: { venueId: string }) {
               <button
                 type="button"
                 onClick={() => setShowPast((p) => !p)}
-                className="text-xs text-[#6B7280] hover:text-[#1B2B4B] underline self-start"
+                className="text-xs text-[#566572] hover:text-[#0C5F7D] underline self-start"
               >
                 {showPast ? "Hide past events" : "Show past events"}
               </button>
@@ -1301,7 +1369,7 @@ function EventsSection({ venueId }: { venueId: string }) {
       )}
 
       {!venue?.eventsEnabled && (
-        <p className="text-sm text-[#6B7280]">
+        <p className="text-sm text-[#566572]">
           Enable events above to start creating events for your venue.
         </p>
       )}
@@ -1317,46 +1385,46 @@ export default function VenuePage() {
   if (!venueId) {
     return (
       <div className="p-6 lg:p-8">
-        <p className="text-[#6B7280]">No venue linked to this account.</p>
+        <p className="text-[#566572]">No venue linked to this account.</p>
       </div>
     );
   }
 
   return (
     <div className="p-6 lg:p-8 flex flex-col gap-10">
-      <h1 className="text-2xl font-bold text-[#1B2B4B]">Venue</h1>
+      <h1 className="text-2xl font-bold text-[#0C5F7D]">Venue</h1>
 
       <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-[#1B2B4B] mb-6">
+        <h2 className="text-lg font-semibold text-[#0C5F7D] mb-6">
           Venue Details
         </h2>
         <VenueDetailsSection venueId={venueId} />
       </section>
 
       <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-[#1B2B4B] mb-6">Photos</h2>
+        <h2 className="text-lg font-semibold text-[#0C5F7D] mb-6">Photos</h2>
         <PhotosSection venueId={venueId} />
       </section>
 
       <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-[#1B2B4B] mb-2">Booking Rules</h2>
-        <p className="text-sm text-[#6B7280] mb-6">
+        <h2 className="text-lg font-semibold text-[#0C5F7D] mb-2">Booking Rules</h2>
+        <p className="text-sm text-[#566572] mb-6">
           Controls how bookings are handled and what time slots are available to customers.
         </p>
         <VenueRulesSection venueId={venueId} />
       </section>
 
       <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-[#1B2B4B] mb-2">Pricing</h2>
-        <p className="text-sm text-[#6B7280] mb-6">
+        <h2 className="text-lg font-semibold text-[#0C5F7D] mb-2">Pricing</h2>
+        <p className="text-sm text-[#566572] mb-6">
           Set the menu and pricing items displayed to customers on the venue page.
         </p>
         <PricingSection venueId={venueId} />
       </section>
 
       <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-[#1B2B4B] mb-2">Events</h2>
-        <p className="text-sm text-[#6B7280] mb-6">
+        <h2 className="text-lg font-semibold text-[#0C5F7D] mb-2">Events</h2>
+        <p className="text-sm text-[#566572] mb-6">
           Create and manage events at your venue. One active event per day is allowed.
         </p>
         <EventsSection venueId={venueId} />

@@ -66,7 +66,7 @@ export function MobileNav() {
   const isSuperAdmin = user?.role === "SuperAdmin";
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#1B2B4B] border-t border-white/10 flex">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0C5F7D] border-t border-white/10 flex">
       {isSuperAdmin ? (
         superAdminNavItems.map((item) => {
           const active = pathname.startsWith(item.href) && (item.href !== "/admin/account" || pathname === item.href);
