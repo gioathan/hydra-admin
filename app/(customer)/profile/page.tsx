@@ -134,7 +134,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { customerId, clearAuth } = useCustomerAuthStore();
+  const { customerId, clearAuth, isGoogleUser } = useCustomerAuthStore();
 
   const { data: customer } = useQuery({
     queryKey: ["customer", customerId],
@@ -173,8 +173,12 @@ export default function ProfilePage() {
             <p className="text-xs font-bold tracking-widest uppercase mb-2.5 ml-1" style={{ color: "#566572", fontFamily: "var(--font-sans)" }}>Account</p>
             <div className="rounded-xl overflow-hidden" style={{ background: "#ffffff", border: "1px solid rgba(225, 215, 198,0.3)", boxShadow: "0 1px 4px rgba(12, 54, 72,0.04)" }}>
               <MenuRow href="/profile/edit" label="Edit Profile" iconType="edit" />
-              <div style={{ height: 1, background: "rgba(225, 215, 198,0.4)", marginLeft: 64 }} />
-              <MenuRow href="/profile/password" label="Change Password" iconType="lock" />
+              {!isGoogleUser && (
+                <>
+                  <div style={{ height: 1, background: "rgba(225, 215, 198,0.4)", marginLeft: 64 }} />
+                  <MenuRow href="/profile/password" label="Change Password" iconType="lock" />
+                </>
+              )}
             </div>
           </div>
 
@@ -241,7 +245,9 @@ export default function ProfilePage() {
                 <h2 className="text-xs font-bold tracking-widest uppercase mb-5" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Account</h2>
                 <div className="flex flex-col gap-3">
                   <DesktopCard href="/profile/edit" title="Edit Profile" subtitle="Update your name and phone number" iconType="edit" />
-                  <DesktopCard href="/profile/password" title="Change Password" subtitle="Keep your account secure with a strong password" iconType="lock" />
+                  {!isGoogleUser && (
+                    <DesktopCard href="/profile/password" title="Change Password" subtitle="Keep your account secure with a strong password" iconType="lock" />
+                  )}
                 </div>
               </div>
               <div>

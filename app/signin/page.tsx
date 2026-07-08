@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -48,6 +48,13 @@ export default function SignInPage() {
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const [extraError, setExtraError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const googleContainerRef = useRef<HTMLDivElement>(null);
+  const [googleWidth, setGoogleWidth] = useState<number | null>(null);
+
+  useLayoutEffect(() => {
+    const el = googleContainerRef.current;
+    if (el) setGoogleWidth(Math.floor(el.getBoundingClientRect().width));
+  }, []);
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: customerLogin,
@@ -70,7 +77,7 @@ export default function SignInPage() {
         return;
       }
       setExtraError(null);
-      setAuth(data.token, data.user, data.customerId);
+      setAuth(data.token, data.user, data.customerId, true);
       router.replace("/discover");
     },
   });
@@ -123,19 +130,23 @@ export default function SignInPage() {
                   Signing in with Google…
                 </div>
               ) : (
-                <GoogleLogin
-                  onSuccess={(credentialResponse) => {
-                    if (!credentialResponse.credential) return;
-                    setExtraError(null);
-                    mutateGoogle({ idToken: credentialResponse.credential });
-                  }}
-                  onError={() => setExtraError("Google sign-in failed. Please try again.")}
-                  text="continue_with"
-                  shape="rectangular"
-                  size="large"
-                  width={460}
-                  useOneTap={false}
-                />
+                <div ref={googleContainerRef} className="w-full overflow-hidden">
+                  {googleWidth !== null && (
+                    <GoogleLogin
+                      onSuccess={(credentialResponse) => {
+                        if (!credentialResponse.credential) return;
+                        setExtraError(null);
+                        mutateGoogle({ idToken: credentialResponse.credential });
+                      }}
+                      onError={() => setExtraError("Google sign-in failed. Please try again.")}
+                      text="continue_with"
+                      shape="rectangular"
+                      size="large"
+                      width={googleWidth}
+                      useOneTap={false}
+                    />
+                  )}
+                </div>
               )}
             </div>
 

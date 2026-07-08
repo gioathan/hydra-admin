@@ -9,7 +9,7 @@ import { useCustomerAuthStore } from "@/store/customerAuthStore";
 import { register as registerApi, googleLogin } from "@/lib/api/customerAuth";
 import { extractErrorMessage } from "@/lib/axios";
 import { validatePassword } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useLayoutEffect, useRef } from "react";
 
 interface FormValues {
   name: string;
@@ -33,6 +33,13 @@ export default function SignUpPage() {
   const { setAuth } = useCustomerAuthStore();
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const [googleError, setGoogleError] = useState<string | null>(null);
+  const googleContainerRef = useRef<HTMLDivElement>(null);
+  const [googleWidth, setGoogleWidth] = useState<number | null>(null);
+
+  useLayoutEffect(() => {
+    const el = googleContainerRef.current;
+    if (el) setGoogleWidth(Math.floor(el.getBoundingClientRect().width));
+  }, []);
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: registerApi,
@@ -51,7 +58,7 @@ export default function SignUpPage() {
         return;
       }
       setGoogleError(null);
-      setAuth(data.token, data.user, data.customerId);
+      setAuth(data.token, data.user, data.customerId, true);
       router.replace("/discover");
     },
     onError: (err) => setGoogleError(extractErrorMessage(err)),
@@ -97,26 +104,30 @@ export default function SignUpPage() {
             </div>
 
             {/* Google sign-up button */}
-            <div className="flex justify-center mb-6">
+            <div ref={googleContainerRef} className="w-full mb-6">
               {isGooglePending ? (
                 <div className="flex items-center gap-2 text-[#566572] text-sm h-11">
                   <Spinner />
                   Signing up with Google…
                 </div>
               ) : (
-                <GoogleLogin
-                  onSuccess={(credentialResponse) => {
-                    if (!credentialResponse.credential) return;
-                    setGoogleError(null);
-                    mutateGoogle({ idToken: credentialResponse.credential });
-                  }}
-                  onError={() => setGoogleError("Google sign-up failed. Please try again.")}
-                  text="signup_with"
-                  shape="rectangular"
-                  size="large"
-                  width={460}
-                  useOneTap={false}
-                />
+                <div className="overflow-hidden">
+                  {googleWidth !== null && (
+                    <GoogleLogin
+                      onSuccess={(credentialResponse) => {
+                        if (!credentialResponse.credential) return;
+                        setGoogleError(null);
+                        mutateGoogle({ idToken: credentialResponse.credential });
+                      }}
+                      onError={() => setGoogleError("Google sign-up failed. Please try again.")}
+                      text="signup_with"
+                      shape="rectangular"
+                      size="large"
+                      width={googleWidth}
+                      useOneTap={false}
+                    />
+                  )}
+                </div>
               )}
             </div>
 
