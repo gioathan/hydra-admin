@@ -852,6 +852,137 @@ function PricingSection({ venueId }: { venueId: string }) {
 
 // ─── Events Section ───────────────────────────────────────────────
 
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+const TIME_OPTIONS: { label: string; value: string }[] = (() => {
+  const opts: { label: string; value: string }[] = [{ label: "— select —", value: "" }];
+  for (let h = 0; h < 24; h++) {
+    for (const m of [0, 30]) {
+      const hh = String(h).padStart(2, "0");
+      const mm = String(m).padStart(2, "0");
+      const period = h < 12 ? "AM" : "PM";
+      const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+      opts.push({ value: `${hh}:${mm}`, label: `${String(h12).padStart(2, "0")}:${mm} ${period}` });
+    }
+  }
+  return opts;
+})();
+
+const selectCls =
+  "w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] bg-white transition-colors appearance-none cursor-pointer";
+
+function parseDateValue(value: string) {
+  if (!value) return { year: "", month: "", day: "" };
+  const [y, m, d] = value.split("-");
+  return {
+    year: y ?? "",
+    month: m ? String(parseInt(m)) : "",
+    day: d ? String(parseInt(d)) : "",
+  };
+}
+
+function DateSelect({
+  value,
+  onChange,
+  required,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  required?: boolean;
+}) {
+  const init = parseDateValue(value);
+  const [year, setYear] = useState(init.year);
+  const [month, setMonth] = useState(init.month);
+  const [day, setDay] = useState(init.day);
+
+  // Sync if parent resets the value (e.g. form reset)
+  const prevValue = useRef(value);
+  useEffect(() => {
+    if (value !== prevValue.current) {
+      const p = parseDateValue(value);
+      setYear(p.year);
+      setMonth(p.month);
+      setDay(p.day);
+      prevValue.current = value;
+    }
+  }, [value]);
+
+  const emit = (y: string, m: string, d: string) => {
+    if (y && m && d) {
+      onChange(`${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`);
+    }
+  };
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 6 }, (_, i) => currentYear + i);
+  const daysInMonth = year && month ? new Date(parseInt(year), parseInt(month), 0).getDate() : 31;
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+  return (
+    <div className="flex gap-2">
+      <select
+        value={month}
+        onChange={(e) => { setMonth(e.target.value); emit(year, e.target.value, day); }}
+        className={`${selectCls} flex-[2]`}
+        required={required}
+      >
+        <option value="">Month</option>
+        {MONTHS.map((name, i) => (
+          <option key={i} value={String(i + 1)}>{name}</option>
+        ))}
+      </select>
+      <select
+        value={day}
+        onChange={(e) => { setDay(e.target.value); emit(year, month, e.target.value); }}
+        className={`${selectCls} flex-1`}
+        required={required}
+      >
+        <option value="">Day</option>
+        {days.map((dd) => (
+          <option key={dd} value={String(dd)}>{dd}</option>
+        ))}
+      </select>
+      <select
+        value={year}
+        onChange={(e) => { setYear(e.target.value); emit(e.target.value, month, day); }}
+        className={`${selectCls} flex-[1.4]`}
+        required={required}
+      >
+        <option value="">Year</option>
+        {years.map((yy) => (
+          <option key={yy} value={String(yy)}>{yy}</option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+function TimeSelect({
+  value,
+  onChange,
+  required,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  required?: boolean;
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={selectCls}
+      required={required}
+    >
+      {TIME_OPTIONS.map((opt) => (
+        <option key={opt.value} value={opt.value}>{opt.label}</option>
+      ))}
+    </select>
+  );
+}
+
 type EventFormData = {
   title: string;
   startsAtDate: string;
@@ -864,7 +995,7 @@ type EventFormData = {
 
 function formatLocal(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+  return d.toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" });
 }
 
 function EventForm({
@@ -892,6 +1023,10 @@ function EventForm({
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const { showToast } = useToast();
   const mainPhotoUrl = watch("mainPhotoUrl");
+  const startsAtDate = watch("startsAtDate");
+  const startsAtTime = watch("startsAtTime");
+  const endsAtDate = watch("endsAtDate");
+  const endsAtTime = watch("endsAtTime");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -904,37 +1039,52 @@ function EventForm({
             error={errors.title ? "Required" : undefined}
           />
         </div>
-        <div>
-          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">Start Date *</label>
-          <input
-            type="date"
-            {...register("startsAtDate", { required: true })}
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
-          />
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">
+            Start Date &amp; Time *
+          </label>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex-1">
+              <DateSelect
+                value={startsAtDate}
+                onChange={(v) => setValue("startsAtDate", v, { shouldValidate: true })}
+                required
+              />
+            </div>
+            <div className="sm:w-40">
+              <TimeSelect
+                value={startsAtTime}
+                onChange={(v) => setValue("startsAtTime", v, { shouldValidate: true })}
+                required
+              />
+            </div>
+          </div>
+          {(errors.startsAtDate || errors.startsAtTime) && (
+            <p className="mt-1 text-xs text-red-500">Start date and time are required</p>
+          )}
+          <input type="hidden" {...register("startsAtDate", { required: true })} />
+          <input type="hidden" {...register("startsAtTime", { required: true })} />
         </div>
-        <div>
-          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">Start Time *</label>
-          <input
-            type="time"
-            {...register("startsAtTime", { required: true })}
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">End Date <span className="font-normal text-[#566572]">(optional)</span></label>
-          <input
-            type="date"
-            {...register("endsAtDate")}
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">End Time <span className="font-normal text-[#566572]">(optional)</span></label>
-          <input
-            type="time"
-            {...register("endsAtTime")}
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#0C5F7D] transition-colors"
-          />
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">
+            End Date &amp; Time <span className="font-normal text-[#566572]">(optional)</span>
+          </label>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex-1">
+              <DateSelect
+                value={endsAtDate}
+                onChange={(v) => setValue("endsAtDate", v)}
+              />
+            </div>
+            <div className="sm:w-40">
+              <TimeSelect
+                value={endsAtTime}
+                onChange={(v) => setValue("endsAtTime", v)}
+              />
+            </div>
+          </div>
+          <input type="hidden" {...register("endsAtDate")} />
+          <input type="hidden" {...register("endsAtTime")} />
         </div>
         <div className="sm:col-span-2">
           <label className="block text-xs font-semibold text-[#0C5F7D] mb-1.5">Main Photo <span className="font-normal text-[#566572]">(optional)</span></label>

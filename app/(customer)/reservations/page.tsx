@@ -29,7 +29,7 @@ const statusStyle: Record<BookingStatus, { bg: string; color: string; border: st
 
 function DesktopBookingCard({ booking, venue }: { booking: BookingDto; venue?: CustomerVenueDto }) {
   const st = statusStyle[booking.status];
-  const firstPhoto = venue && [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.photoUrl);
+  const firstPhoto = venue && [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.url);
 
   return (
     <Link
@@ -39,9 +39,9 @@ function DesktopBookingCard({ booking, venue }: { booking: BookingDto; venue?: C
     >
       {/* Photo */}
       <div className="relative w-full md:w-56 h-48 md:h-auto overflow-hidden shrink-0" style={{ background: "#0C5F7D" }}>
-        {firstPhoto?.photoUrl ? (
+        {firstPhoto?.url ? (
           <Image
-            src={firstPhoto.photoUrl}
+            src={firstPhoto.url}
             alt={venue?.name ?? ""}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"

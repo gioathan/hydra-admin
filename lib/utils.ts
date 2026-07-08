@@ -1,5 +1,5 @@
 export function formatLocalDate(utcStr: string): string {
-  return new Date(utcStr).toLocaleDateString(undefined, {
+  return new Date(utcStr).toLocaleDateString("en-US", {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -8,7 +8,7 @@ export function formatLocalDate(utcStr: string): string {
 }
 
 export function formatLocalTime(utcStr: string): string {
-  return new Date(utcStr).toLocaleTimeString(undefined, {
+  return new Date(utcStr).toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
     hour12: true,

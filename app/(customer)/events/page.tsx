@@ -14,11 +14,11 @@ const LOCATION_KEY = "customer_location";
 
 function formatEventDate(startsAtUtc: string, endsAtUtc: string | null): string {
   const start = new Date(startsAtUtc);
-  const dateStr = start.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
-  const startTime = start.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+  const dateStr = start.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  const startTime = start.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
   if (!endsAtUtc) return `${dateStr} · ${startTime}`;
   const end = new Date(endsAtUtc);
-  const endTime = end.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+  const endTime = end.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
   return `${dateStr} · ${startTime} – ${endTime}`;
 }
 
@@ -89,12 +89,12 @@ function LocationPickerModal({
 function EventCard({ event }: { event: EventListItemDto }) {
   const [imgError, setImgError] = useState(false);
   const hasPhoto = !!event.mainPhotoUrl && !imgError;
-  const day = new Date(event.startsAtUtc).toLocaleDateString(undefined, { day: "numeric" });
-  const month = new Date(event.startsAtUtc).toLocaleDateString(undefined, { month: "short" }).toUpperCase();
+  const day = new Date(event.startsAtUtc).toLocaleDateString("en-US", { day: "numeric" });
+  const month = new Date(event.startsAtUtc).toLocaleDateString("en-US", { month: "short" }).toUpperCase();
 
   return (
     <Link
-      href={`/venues/${event.venueId}`}
+      href={`/events/${event.id}`}
       className="group block rounded-2xl overflow-hidden transition-transform hover:-translate-y-0.5"
       style={{ background: "#fff", border: "1px solid rgba(225, 215, 198,0.4)", boxShadow: "0 4px 24px rgba(12, 54, 72,0.06)" }}
     >
@@ -152,7 +152,7 @@ function EventCard({ event }: { event: EventListItemDto }) {
         )}
         <div className="flex items-center justify-end mt-1">
           <span className="text-xs font-semibold flex items-center gap-1" style={{ color: "#C25B3C", fontFamily: "var(--font-sans)" }}>
-            View venue
+            View event
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>

@@ -230,6 +230,8 @@ export interface CustomerVenueDto {
   googleMapsUrl: string | null;
   description: string | null;
   pricingItems: PricingItemDto[];
+  bookingsEnabled: boolean;
+  eventsEnabled: boolean;
 }
 
 export interface RegisterRequest {

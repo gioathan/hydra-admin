@@ -11,26 +11,26 @@ const PAGE_SIZE = 15;
 
 function formatEventDate(startsAtUtc: string, endsAtUtc: string | null): string {
   const start = new Date(startsAtUtc);
-  const dateStr = start.toLocaleDateString(undefined, {
+  const dateStr = start.toLocaleDateString("en-US", {
     weekday: "short",
     year: "numeric",
     month: "short",
     day: "numeric",
   });
-  const startTime = start.toLocaleTimeString(undefined, {
+  const startTime = start.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
   });
   if (!endsAtUtc) return `${dateStr} at ${startTime}`;
   const end = new Date(endsAtUtc);
-  const endTime = end.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+  const endTime = end.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
   return `${dateStr} · ${startTime} – ${endTime}`;
 }
 
 function EventCard({ event }: { event: EventListItemDto }) {
   const startDate = new Date(event.startsAtUtc);
-  const day = startDate.toLocaleDateString(undefined, { day: "numeric" });
-  const month = startDate.toLocaleDateString(undefined, { month: "short" }).toUpperCase();
+  const day = startDate.toLocaleDateString("en-US", { day: "numeric" });
+  const month = startDate.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
 
   return (
     <div className="flex gap-4 bg-white rounded-xl border border-[#E1D7C6] shadow-sm overflow-hidden hover:shadow-md transition-shadow">

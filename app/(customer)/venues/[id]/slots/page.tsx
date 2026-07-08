@@ -50,7 +50,7 @@ export default function SlotsPage({ params }: { params: Promise<{ id: string }> 
   };
 
   const venueType = typesData?.items.find((t) => t.id === venue?.venueTypeId);
-  const firstPhoto = venue && [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.photoUrl);
+  const firstPhoto = venue && [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.url);
   const formattedDate = date ? formatLocalDate(date + "T12:00:00Z") : "";
 
   // ── Shared slot button renderer ──────────────────────────────────
@@ -154,9 +154,9 @@ export default function SlotsPage({ params }: { params: Promise<{ id: string }> 
 
         {/* Hero */}
         <section className="relative h-[480px] w-full overflow-hidden">
-          {firstPhoto?.photoUrl ? (
+          {firstPhoto?.url ? (
             <Image
-              src={firstPhoto.photoUrl}
+              src={firstPhoto.url}
               alt={venue?.name ?? ""}
               fill
               className="object-cover object-center"

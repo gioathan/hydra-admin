@@ -66,7 +66,7 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
   }
 
   const canCancel = booking.status === "Pending" || booking.status === "Confirmed";
-  const firstPhoto = venue && [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.photoUrl);
+  const firstPhoto = venue && [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.url);
   const st = statusDesktop[booking.status];
 
   return (
@@ -146,9 +146,9 @@ export default function ReservationDetailPage({ params }: { params: Promise<{ id
 
         {/* Hero */}
         <section className="relative h-[480px] w-full overflow-hidden">
-          {firstPhoto?.photoUrl ? (
+          {firstPhoto?.url ? (
             <Image
-              src={firstPhoto.photoUrl}
+              src={firstPhoto.url}
               alt={venue?.name ?? ""}
               fill
               className="object-cover object-center"

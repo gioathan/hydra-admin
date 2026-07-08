@@ -4,12 +4,13 @@ import { use, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getCustomerVenue } from "@/lib/api/customerVenues";
-import { getCustomerVenueTypes as getVenueTypes } from "@/lib/api/customerVenues";
+import Link from "next/link";
+import { getCustomerVenue, getCustomerVenueTypes as getVenueTypes, getCustomerVenueEvents } from "@/lib/api/customerVenues";
 import { PhotoSlider } from "@/components/customer/PhotoSlider";
-import { StarRating } from "@/components/customer/StarRating";
+// import { StarRating } from "@/components/customer/StarRating";
 import { CalendarPicker } from "@/components/customer/CalendarPicker";
 import { formatDateParam } from "@/lib/utils";
+import type { EventListItemDto } from "@/types";
 
 export default function VenueDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -33,6 +34,15 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
 
   const venueType = typesData?.items.find((t) => t.id === venue?.venueTypeId);
 
+  const { data: venueEvents = [] } = useQuery({
+    queryKey: ["customerVenueEvents", id],
+    queryFn: () => getCustomerVenueEvents(id),
+    staleTime: 60_000,
+    enabled: !!venue,
+  });
+
+  const upcomingEvents = venueEvents.filter((e: EventListItemDto) => !new Date(e.startsAtUtc).valueOf() || new Date(e.startsAtUtc) >= new Date());
+
   const handleCheckAvailability = () => {
     if (!selectedDate) return;
     const dateParam = formatDateParam(selectedDate);
@@ -51,8 +61,8 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
     );
   }
 
-  const firstPhoto = [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.photoUrl);
-  const sortedPhotos = [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).filter((p) => p.photoUrl);
+  const firstPhoto = [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.url);
+  const sortedPhotos = [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).filter((p) => p.url);
 
   const pricingGroups = [...venue.pricingItems]
     .sort((a, b) => a.displayOrder - b.displayOrder)
@@ -94,11 +104,11 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
             </div>
             <p className="text-sm text-[#8B95A0]">{venue.address}</p>
             <div className="flex items-center gap-3 mt-2">
-              {venue.averageRating != null && venue.ratingCount > 0 ? (
+              {/* {venue.averageRating != null && venue.ratingCount > 0 ? (
                 <StarRating rating={venue.averageRating} count={venue.ratingCount} size="md" />
               ) : (
                 <span className="text-sm" style={{ color: "#8B95A0" }}>No reviews yet</span>
-              )}
+              )} */}
               <span className="text-sm text-[#8B95A0]">· Capacity {venue.capacity}</span>
             </div>
             {venue.googleMapsUrl && (
@@ -135,43 +145,92 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
             </button>
           )}
 
-          <div>
-            <h2 className="text-base font-semibold text-[#0C5F7D] mb-3">Select a date</h2>
-            <CalendarPicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
-          </div>
+          {venue.bookingsEnabled ? (
+            <>
+              <div>
+                <h2 className="text-base font-semibold text-[#0C5F7D] mb-3">Select a date</h2>
+                <CalendarPicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
+              </div>
 
-          <div>
-            <h2 className="text-base font-semibold text-[#0C5F7D] mb-3">Party size</h2>
-            <div className="flex items-center gap-5">
+              <div>
+                <h2 className="text-base font-semibold text-[#0C5F7D] mb-3">Party size</h2>
+                <div className="flex items-center gap-5">
+                  <button
+                    type="button"
+                    onClick={() => setPartySize((s) => Math.max(1, s - 1))}
+                    className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-xl text-[#0C5F7D] hover:bg-gray-50 disabled:opacity-30"
+                    disabled={partySize <= 1}
+                  >
+                    −
+                  </button>
+                  <span className="text-2xl font-bold text-[#0C5F7D] w-8 text-center">{partySize}</span>
+                  <button
+                    type="button"
+                    onClick={() => setPartySize((s) => Math.min(venue.capacity, s + 1))}
+                    className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-xl text-[#0C5F7D] hover:bg-gray-50 disabled:opacity-30"
+                    disabled={partySize >= venue.capacity}
+                  >
+                    +
+                  </button>
+                  <span className="text-sm text-[#8B95A0]">max {venue.capacity}</span>
+                </div>
+              </div>
+
               <button
                 type="button"
-                onClick={() => setPartySize((s) => Math.max(1, s - 1))}
-                className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-xl text-[#0C5F7D] hover:bg-gray-50 disabled:opacity-30"
-                disabled={partySize <= 1}
+                onClick={handleCheckAvailability}
+                disabled={!selectedDate}
+                className="w-full bg-[#C25B3C] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#9E4527] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                −
+                {selectedDate ? "See Available Slots" : "Select a date first"}
               </button>
-              <span className="text-2xl font-bold text-[#0C5F7D] w-8 text-center">{partySize}</span>
-              <button
-                type="button"
-                onClick={() => setPartySize((s) => Math.min(venue.capacity, s + 1))}
-                className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-xl text-[#0C5F7D] hover:bg-gray-50 disabled:opacity-30"
-                disabled={partySize >= venue.capacity}
-              >
-                +
-              </button>
-              <span className="text-sm text-[#8B95A0]">max {venue.capacity}</span>
+            </>
+          ) : (
+            <div className="flex items-start gap-3 px-4 py-4 rounded-xl border" style={{ background: "#F4EDE1", borderColor: "#E1D7C6" }}>
+              <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="#8B95A0" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+              </svg>
+              <div>
+                <p className="text-sm font-semibold" style={{ color: "#0C5F7D" }}>Not accepting reservations</p>
+                <p className="text-xs mt-0.5" style={{ color: "#8B95A0" }}>This venue is not currently taking online bookings.</p>
+              </div>
             </div>
-          </div>
+          )}
 
-          <button
-            type="button"
-            onClick={handleCheckAvailability}
-            disabled={!selectedDate}
-            className="w-full bg-[#C25B3C] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#9E4527] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            {selectedDate ? "See Available Slots" : "Select a date first"}
-          </button>
+          {/* Events section — mobile */}
+          {upcomingEvents.length > 0 && (
+            <div>
+              <h2 className="text-base font-semibold text-[#0C5F7D] mb-3">Upcoming Events</h2>
+              <div className="flex flex-col gap-3">
+                {upcomingEvents.map((event: EventListItemDto) => (
+                  <Link
+                    key={event.id}
+                    href={`/events/${event.id}`}
+                    className="flex items-center gap-3 p-3 rounded-xl border transition-colors hover:bg-white"
+                    style={{ background: "#fff", borderColor: "#E6DCCC" }}
+                  >
+                    <div className="flex flex-col items-center rounded-lg px-2.5 py-1.5 shrink-0" style={{ background: "#C25B3C", minWidth: 40 }}>
+                      <span className="text-white font-bold leading-none" style={{ fontSize: 17, fontFamily: "var(--font-serif)" }}>
+                        {new Date(event.startsAtUtc).toLocaleDateString("en-US", { day: "numeric" })}
+                      </span>
+                      <span className="text-white/80 font-bold tracking-widest" style={{ fontSize: 8, fontFamily: "var(--font-sans)" }}>
+                        {new Date(event.startsAtUtc).toLocaleDateString("en-US", { month: "short" }).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold truncate" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{event.title}</p>
+                      <p className="text-xs mt-0.5" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>
+                        {new Date(event.startsAtUtc).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
+                      </p>
+                    </div>
+                    <svg className="w-4 h-4 shrink-0" fill="none" stroke="#C25B3C" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -183,12 +242,12 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
           {sortedPhotos.length === 0 ? (
             <div className="w-full h-full" style={{ background: "#0C5F7D" }} />
           ) : sortedPhotos.length === 1 ? (
-            <Image src={sortedPhotos[0].photoUrl!} alt={venue.name} fill className="object-cover object-center" sizes="100vw" priority />
+            <Image src={sortedPhotos[0].url!} alt={venue.name} fill className="object-cover object-center" sizes="100vw" priority />
           ) : (
             <div className="flex h-full gap-0.5">
               {/* Main photo */}
               <div className="relative flex-[3] overflow-hidden">
-                <Image src={sortedPhotos[0].photoUrl!} alt={venue.name} fill className="object-cover" sizes="60vw" priority />
+                <Image src={sortedPhotos[0].url!} alt={venue.name} fill className="object-cover" sizes="60vw" priority />
               </div>
               {/* Side grid — up to 4 thumbnails */}
               <div
@@ -200,7 +259,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
               >
                 {sortedPhotos.slice(1, 5).map((photo, i) => (
                   <div key={i} className="relative overflow-hidden">
-                    <Image src={photo.photoUrl!} alt={venue.name} fill className="object-cover" sizes="20vw" />
+                    <Image src={photo.url!} alt={venue.name} fill className="object-cover" sizes="20vw" />
                   </div>
                 ))}
               </div>
@@ -224,7 +283,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 >
                   {venue.name}
                 </h1>
-                <div className="flex items-center gap-4 text-white">
+                {/* <div className="flex items-center gap-4 text-white">
                   {venue.averageRating != null && venue.ratingCount > 0 ? (
                     <div className="flex items-center gap-1.5">
                       <span style={{ color: "#F6D9CD" }}>★</span>
@@ -237,7 +296,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                       No reviews yet
                     </span>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -308,7 +367,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 </div>
 
                 {/* Rating */}
-                <div
+                {/* <div
                   className="flex items-start gap-4 p-6 rounded-xl border"
                   style={{ background: "#ffffff", borderColor: "#E6DCCC" }}
                 >
@@ -325,7 +384,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                       <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>No reviews yet</p>
                     )}
                   </div>
-                </div>
+                </div> */}
 
                 {/* Venue type */}
                 {venueType && (
@@ -371,6 +430,47 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                   <p className="text-sm leading-relaxed" style={{ color: "#566572", fontFamily: "var(--font-sans)" }}>{venue.description}</p>
                 </div>
               )}
+
+              {/* Events section — desktop */}
+              {upcomingEvents.length > 0 && (
+                <div>
+                  <h2 className="text-lg font-semibold mb-4" style={{ color: "#0C5F7D", fontFamily: "var(--font-serif)" }}>Upcoming Events</h2>
+                  <div className="flex flex-col gap-3">
+                    {upcomingEvents.map((event: EventListItemDto) => (
+                      <Link
+                        key={event.id}
+                        href={`/events/${event.id}`}
+                        className="flex items-center gap-4 p-4 rounded-xl border transition-all hover:-translate-y-0.5 hover:shadow-md"
+                        style={{ background: "#fff", borderColor: "#E6DCCC" }}
+                      >
+                        {event.mainPhotoUrl ? (
+                          <img src={event.mainPhotoUrl} alt={event.title} className="w-16 h-16 rounded-lg object-cover shrink-0" />
+                        ) : (
+                          <div className="w-16 h-16 rounded-lg flex items-center justify-center shrink-0" style={{ background: "#D3E7EE" }}>
+                            <svg className="w-6 h-6" fill="none" stroke="rgba(194,91,60,0.4)" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{event.title}</p>
+                          <p className="text-xs mt-0.5" style={{ color: "#C25B3C", fontFamily: "var(--font-sans)" }}>
+                            {new Date(event.startsAtUtc).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+                            {" · "}
+                            {new Date(event.startsAtUtc).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
+                          </p>
+                          {event.description && (
+                            <p className="text-xs mt-1 line-clamp-1" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>{event.description}</p>
+                          )}
+                        </div>
+                        <svg className="w-4 h-4 shrink-0" fill="none" stroke="#C25B3C" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Right: booking card */}
@@ -383,70 +483,99 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                   className="text-2xl font-semibold mb-6 pb-4 border-b"
                   style={{ fontFamily: "var(--font-serif)", color: "#0C5F7D", borderColor: "#E1D7C6" }}
                 >
-                  Make a Reservation
+                  {venue.bookingsEnabled ? "Make a Reservation" : "Reservations"}
                 </h3>
 
-                <div className="flex flex-col gap-6">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Select a Date</p>
-                    <CalendarPicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
-                  </div>
-
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Party Size</p>
-                    <div className="flex items-center justify-between p-4 rounded-xl border bg-white" style={{ borderColor: "#E6DCCC" }}>
-                      <button
-                        type="button"
-                        onClick={() => setPartySize((s) => Math.max(1, s - 1))}
-                        disabled={partySize <= 1}
-                        className="w-10 h-10 rounded-full border flex items-center justify-center text-xl font-light transition hover:bg-gray-50 disabled:opacity-30"
-                        style={{ borderColor: "#E1D7C6", color: "#0C5F7D" }}
-                      >
-                        −
-                      </button>
-                      <div className="text-center">
-                        <span className="text-3xl font-bold" style={{ color: "#0C5F7D", fontFamily: "var(--font-serif)" }}>{partySize}</span>
-                        <p className="text-xs mt-0.5" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>max {venue.capacity}</p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setPartySize((s) => Math.min(venue.capacity, s + 1))}
-                        disabled={partySize >= venue.capacity}
-                        className="w-10 h-10 rounded-full border flex items-center justify-center text-xl font-light transition hover:bg-gray-50 disabled:opacity-30"
-                        style={{ borderColor: "#E1D7C6", color: "#0C5F7D" }}
-                      >
-                        +
-                      </button>
+                {venue.bookingsEnabled ? (
+                  <div className="flex flex-col gap-6">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Select a Date</p>
+                      <CalendarPicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
                     </div>
-                  </div>
 
-                  {hasPricing && (
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Party Size</p>
+                      <div className="flex items-center justify-between p-4 rounded-xl border bg-white" style={{ borderColor: "#E6DCCC" }}>
+                        <button
+                          type="button"
+                          onClick={() => setPartySize((s) => Math.max(1, s - 1))}
+                          disabled={partySize <= 1}
+                          className="w-10 h-10 rounded-full border flex items-center justify-center text-xl font-light transition hover:bg-gray-50 disabled:opacity-30"
+                          style={{ borderColor: "#E1D7C6", color: "#0C5F7D" }}
+                        >
+                          −
+                        </button>
+                        <div className="text-center">
+                          <span className="text-3xl font-bold" style={{ color: "#0C5F7D", fontFamily: "var(--font-serif)" }}>{partySize}</span>
+                          <p className="text-xs mt-0.5" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>max {venue.capacity}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setPartySize((s) => Math.min(venue.capacity, s + 1))}
+                          disabled={partySize >= venue.capacity}
+                          className="w-10 h-10 rounded-full border flex items-center justify-center text-xl font-light transition hover:bg-gray-50 disabled:opacity-30"
+                          style={{ borderColor: "#E1D7C6", color: "#0C5F7D" }}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    {hasPricing && (
+                      <button
+                        type="button"
+                        onClick={() => setPricingOpen(true)}
+                        className="w-full py-3.5 text-sm font-semibold rounded-lg border transition-colors flex items-center justify-center gap-2"
+                        style={{ background: "#FBF2EC", borderColor: "#C25B3C", color: "#C25B3C", fontFamily: "var(--font-sans)" }}
+                      >
+                        <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        Menu &amp; Pricing
+                      </button>
+                    )}
+
                     <button
                       type="button"
-                      onClick={() => setPricingOpen(true)}
-                      className="w-full py-3.5 text-sm font-semibold rounded-lg border transition-colors flex items-center justify-center gap-2"
-                      style={{ background: "#FBF2EC", borderColor: "#C25B3C", color: "#C25B3C", fontFamily: "var(--font-sans)" }}
+                      onClick={handleCheckAvailability}
+                      disabled={!selectedDate}
+                      className="w-full py-5 text-white text-sm font-bold uppercase tracking-wider rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-40 disabled:cursor-not-allowed disabled:translate-y-0 flex items-center justify-center gap-3 shadow-xl"
+                      style={{ background: "#0C5F7D", fontFamily: "var(--font-sans)" }}
                     >
-                      <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      {selectedDate ? "See Available Slots" : "Select a Date First"}
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
-                      Menu &amp; Pricing
                     </button>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={handleCheckAvailability}
-                    disabled={!selectedDate}
-                    className="w-full py-5 text-white text-sm font-bold uppercase tracking-wider rounded-lg transition-all hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-40 disabled:cursor-not-allowed disabled:translate-y-0 flex items-center justify-center gap-3 shadow-xl"
-                    style={{ background: "#0C5F7D", fontFamily: "var(--font-sans)" }}
-                  >
-                    {selectedDate ? "See Available Slots" : "Select a Date First"}
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </button>
-                </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center text-center gap-4 py-4">
+                    <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "#EBE4DA" }}>
+                      <svg className="w-7 h-7" fill="none" stroke="#8B95A0" strokeWidth={1.5} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold mb-1" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>Not accepting reservations</p>
+                      <p className="text-xs leading-relaxed" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>
+                        This venue is not currently taking online bookings. Check back later or contact the venue directly.
+                      </p>
+                    </div>
+                    {hasPricing && (
+                      <button
+                        type="button"
+                        onClick={() => setPricingOpen(true)}
+                        className="w-full py-3.5 text-sm font-semibold rounded-lg border transition-colors flex items-center justify-center gap-2 mt-2"
+                        style={{ background: "#FBF2EC", borderColor: "#C25B3C", color: "#C25B3C", fontFamily: "var(--font-sans)" }}
+                      >
+                        <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        Menu &amp; Pricing
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 

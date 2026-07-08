@@ -29,7 +29,7 @@ export default function SuccessPage({ params }: { params: Promise<{ id: string }
     staleTime: 60_000,
   });
 
-  const firstPhoto = venue && [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.photoUrl);
+  const firstPhoto = venue && [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.url);
 
   return (
     <>
@@ -113,8 +113,8 @@ export default function SuccessPage({ params }: { params: Promise<{ id: string }
           >
             {/* Photo */}
             <div className="relative md:w-1/3 h-48 md:h-auto overflow-hidden" style={{ background: "#0C5F7D" }}>
-              {firstPhoto?.photoUrl ? (
-                <Image src={firstPhoto.photoUrl} alt={venue?.name ?? ""} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+              {firstPhoto?.url ? (
+                <Image src={firstPhoto.url} alt={venue?.name ?? ""} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <span className="text-4xl font-bold" style={{ color: "rgba(255,255,255,0.2)", fontFamily: "var(--font-serif)" }}>

@@ -13,7 +13,7 @@ interface PhotoSliderProps {
 
 export function PhotoSlider({ photos, name, height = "h-64" }: PhotoSliderProps) {
   const sorted = [...photos]
-    .filter((p) => p.photoUrl)
+    .filter((p) => p.url)
     .sort((a, b) => a.displayOrder - b.displayOrder);
   const [current, setCurrent] = useState(0);
 
@@ -28,7 +28,7 @@ export function PhotoSlider({ photos, name, height = "h-64" }: PhotoSliderProps)
   return (
     <div className={`relative ${height} bg-[#0C5F7D] overflow-hidden`}>
       <Image
-        src={sorted[current].photoUrl!}
+        src={sorted[current].url!}
         alt={name}
         fill
         className="object-cover"

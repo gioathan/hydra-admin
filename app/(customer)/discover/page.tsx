@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCustomerVenues, getVenueLocations } from "@/lib/api/customerVenues";
 import { getCustomerVenueTypes as getVenueTypes } from "@/lib/api/customerVenues";
-import { getPendingRatings } from "@/lib/api/ratingsApi";
+// import { getPendingRatings } from "@/lib/api/ratingsApi";
 import { useCustomerAuthStore } from "@/store/customerAuthStore";
 import { getCustomer } from "@/lib/api/customersApi";
 import { VenueCard } from "@/components/customer/VenueCard";
@@ -151,11 +151,11 @@ export default function DiscoverPage() {
     enabled: locationReady && !!location,
   });
 
-  const { data: pendingRatings } = useQuery({
-    queryKey: ["pendingRatings"],
-    queryFn: getPendingRatings,
-    staleTime: 60_000,
-  });
+  // const { data: pendingRatings } = useQuery({
+  //   queryKey: ["pendingRatings"],
+  //   queryFn: getPendingRatings,
+  //   staleTime: 60_000,
+  // });
 
   const venueTypes = typesData?.items ?? [];
   const venues = data?.items ?? [];
@@ -166,7 +166,7 @@ export default function DiscoverPage() {
   const venueContent = (
     <div className="flex flex-col gap-3">
       {/* Pending ratings banners */}
-      {(pendingRatings ?? []).length > 0 && (
+      {/* {(pendingRatings ?? []).length > 0 && (
         <div className="flex flex-col gap-2 mb-1">
           {pendingRatings!.map((r) => (
             <Link
@@ -183,7 +183,7 @@ export default function DiscoverPage() {
             </Link>
           ))}
         </div>
-      )}
+      )} */}
 
       {!location ? (
         <div className="hidden lg:flex flex-col items-center justify-center py-20 text-center gap-3">

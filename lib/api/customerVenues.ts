@@ -41,3 +41,13 @@ export async function getUpcomingEvents(page = 1, pageSize = 10, location?: stri
   });
   return res.data;
 }
+
+export async function getCustomerEvent(id: string): Promise<EventListItemDto> {
+  const res = await api.get<EventListItemDto>(`/events/${id}`);
+  return res.data;
+}
+
+export async function getCustomerVenueEvents(venueId: string): Promise<EventListItemDto[]> {
+  const res = await api.get<EventListItemDto[]>(`/venues/${venueId}/events`);
+  return res.data;
+}

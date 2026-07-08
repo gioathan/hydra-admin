@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { CustomerVenueDto, VenueTypeDto } from "@/types";
-import { StarRating } from "./StarRating";
+// import { StarRating } from "./StarRating";
 import { getInitial } from "@/lib/utils";
 
 interface VenueCardProps {
@@ -11,7 +11,7 @@ interface VenueCardProps {
 }
 
 export function VenueCard({ venue, venueType }: VenueCardProps) {
-  const firstPhoto = [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.photoUrl);
+  const firstPhoto = [...venue.photos].sort((a, b) => a.displayOrder - b.displayOrder).find((p) => p.url);
 
   return (
     <Link
@@ -26,10 +26,10 @@ export function VenueCard({ venue, venueType }: VenueCardProps) {
     >
       {/* Photo — 256px tall to match RN */}
       <div className="relative overflow-hidden" style={{ height: 256, background: "#ECE3D4" }}>
-        {firstPhoto?.photoUrl ? (
+        {firstPhoto?.url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={firstPhoto.photoUrl}
+            src={firstPhoto.url}
             alt={venue.name}
             className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
           />
@@ -72,11 +72,11 @@ export function VenueCard({ venue, venueType }: VenueCardProps) {
             </svg>
             <p className="text-sm truncate" style={{ color: "#566572" }}>{venue.address}</p>
           </div>
-          {venue.averageRating != null && venue.ratingCount > 0 ? (
+          {/* {venue.averageRating != null && venue.ratingCount > 0 ? (
             <StarRating rating={venue.averageRating} count={venue.ratingCount} />
           ) : (
             <span className="text-xs" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>No reviews yet</span>
-          )}
+          )} */}
         </div>
 
         {/* Book button */}
