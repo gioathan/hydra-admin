@@ -266,9 +266,9 @@ export interface ResetPasswordRequest {
 
 export interface CustomerDto {
   id: string;
-  name: string;
-  email: string;
-  phone: string;
+  name: string | null;
+  email: string | null;
+  phone: string | null;
   locale: "en" | "el";
   createdAtUtc: string;
   pushToken: string | null;
