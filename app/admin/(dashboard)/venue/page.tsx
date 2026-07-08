@@ -69,8 +69,7 @@ function VenueDetailsSection({ venueId }: { venueId: string }) {
         capacity: venue.capacity,
         venueTypeId: venue.venueTypeId,
         location: venue.location ?? "",
-        latitude: venue.latitude ?? undefined,
-        longitude: venue.longitude ?? undefined,
+        mapsUrl: venue.googleMapsUrl ?? "",
         description: venue.description ?? "",
       });
     }
@@ -87,8 +86,7 @@ function VenueDetailsSection({ venueId }: { venueId: string }) {
         capacity: updated.capacity,
         venueTypeId: updated.venueTypeId,
         location: updated.location ?? "",
-        latitude: updated.latitude ?? undefined,
-        longitude: updated.longitude ?? undefined,
+        mapsUrl: updated.googleMapsUrl ?? "",
         description: updated.description ?? "",
       });
     },
@@ -147,23 +145,16 @@ function VenueDetailsSection({ venueId }: { venueId: string }) {
         error={errors.location?.message}
         {...register("location")}
       />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="flex flex-col gap-1.5">
         <Input
-          label="Latitude"
-          type="number"
-          step="any"
-          placeholder="e.g. 37.349"
-          error={errors.latitude?.message}
-          {...register("latitude", { valueAsNumber: true })}
+          label="Google Maps link"
+          placeholder="https://www.google.com/maps/place/..."
+          error={errors.mapsUrl?.message}
+          {...register("mapsUrl")}
         />
-        <Input
-          label="Longitude"
-          type="number"
-          step="any"
-          placeholder="e.g. 23.473"
-          error={errors.longitude?.message}
-          {...register("longitude", { valueAsNumber: true })}
-        />
+        <p className="text-xs text-[#566572]">
+          Paste the Google Maps link for this venue&apos;s location.
+        </p>
       </div>
       {venue?.googleMapsUrl && (
         <div className="flex items-center gap-2 text-sm">
