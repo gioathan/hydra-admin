@@ -53,8 +53,6 @@ export interface VenueDto {
   averageRating: number | null;
   ratingCount: number;
   location: string | null;
-  latitude: number | null;
-  longitude: number | null;
   googleMapsUrl: string | null;
   description: string | null;
   pricingItems: PricingItemDto[];
@@ -120,8 +118,7 @@ export interface UpdateVenueRequest {
   capacity: number;
   venueTypeId: string;
   location?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
+  mapsUrl?: string | null;
   description?: string | null;
 }
 
@@ -225,8 +222,6 @@ export interface CustomerVenueDto {
   ratingCount: number;
   venueTypeId: string;
   location: string | null;
-  latitude: number | null;
-  longitude: number | null;
   googleMapsUrl: string | null;
   description: string | null;
   pricingItems: PricingItemDto[];
