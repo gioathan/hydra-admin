@@ -38,9 +38,8 @@ export default function VerifyEmailPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#FAF6EF] px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-2xl font-bold text-[#0C5F7D] tracking-widest">
-            <img src="/logo-bee.svg" alt="Local Bee" width={28} height={28} />
-            Local Bee
+          <Link href="/" className="inline-flex items-center">
+            <img src="/brand-lockup.svg" alt="Local Bee" style={{ height: 36, width: "auto" }} />
           </Link>
         </div>
 

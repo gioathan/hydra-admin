@@ -9,10 +9,7 @@ export default function LandingPage() {
       <section className="flex flex-col justify-between p-10 lg:p-10 xl:p-16 bg-white lg:h-full lg:overflow-hidden">
 
         <div className="flex items-center justify-between">
-          <span style={{ fontFamily: "var(--font-serif)" }} className="flex items-center gap-3 text-2xl font-bold tracking-[0.2em] text-[#0C5F7D]">
-            <img src="/brand-mark.svg" alt="Local Bee" width={48} height={48} />
-            Local Bee
-          </span>
+          <img src="/brand-lockup.svg" alt="Local Bee" style={{ height: 64, width: "auto" }} />
           <a href="mailto:test@mail.com" className="text-sm text-[#566572] hover:text-[#C25B3C] transition-colors">
             Support
           </a>
