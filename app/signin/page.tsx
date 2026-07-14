@@ -95,8 +95,9 @@ export default function SignInPage() {
 
         {/* Brand */}
         <div className="text-center mb-6">
-          <Link href="/" style={{ fontFamily: "var(--font-serif)" }} className="text-2xl font-bold tracking-[0.2em] text-[#0C5F7D] hover:text-[#0C5F7D] transition-colors">
-            HYDRA
+          <Link href="/" style={{ fontFamily: "var(--font-serif)" }} className="inline-flex items-center gap-2 text-2xl font-bold tracking-[0.2em] text-[#0C5F7D] hover:text-[#0C5F7D] transition-colors">
+            <img src="/logo-bee.svg" alt="Local Bee" width={28} height={28} />
+            Local Bee
           </Link>
         </div>
 
@@ -237,7 +238,7 @@ export default function SignInPage() {
 
             <div className="mt-10 pt-10 border-t border-[#E1D7C6]/30 text-center">
               <p className="text-[#566572]">
-                New to HYDRA?{" "}
+                New to Local Bee?{" "}
                 <Link href="/signup" className="text-[#C25B3C] font-bold hover:underline ml-1">
                   Create an account
                 </Link>

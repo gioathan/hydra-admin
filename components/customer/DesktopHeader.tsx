@@ -33,10 +33,11 @@ export function CustomerDesktopHeader() {
         <div className="flex items-center gap-12">
           <Link
             href="/discover"
-            className="font-bold tracking-[0.2em]"
+            className="flex items-center gap-2 font-bold tracking-[0.2em]"
             style={{ fontSize: 28, fontFamily: "var(--font-serif)", color: "#0C5F7D" }}
           >
-            HYDRA
+            <img src="/logo-bee.svg" alt="Local Bee" width={30} height={30} />
+            Local Bee
           </Link>
           <div className="flex items-center gap-8">
             {NAV_LINKS.map(({ href, label }) => {

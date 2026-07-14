@@ -50,12 +50,12 @@ export const termsOfServiceSections: LegalSection[] = [
   {
     title: "Acceptance of Terms",
     content:
-      "By accessing or using the HYDRA platform, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our service.",
+      "By accessing or using the Local Bee platform, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our service.",
   },
   {
     title: "Use of the Service",
     content:
-      "HYDRA provides an online platform for discovering and booking venues in the Mediterranean. You agree to use the platform only for lawful purposes and in accordance with these terms.",
+      "Local Bee provides an online platform for discovering and booking venues in the Mediterranean. You agree to use the platform only for lawful purposes and in accordance with these terms.",
   },
   {
     title: "Account Responsibility",
@@ -65,22 +65,22 @@ export const termsOfServiceSections: LegalSection[] = [
   {
     title: "Bookings and Cancellations",
     content:
-      "When you make a booking through HYDRA, you enter into a direct agreement with the venue. Cancellation policies vary by venue and are displayed before you confirm. HYDRA is not responsible for venue-side cancellations.",
+      "When you make a booking through Local Bee, you enter into a direct agreement with the venue. Cancellation policies vary by venue and are displayed before you confirm. Local Bee is not responsible for venue-side cancellations.",
   },
   {
     title: "Payments",
     content:
-      "Payments are processed securely through our payment provider. Prices are displayed in Euros and include applicable taxes where required by law. HYDRA reserves the right to correct pricing errors.",
+      "Payments are processed securely through our payment provider. Prices are displayed in Euros and include applicable taxes where required by law. Local Bee reserves the right to correct pricing errors.",
   },
   {
     title: "Intellectual Property",
     content:
-      "All content on the HYDRA platform, including logos, text, graphics, and software, is the property of HYDRA Mediterranean and is protected by applicable intellectual property laws.",
+      "All content on the Local Bee platform, including logos, text, graphics, and software, is the property of Local Bee and is protected by applicable intellectual property laws.",
   },
   {
     title: "Limitation of Liability",
     content:
-      "HYDRA acts as an intermediary between users and venues. To the maximum extent permitted by law, HYDRA shall not be liable for any indirect, incidental, or consequential damages arising from use of the platform.",
+      "Local Bee acts as an intermediary between users and venues. To the maximum extent permitted by law, Local Bee shall not be liable for any indirect, incidental, or consequential damages arising from use of the platform.",
   },
   {
     title: "Changes to Terms",

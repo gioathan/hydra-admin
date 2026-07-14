@@ -77,8 +77,9 @@ export default function SignUpPage() {
 
         {/* Brand */}
         <div className="text-center mb-6">
-          <Link href="/" style={{ fontFamily: "var(--font-serif)" }} className="text-2xl font-bold tracking-[0.2em] text-[#0C5F7D] hover:text-[#0C5F7D] transition-colors">
-            HYDRA
+          <Link href="/" style={{ fontFamily: "var(--font-serif)" }} className="inline-flex items-center gap-2 text-2xl font-bold tracking-[0.2em] text-[#0C5F7D] hover:text-[#0C5F7D] transition-colors">
+            <img src="/logo-bee.svg" alt="Local Bee" width={28} height={28} />
+            Local Bee
           </Link>
         </div>
 

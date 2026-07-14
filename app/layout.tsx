@@ -18,8 +18,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Hydra",
-  description: "Discover and book venues",
+  title: "Local Bee",
+  description: "Discover and book local venues around the Greek islands.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
