@@ -211,7 +211,7 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <p className="text-[10px] text-center tracking-widest uppercase mt-2" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Hydra v1.0</p>
+          <p className="text-[10px] text-center tracking-widest uppercase mt-2" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Local Bee v1.0</p>
         </div>
       </div>
 
@@ -266,7 +266,7 @@ export default function ProfilePage() {
                 <h2 className="text-xs font-bold tracking-widest uppercase mb-5" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Legal</h2>
                 <div className="flex flex-col gap-3">
                   <DesktopCard href="/privacy-policy" title="Privacy Policy" subtitle="How we collect, use, and protect your personal data" iconType="shield" />
-                  <DesktopCard href="/terms-of-service" title="Terms of Service" subtitle="Rules and guidelines for using the HYDRA platform" iconType="document" />
+                  <DesktopCard href="/terms-of-service" title="Terms of Service" subtitle="Rules and guidelines for using the Local Bee platform" iconType="document" />
                 </div>
               </div>
             </div>

@@ -6,7 +6,7 @@ export function CustomerDesktopFooter() {
   const handleShare = async () => {
     const url = window.location.href;
     if (navigator.share) {
-      await navigator.share({ title: "HYDRA Mediterranean", url }).catch(() => {});
+      await navigator.share({ title: "Local Bee", url }).catch(() => {});
     } else {
       await navigator.clipboard.writeText(url);
     }
@@ -18,10 +18,11 @@ export function CustomerDesktopFooter() {
         {/* Brand + tagline */}
         <div className="flex flex-col gap-6">
           <span
-            className="font-bold tracking-[0.2em]"
+            className="flex items-center gap-2 font-bold tracking-[0.2em]"
             style={{ fontSize: 28, fontFamily: "var(--font-serif)", color: "#FAF6EF" }}
           >
-            HYDRA
+            <img src="/logo-bee.svg" alt="Local Bee" width={30} height={30} />
+            Local Bee
           </span>
           <p className="text-sm leading-relaxed max-w-xs" style={{ color: "#7FA7B5", fontFamily: "var(--font-sans)" }}>
             Curating the finest Mediterranean experiences for the modern traveler. From secret coves to world-class dining.
@@ -85,7 +86,7 @@ export function CustomerDesktopFooter() {
             </button>
           </div>
           <p className="text-xs mt-8" style={{ color: "#7FA7B5", fontFamily: "var(--font-sans)" }}>
-            © {new Date().getFullYear()} HYDRA Mediterranean. All rights reserved.
+            © {new Date().getFullYear()} Local Bee. All rights reserved.
           </p>
         </div>
       </div>

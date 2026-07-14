@@ -56,7 +56,10 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#FAF6EF] p-4">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-[#C25B3C]">Hydra</h1>
+          <h1 className="flex items-center justify-center gap-2 text-3xl font-bold text-[#C25B3C]">
+            <img src="/logo-bee.svg" alt="Local Bee" width={32} height={32} />
+            Local Bee
+          </h1>
           <p className="text-sm text-[#566572] mt-1">Admin Dashboard</p>
         </div>
 

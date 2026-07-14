@@ -38,7 +38,7 @@ function LocationPickerModal({
           className="text-[22px] font-bold tracking-[8px]"
           style={{ fontFamily: "var(--font-serif)", color: "#0C5F7D" }}
         >
-          HYDRA
+          Local Bee
         </span>
         <div className="text-center">
           <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: "#C25B3C", fontFamily: "var(--font-sans)" }}>
@@ -303,7 +303,7 @@ export default function DiscoverPage() {
           className="text-[22px] font-bold tracking-[8px]"
           style={{ fontFamily: "var(--font-serif)", color: "#0C5F7D" }}
         >
-          HYDRA
+          Local Bee
         </span>
 
         <Link

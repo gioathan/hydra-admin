@@ -71,7 +71,8 @@ export function Sidebar() {
       {/* Logo / Venue name */}
       <div className="px-6 py-6 border-b border-white/10">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-[#C25B3C] font-bold text-xl">Hydra</span>
+          <img src="/logo-bee.svg" alt="Local Bee" width={24} height={24} />
+          <span className="text-[#C25B3C] font-bold text-xl">Local Bee</span>
           <span className="text-white/60 text-sm">Admin</span>
         </div>
         <p className="text-sm text-white/80 font-medium truncate">
