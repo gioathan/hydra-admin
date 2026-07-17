@@ -1,4 +1,8 @@
-<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g transform="translate(256 268) rotate(-18) scale(1.15)"><defs><clipPath id="beeBody"><ellipse cx="0" cy="30" rx="82" ry="120"/></clipPath></defs>
+<svg viewBox="0 0 1080 340" xmlns="http://www.w3.org/2000/svg">
+  <text x="24" y="242" font-family="Georgia,'Times New Roman',serif" font-size="196" font-weight="500" fill="#E8A83C" letter-spacing="1">Local Bee</text>
+  <path d="M 858 236 C 842 292, 772 312, 740 288 C 710 266, 736 232, 762 248 C 776 257, 772 278, 754 280"
+        fill="none" stroke="#0C5F7D" stroke-width="7" stroke-linecap="round"/>
+  <g transform="translate(905 128) rotate(-26) scale(0.58)"><defs><clipPath id="beeBody"><ellipse cx="0" cy="30" rx="82" ry="120"/></clipPath></defs>
 <g id="bee">
   <ellipse cx="-44" cy="-74" rx="48" ry="80" fill="#FBEAC6" stroke="#E8A83C" stroke-width="9" transform="rotate(-32 -44 -74)"/>
   <ellipse cx="44" cy="-70" rx="44" ry="72" fill="#FBEAC6" stroke="#E8A83C" stroke-width="9" transform="rotate(30 44 -70)"/>
@@ -8,4 +12,5 @@
   <path d="M-14 -128 C -28 -166, -48 -174, -66 -164" fill="none" stroke="#0C5F7D" stroke-width="9" stroke-linecap="round"/>
   <path d="M14 -128 C 28 -166, 48 -174, 66 -164" fill="none" stroke="#0C5F7D" stroke-width="9" stroke-linecap="round"/>
   <circle cx="-68" cy="-164" r="11" fill="#E8A83C"/><circle cx="68" cy="-164" r="11" fill="#E8A83C"/>
-</g></g></svg>
+</g></g>
+</svg>

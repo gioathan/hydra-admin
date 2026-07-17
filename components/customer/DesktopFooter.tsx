@@ -17,13 +17,7 @@ export function CustomerDesktopFooter() {
       <div className="max-w-[1440px] mx-auto px-20 grid grid-cols-3 gap-8">
         {/* Brand + tagline */}
         <div className="flex flex-col gap-6">
-          <span
-            className="flex items-center gap-2 font-bold tracking-[0.2em]"
-            style={{ fontSize: 28, fontFamily: "var(--font-serif)", color: "#FAF6EF" }}
-          >
-            <img src="/logo-bee.svg" alt="Local Bee" width={30} height={30} />
-            Local Bee
-          </span>
+          <img src="/brand-lockup-light.svg" alt="Local Bee" style={{ height: 30, width: "auto" }} />
           <p className="text-sm leading-relaxed max-w-xs" style={{ color: "#7FA7B5", fontFamily: "var(--font-sans)" }}>
             Curating the finest Mediterranean experiences for the modern traveler. From secret coves to world-class dining.
           </p>

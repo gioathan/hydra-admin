@@ -31,13 +31,8 @@ export function CustomerDesktopHeader() {
     >
       <div className="max-w-[1440px] mx-auto w-full px-20 flex justify-between items-center h-20">
         <div className="flex items-center gap-12">
-          <Link
-            href="/discover"
-            className="flex items-center gap-2 font-bold tracking-[0.2em]"
-            style={{ fontSize: 28, fontFamily: "var(--font-serif)", color: "#0C5F7D" }}
-          >
-            <img src="/logo-bee.svg" alt="Local Bee" width={30} height={30} />
-            Local Bee
+          <Link href="/discover" className="flex items-center">
+            <img src="/brand-lockup.svg" alt="Local Bee" style={{ height: 34, width: "auto" }} />
           </Link>
           <div className="flex items-center gap-8">
             {NAV_LINKS.map(({ href, label }) => {
