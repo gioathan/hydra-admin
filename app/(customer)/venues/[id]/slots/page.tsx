@@ -67,7 +67,7 @@ export default function SlotsPage({ params }: { params: Promise<{ id: string }> 
         }`}
         style={
           isSel
-            ? { background: "#C25B3C", color: "#ffffff", borderColor: "#C25B3C", ringColor: "rgba(194, 91, 60,0.15)", fontFamily: "var(--font-sans)" }
+            ? { background: "#C25B3C", color: "#ffffff", borderColor: "#C25B3C", fontFamily: "var(--font-sans)" }
             : { borderColor: "#E1D7C6", color: "#566572", fontFamily: "var(--font-sans)" }
         }
       >
