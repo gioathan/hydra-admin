@@ -179,6 +179,7 @@ export interface LoginResponse {
   token: string;
   customerId: string | null;
   venueId: string | null;
+  phoneRequired: boolean;
 }
 
 export interface ApiError {

@@ -59,7 +59,7 @@ export default function SignUpPage() {
       }
       setGoogleError(null);
       setAuth(data.token, data.user, data.customerId, true);
-      router.replace("/discover");
+      router.replace(data.phoneRequired ? "/complete-profile" : "/discover");
     },
     onError: (err) => setGoogleError(extractErrorMessage(err)),
   });

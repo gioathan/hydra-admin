@@ -65,7 +65,7 @@ export default function SignInPage() {
       }
       setExtraError(null);
       setAuth(data.token, data.user, data.customerId);
-      router.replace("/discover");
+      router.replace(data.phoneRequired ? "/complete-profile" : "/discover");
     },
   });
 
@@ -78,7 +78,7 @@ export default function SignInPage() {
       }
       setExtraError(null);
       setAuth(data.token, data.user, data.customerId, true);
-      router.replace("/discover");
+      router.replace(data.phoneRequired ? "/complete-profile" : "/discover");
     },
   });
 
