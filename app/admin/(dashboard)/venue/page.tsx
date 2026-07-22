@@ -68,7 +68,6 @@ function VenueDetailsSection({ venueId }: { venueId: string }) {
         address: venue.address,
         capacity: venue.capacity,
         venueTypeId: venue.venueTypeId,
-        location: venue.location ?? "",
         mapsUrl: venue.googleMapsUrl ?? "",
         description: venue.description ?? "",
       });
@@ -85,7 +84,6 @@ function VenueDetailsSection({ venueId }: { venueId: string }) {
         address: updated.address,
         capacity: updated.capacity,
         venueTypeId: updated.venueTypeId,
-        location: updated.location ?? "",
         mapsUrl: updated.googleMapsUrl ?? "",
         description: updated.description ?? "",
       });
@@ -141,9 +139,10 @@ function VenueDetailsSection({ venueId }: { venueId: string }) {
       />
       <Input
         label="Location (city/island)"
-        placeholder="e.g. Hydra"
-        error={errors.location?.message}
-        {...register("location")}
+        value={venue?.location ?? "—"}
+        readOnly
+        disabled
+        helperText="Set by the administrator — contact support to change it."
       />
       <div className="flex flex-col gap-1.5">
         <Input

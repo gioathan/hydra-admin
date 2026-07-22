@@ -25,7 +25,7 @@ export default function SuperAdminUsersPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const { showToast } = useToast();
   const [form, setForm] = useState<RegisterVenueAdminRequest>({
-    email: "", name: "", address: "", capacity: 0, venueTypeId: "", password: "", description: "",
+    email: "", name: "", address: "", capacity: 0, venueTypeId: "", location: "", password: "", description: "",
   });
 
   const { data, isLoading } = useQuery({
@@ -52,7 +52,7 @@ export default function SuperAdminUsersPage() {
       queryClient.invalidateQueries({ queryKey: ["superadmin-users"] });
       setShowCreate(false);
       showToast("Venue admin created successfully", "success");
-      setForm({ email: "", name: "", address: "", capacity: 0, venueTypeId: venueTypesData?.items?.[0]?.id ?? "", password: "", description: "" });
+      setForm({ email: "", name: "", address: "", capacity: 0, venueTypeId: venueTypesData?.items?.[0]?.id ?? "", location: "", password: "", description: "" });
     },
     onError: (err) => showToast(extractErrorMessage(err), "error"),
   });
@@ -149,6 +149,7 @@ export default function SuperAdminUsersPage() {
           <Input label="Password" type="password" value={form.password ?? ""} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} placeholder="Leave blank to auto-generate" />
           <Input label="Venue Name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />
           <Input label="Address" value={form.address} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} required />
+          <Input label="Location (city/island)" placeholder="e.g. Hydra" value={form.location ?? ""} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} />
           <Input label="Capacity" type="number" value={String(form.capacity)} onChange={e => setForm(f => ({ ...f, capacity: Number(e.target.value) }))} required />
           <Select
             label="Venue Type"
