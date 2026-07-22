@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAllUsers, createVenueAdmin, deleteUser } from "@/lib/api/users";
 import { getVenueTypes } from "@/lib/api/venueTypes";
@@ -38,13 +38,21 @@ export default function SuperAdminUsersPage() {
     queryFn: () => getVenueTypes(1, 100),
   });
 
+  // Default the venue-type dropdown to the first available type so the form
+  // never submits an empty venueTypeId (a controlled <select> shows the first
+  // option but doesn't set its value until the user changes it).
+  useEffect(() => {
+    const firstId = venueTypesData?.items?.[0]?.id;
+    if (firstId) setForm(f => (f.venueTypeId ? f : { ...f, venueTypeId: firstId }));
+  }, [venueTypesData]);
+
   const createMutation = useMutation({
     mutationFn: createVenueAdmin,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["superadmin-users"] });
       setShowCreate(false);
       showToast("Venue admin created successfully", "success");
-      setForm({ email: "", name: "", address: "", capacity: 0, venueTypeId: "", password: "", description: "" });
+      setForm({ email: "", name: "", address: "", capacity: 0, venueTypeId: venueTypesData?.items?.[0]?.id ?? "", password: "", description: "" });
     },
     onError: (err) => showToast(extractErrorMessage(err), "error"),
   });
