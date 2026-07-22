@@ -6,8 +6,21 @@ export async function updateUser(userId: string, data: UpdateUserRequest): Promi
   return res.data;
 }
 
-export async function getAllUsers(page = 1, pageSize = 25): Promise<PagedResult<UserDto>> {
-  const res = await api.get<PagedResult<UserDto>>("/users", { params: { page, pageSize } });
+export async function updateUserEmail(userId: string, email: string): Promise<{ message: string }> {
+  const res = await api.put<{ message: string }>(`/users/${userId}/email`, { email });
+  return res.data;
+}
+
+export async function getAllUsers(
+  page = 1,
+  pageSize = 25,
+  search?: string,
+  role?: string
+): Promise<PagedResult<UserDto>> {
+  const params: Record<string, string | number> = { page, pageSize };
+  if (search) params.search = search;
+  if (role) params.role = role;
+  const res = await api.get<PagedResult<UserDto>>("/users", { params });
   return res.data;
 }
 
