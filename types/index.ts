@@ -117,7 +117,6 @@ export interface UpdateVenueRequest {
   address: string;
   capacity: number;
   venueTypeId: string;
-  location?: string | null;
   mapsUrl?: string | null;
   description?: string | null;
 }
@@ -317,6 +316,7 @@ export interface RegisterVenueAdminRequest {
   address: string;
   capacity: number;
   venueTypeId: string;
+  location?: string | null;
   password?: string | null;
   description?: string | null;
 }
