@@ -59,7 +59,7 @@ export function CustomerDesktopFooter() {
           </h4>
           <div className="flex gap-5">
             <a
-              href="mailto:test@email.com"
+              href="mailto:info@localbee.gr"
               className="transition-colors hover:text-white"
               style={{ color: "#E1D7C6" }}
               aria-label="Email us"

@@ -10,7 +10,7 @@ export default function LandingPage() {
 
         <div className="flex items-center justify-between">
           <img src="/brand-lockup.svg" alt="Local Bee" style={{ height: 64, width: "auto" }} />
-          <a href="mailto:test@mail.com" className="text-sm text-[#566572] hover:text-[#C25B3C] transition-colors">
+          <a href="mailto:info@localbee.gr" className="text-sm text-[#566572] hover:text-[#C25B3C] transition-colors">
             Support
           </a>
         </div>

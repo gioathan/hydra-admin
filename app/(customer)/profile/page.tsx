@@ -192,7 +192,7 @@ export default function ProfilePage() {
           <div>
             <p className="text-xs font-bold tracking-widest uppercase mb-2.5 ml-1" style={{ color: "#566572", fontFamily: "var(--font-sans)" }}>Support</p>
             <div className="rounded-xl overflow-hidden" style={{ background: "#ffffff", border: "1px solid rgba(225, 215, 198,0.3)", boxShadow: "0 1px 4px rgba(12, 54, 72,0.04)" }}>
-              <MenuRow label="Contact Us" iconType="mail" onClick={() => window.open('mailto:test@email.com')} />
+              <MenuRow label="Contact Us" iconType="mail" onClick={() => window.open('mailto:info@localbee.gr')} />
             </div>
           </div>
 
@@ -259,7 +259,7 @@ export default function ProfilePage() {
               <div>
                 <h2 className="text-xs font-bold tracking-widest uppercase mb-5" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Support</h2>
                 <div className="flex flex-col gap-3">
-                  <DesktopCard href="mailto:test@email.com" title="Contact Us" subtitle="Get in touch with our support team" iconType="mail" />
+                  <DesktopCard href="mailto:info@localbee.gr" title="Contact Us" subtitle="Get in touch with our support team" iconType="mail" />
                 </div>
               </div>
               <div>
