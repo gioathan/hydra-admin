@@ -1,11 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useCustomerAuthStore } from "@/store/customerAuthStore";
-import { getCustomer } from "@/lib/api/customersApi";
+import { getCustomer, deleteAccount } from "@/lib/api/customersApi";
 import { getInitial } from "@/lib/utils";
+import { extractErrorMessage } from "@/lib/axios";
+import { useToast } from "@/components/ui/Toast";
+import { Modal } from "@/components/ui/Modal";
 
 type IconType = "edit" | "lock" | "calendar" | "exit" | "shield" | "document" | "mail";
 
@@ -134,7 +138,9 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { customerId, clearAuth, isGoogleUser } = useCustomerAuthStore();
+  const { user, customerId, clearAuth, isGoogleUser } = useCustomerAuthStore();
+  const { showToast } = useToast();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const { data: customer } = useQuery({
     queryKey: ["customer", customerId],
@@ -147,6 +153,18 @@ export default function ProfilePage() {
     clearAuth();
     router.replace("/");
   };
+
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteAccount(user!.id),
+    onSuccess: () => {
+      clearAuth();
+      router.replace("/");
+    },
+    onError: (err) => {
+      setShowDeleteConfirm(false);
+      showToast(extractErrorMessage(err), "error");
+    },
+  });
 
   const name = customer?.name ?? "—";
 
@@ -209,6 +227,16 @@ export default function ProfilePage() {
             <div className="rounded-xl overflow-hidden" style={{ background: "#ffffff", border: "1px solid rgba(225, 215, 198,0.3)", boxShadow: "0 1px 4px rgba(12, 54, 72,0.04)" }}>
               <MenuRow label="Sign Out" iconType="exit" destructive onClick={handleSignOut} />
             </div>
+          </div>
+
+          <div className="text-center mt-1">
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="text-xs font-medium underline"
+              style={{ color: "#8B95A0" }}
+            >
+              Delete Account
+            </button>
           </div>
 
           <p className="text-[10px] text-center tracking-widest uppercase mt-2" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Local Bee v1.0</p>
@@ -287,11 +315,29 @@ export default function ProfilePage() {
                 >
                   Sign Out
                 </button>
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="w-full text-center text-xs font-medium underline"
+                  style={{ color: "#8B95A0" }}
+                >
+                  Delete Account
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <Modal
+        open={showDeleteConfirm}
+        title="Delete your account?"
+        description="This permanently deletes your account, bookings, and ratings. This action cannot be undone."
+        confirmLabel={deleteMutation.isPending ? "Deleting..." : "Delete Account"}
+        confirmVariant="danger"
+        loading={deleteMutation.isPending}
+        onConfirm={() => deleteMutation.mutate()}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </>
   );
 }
