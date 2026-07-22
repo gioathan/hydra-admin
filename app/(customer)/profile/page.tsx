@@ -141,6 +141,7 @@ export default function ProfilePage() {
   const { user, customerId, clearAuth, isGoogleUser } = useCustomerAuthStore();
   const { showToast } = useToast();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
   const { data: customer } = useQuery({
     queryKey: ["customer", customerId],
@@ -150,6 +151,7 @@ export default function ProfilePage() {
   });
 
   const handleSignOut = () => {
+    setShowSignOutConfirm(false);
     clearAuth();
     router.replace("/");
   };
@@ -225,7 +227,7 @@ export default function ProfilePage() {
 
           <div>
             <div className="rounded-xl overflow-hidden" style={{ background: "#ffffff", border: "1px solid rgba(225, 215, 198,0.3)", boxShadow: "0 1px 4px rgba(12, 54, 72,0.04)" }}>
-              <MenuRow label="Sign Out" iconType="exit" destructive onClick={handleSignOut} />
+              <MenuRow label="Sign Out" iconType="exit" destructive onClick={() => setShowSignOutConfirm(true)} />
             </div>
           </div>
 
@@ -309,7 +311,7 @@ export default function ProfilePage() {
                 </div>
                 <div style={{ height: 1, background: "#E6DCCC" }} />
                 <button
-                  onClick={handleSignOut}
+                  onClick={() => setShowSignOutConfirm(true)}
                   className="w-full py-3 rounded-xl text-sm font-semibold transition hover:bg-red-50"
                   style={{ color: "#C0392C", border: "1px solid #C0392C", background: "transparent" }}
                 >
@@ -327,6 +329,16 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      <Modal
+        open={showSignOutConfirm}
+        title="Sign out?"
+        description="You'll need to sign in again to access your bookings."
+        confirmLabel="Sign Out"
+        confirmVariant="danger"
+        onConfirm={handleSignOut}
+        onCancel={() => setShowSignOutConfirm(false)}
+      />
 
       <Modal
         open={showDeleteConfirm}
