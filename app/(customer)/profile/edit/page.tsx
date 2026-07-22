@@ -29,7 +29,7 @@ export default function EditProfilePage() {
     useForm<UpdateCustomerRequest>();
 
   useEffect(() => {
-    if (customer) reset({ name: customer.name, phone: customer.phone });
+    if (customer) reset({ name: customer.name ?? "", phone: customer.phone ?? "" });
   }, [customer, reset]);
 
   const { mutate, isPending } = useMutation({
@@ -37,7 +37,7 @@ export default function EditProfilePage() {
     onSuccess: (updated) => {
       queryClient.setQueryData(["customer", customerId], updated);
       showToast("Profile updated.", "success");
-      reset({ name: updated.name, phone: updated.phone });
+      reset({ name: updated.name ?? "", phone: updated.phone ?? "" });
     },
     onError: (err) => showToast(extractErrorMessage(err), "error"),
   });

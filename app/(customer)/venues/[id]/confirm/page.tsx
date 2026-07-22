@@ -66,7 +66,7 @@ export default function ConfirmPage({ params }: { params: Promise<{ id: string }
         {customer && (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#C25B3C] flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-bold text-sm">{getInitial(customer.name)}</span>
+              <span className="text-white font-bold text-sm">{getInitial(customer.name ?? "")}</span>
             </div>
             <div>
               <p className="text-sm font-semibold text-[#0C5F7D]">{customer.name}</p>
