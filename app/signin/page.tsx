@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 import { useCustomerAuthStore } from "@/store/customerAuthStore";
 import { customerLogin, googleLogin } from "@/lib/api/customerAuth";
 import { extractErrorMessage } from "@/lib/axios";
@@ -66,6 +67,14 @@ export default function SignInPage() {
       setExtraError(null);
       setAuth(data.token, data.user, data.customerId);
       router.replace(data.phoneRequired ? "/complete-profile" : "/discover");
+    },
+    onError: (err, variables) => {
+      if (axios.isAxiosError(err) && err.response?.status === 403) {
+        const userId = err.response.data?.userId ?? "";
+        localStorage.setItem("pending_verify_userId", userId);
+        localStorage.setItem("pending_verify_email", variables.email);
+        router.push("/verify-email");
+      }
     },
   });
 
