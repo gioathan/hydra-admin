@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getAllUsers, createVenueAdmin, deleteUser } from "@/lib/api/users";
+import { getAllUsers, createVenueAdmin, deleteUser, updateUserEmail } from "@/lib/api/users";
 import { getVenueTypes } from "@/lib/api/venueTypes";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -10,7 +10,7 @@ import { Select } from "@/components/ui/Select";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useToast } from "@/components/ui/Toast";
 import { extractErrorMessage } from "@/lib/axios";
-import { RegisterVenueAdminRequest } from "@/types";
+import { RegisterVenueAdminRequest, UserDto } from "@/types";
 
 const roleBadgeClass = (role: string) => {
   if (role === "SuperAdmin") return "bg-purple-100 text-purple-800";
@@ -23,14 +23,26 @@ export default function SuperAdminUsersPage() {
   const [page, setPage] = useState(1);
   const [showCreate, setShowCreate] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("");
+  const [editUser, setEditUser] = useState<UserDto | null>(null);
+  const [editEmail, setEditEmail] = useState("");
   const { showToast } = useToast();
   const [form, setForm] = useState<RegisterVenueAdminRequest>({
     email: "", name: "", address: "", capacity: 0, venueTypeId: "", location: "", password: "", description: "",
   });
 
+  // debounce the search box; reset to page 1 whenever the filters change
+  useEffect(() => {
+    const t = setTimeout(() => { setSearch(searchInput); setPage(1); }, 400);
+    return () => clearTimeout(t);
+  }, [searchInput]);
+  useEffect(() => { setPage(1); }, [roleFilter]);
+
   const { data, isLoading } = useQuery({
-    queryKey: ["superadmin-users", page],
-    queryFn: () => getAllUsers(page, 25),
+    queryKey: ["superadmin-users", page, search, roleFilter],
+    queryFn: () => getAllUsers(page, 25, search || undefined, roleFilter || undefined),
   });
 
   const { data: venueTypesData } = useQuery({
@@ -67,6 +79,16 @@ export default function SuperAdminUsersPage() {
     onError: (err) => showToast(extractErrorMessage(err), "error"),
   });
 
+  const editEmailMutation = useMutation({
+    mutationFn: ({ id, email }: { id: string; email: string }) => updateUserEmail(id, email),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["superadmin-users"] });
+      setEditUser(null);
+      showToast("Email updated", "success");
+    },
+    onError: (err) => showToast(extractErrorMessage(err), "error"),
+  });
+
   const venueTypeOptions = (venueTypesData?.items ?? []).map(vt => ({ value: vt.id, label: vt.name }));
 
   return (
@@ -77,6 +99,24 @@ export default function SuperAdminUsersPage() {
           <p className="text-sm text-[#566572] mt-1">All registered users in the system</p>
         </div>
         <Button onClick={() => setShowCreate(true)}>Create Venue Admin</Button>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex-1 min-w-[220px]">
+          <Input placeholder="Search by email…" value={searchInput} onChange={e => setSearchInput(e.target.value)} />
+        </div>
+        <div className="w-44">
+          <Select
+            value={roleFilter}
+            onChange={e => setRoleFilter(e.target.value)}
+            options={[
+              { value: "", label: "All roles" },
+              { value: "Admin", label: "Admins" },
+              { value: "Customer", label: "Customers" },
+              { value: "SuperAdmin", label: "Super Admins" },
+            ]}
+          />
+        </div>
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -111,15 +151,30 @@ export default function SuperAdminUsersPage() {
                       {user.isEmailVerified ? "Yes" : "No"}
                     </td>
                     <td className="py-3 border-t border-gray-100 px-4">
-                      <button
-                        onClick={() => setDeleteId(user.id)}
-                        className="text-red-500 hover:text-red-700 text-sm font-medium"
-                      >
-                        Delete
-                      </button>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => { setEditUser(user); setEditEmail(user.email); }}
+                          className="text-[#0C5F7D] hover:text-[#C25B3C] text-sm font-medium"
+                        >
+                          Edit email
+                        </button>
+                        <button
+                          onClick={() => setDeleteId(user.id)}
+                          className="text-red-500 hover:text-red-700 text-sm font-medium"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
+            {!isLoading && (data?.items?.length ?? 0) === 0 && (
+              <tr>
+                <td colSpan={4} className="py-10 text-center text-sm text-[#566572] border-t border-gray-100">
+                  No users match your filters.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
         {!isLoading && data && (
@@ -180,6 +235,18 @@ export default function SuperAdminUsersPage() {
         onConfirm={() => deleteId && deleteMutation.mutate(deleteId)}
         onCancel={() => setDeleteId(null)}
       />
+
+      {/* Edit Email Modal */}
+      <Modal
+        open={!!editUser}
+        title="Change user email"
+        confirmLabel={editEmailMutation.isPending ? "Saving..." : "Save"}
+        loading={editEmailMutation.isPending}
+        onConfirm={() => editUser && editEmailMutation.mutate({ id: editUser.id, email: editEmail })}
+        onCancel={() => setEditUser(null)}
+      >
+        <Input label="Email" type="email" value={editEmail} onChange={e => setEditEmail(e.target.value)} required />
+      </Modal>
     </div>
   );
 }
