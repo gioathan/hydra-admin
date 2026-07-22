@@ -97,7 +97,7 @@ export default function LandingPage() {
         </div>
 
         <footer className="flex justify-between items-center pt-5">
-          <span className="text-xs text-[#8B95A0]/60">© 2024 Local Bee</span>
+          <span className="text-xs text-[#8B95A0]/60">© {new Date().getFullYear()} Local Bee</span>
         </footer>
       </section>
 
