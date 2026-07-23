@@ -158,19 +158,23 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                   <button
                     type="button"
                     onClick={() => setPartySize((s) => Math.max(1, s - 1))}
-                    className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-xl text-[#0C5F7D] hover:bg-gray-50 disabled:opacity-30"
+                    className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-[#0C5F7D] hover:bg-gray-50 disabled:opacity-30"
                     disabled={partySize <= 1}
                   >
-                    −
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                      <path d="M5 12h14" />
+                    </svg>
                   </button>
                   <span className="text-2xl font-bold text-[#0C5F7D] w-8 text-center">{partySize}</span>
                   <button
                     type="button"
                     onClick={() => setPartySize((s) => Math.min(venue.capacity, s + 1))}
-                    className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-xl text-[#0C5F7D] hover:bg-gray-50 disabled:opacity-30"
+                    className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-[#0C5F7D] hover:bg-gray-50 disabled:opacity-30"
                     disabled={partySize >= venue.capacity}
                   >
-                    +
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                      <path d="M12 5v14M5 12h14" />
+                    </svg>
                   </button>
                   <span className="text-sm text-[#8B95A0]">max {venue.capacity}</span>
                 </div>
@@ -500,10 +504,12 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                           type="button"
                           onClick={() => setPartySize((s) => Math.max(1, s - 1))}
                           disabled={partySize <= 1}
-                          className="w-10 h-10 rounded-full border flex items-center justify-center text-xl font-light transition hover:bg-gray-50 disabled:opacity-30"
+                          className="w-10 h-10 rounded-full border flex items-center justify-center transition hover:bg-gray-50 disabled:opacity-30"
                           style={{ borderColor: "#E1D7C6", color: "#0C5F7D" }}
                         >
-                          −
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                            <path d="M5 12h14" />
+                          </svg>
                         </button>
                         <div className="text-center">
                           <span className="text-3xl font-bold" style={{ color: "#0C5F7D", fontFamily: "var(--font-serif)" }}>{partySize}</span>
@@ -513,10 +519,12 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                           type="button"
                           onClick={() => setPartySize((s) => Math.min(venue.capacity, s + 1))}
                           disabled={partySize >= venue.capacity}
-                          className="w-10 h-10 rounded-full border flex items-center justify-center text-xl font-light transition hover:bg-gray-50 disabled:opacity-30"
+                          className="w-10 h-10 rounded-full border flex items-center justify-center transition hover:bg-gray-50 disabled:opacity-30"
                           style={{ borderColor: "#E1D7C6", color: "#0C5F7D" }}
                         >
-                          +
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                            <path d="M12 5v14M5 12h14" />
+                          </svg>
                         </button>
                       </div>
                     </div>
