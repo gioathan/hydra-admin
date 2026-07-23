@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
   // The app was never type-checked/linted in CI before its first deploy; these
@@ -16,4 +17,9 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  silent: true,
+  // No Sentry auth token configured — skip source map upload rather than fail the build.
+  sourcemaps: { disable: true },
+  disableLogger: true,
+});

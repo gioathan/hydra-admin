@@ -86,4 +86,5 @@ Two Zustand stores, both localStorage-backed with a `hydrate()` method that must
 ```
 NEXT_PUBLIC_API_URL=http://localhost:8080/api/v1
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=<web oauth client id>
+NEXT_PUBLIC_SENTRY_DSN=<sentry DSN for this Next.js project, blank to disable>
 ```
