@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { getUpcomingEvents, getVenueLocations } from "@/lib/api/venues";
-import { Select } from "@/components/ui/Select";
+import { useAuthStore } from "@/store/authStore";
+import { getVenue, getUpcomingEvents } from "@/lib/api/venues";
 import { EventListItemDto } from "@/types";
 
 const PAGE_SIZE = 15;
@@ -97,66 +96,55 @@ function EventCard({ event }: { event: EventListItemDto }) {
 }
 
 export default function EventsPage() {
-  const [location, setLocation] = useState<string>("");
+  const { venueId } = useAuthStore();
 
-  const { data: locations = [] } = useQuery({
-    queryKey: ["venueLocations"],
-    queryFn: getVenueLocations,
-    staleTime: 10 * 60_000,
+  const { data: venue, isLoading: venueLoading } = useQuery({
+    queryKey: ["venue", venueId],
+    queryFn: () => getVenue(venueId!),
+    enabled: !!venueId,
   });
+
+  const location = venue?.location ?? null;
 
   const {
     data,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    isLoading,
+    isLoading: eventsLoading,
   } = useInfiniteQuery({
     queryKey: ["upcomingEvents", location],
     queryFn: ({ pageParam = 1 }) =>
-      getUpcomingEvents(pageParam as number, PAGE_SIZE, location || null),
+      getUpcomingEvents(pageParam as number, PAGE_SIZE, location),
     initialPageParam: 1,
     getNextPageParam: (last) => (last.hasNextPage ? last.pageNumber + 1 : undefined),
+    enabled: !venueLoading && !!location,
   });
 
+  const isLoading = venueLoading || (!!location && eventsLoading);
   const events: EventListItemDto[] = data?.pages.flatMap((p) => p.items) ?? [];
   const totalCount = data?.pages[0]?.totalCount ?? 0;
 
   return (
     <div className="p-6 lg:p-8 flex flex-col gap-6">
       {/* Header */}
-      <div className="flex items-start justify-between flex-wrap gap-4">
-        <div>
-          <p className="text-xs font-bold tracking-widest text-[#C25B3C] uppercase mb-1">
-            Across all venues
-          </p>
-          <h1 className="text-2xl font-bold text-[#0C5F7D]">Upcoming Events</h1>
-          <p className="text-sm text-[#566572] mt-1 max-w-xl">
-            Browse upcoming events from every venue on Hydra. To create or edit your
-            own events, go to <Link href="/admin/venue" className="text-[#C25B3C] font-medium hover:underline">your Venue page</Link>.
-          </p>
-        </div>
-
-        {/* Location filter */}
-        {locations.length > 0 && (
-          <div className="w-48">
-            <Select
-              options={[
-                { value: "", label: "All locations" },
-                ...locations.map((loc) => ({ value: loc, label: loc })),
-              ]}
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </div>
-        )}
+      <div>
+        <p className="text-xs font-bold tracking-widest text-[#C25B3C] uppercase mb-1">
+          {location ? `In ${location}` : "Upcoming Events"}
+        </p>
+        <h1 className="text-2xl font-bold text-[#0C5F7D]">Upcoming Events</h1>
+        <p className="text-sm text-[#566572] mt-1 max-w-xl">
+          {location
+            ? `What's happening around ${location} — from your venue and others nearby.`
+            : "Events happening around your venue."}{" "}
+          To create or edit your own events, go to <Link href="/admin/venue" className="text-[#C25B3C] font-medium hover:underline">your Venue page</Link>.
+        </p>
       </div>
 
       {/* Count */}
-      {!isLoading && (
+      {!isLoading && !!location && (
         <p className="text-sm text-gray-400 -mt-2">
-          {totalCount} upcoming event{totalCount !== 1 ? "s" : ""}
-          {location ? ` in ${location}` : ""}
+          {totalCount} upcoming event{totalCount !== 1 ? "s" : ""} in {location}
         </p>
       )}
 
@@ -167,6 +155,19 @@ export default function EventsPage() {
             <div key={i} className="h-32 bg-white rounded-xl border border-[#E1D7C6] animate-pulse" />
           ))}
         </div>
+      ) : !location ? (
+        <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
+          <div className="w-16 h-16 rounded-full bg-[#F4EDE1] flex items-center justify-center">
+            <svg className="w-7 h-7 text-[#C25B3C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <p className="text-[#0C5F7D] font-semibold">Your venue has no location set</p>
+          <p className="text-sm text-gray-400 max-w-sm">
+            Contact support to set your venue&apos;s location so we can show you what&apos;s happening nearby.
+          </p>
+        </div>
       ) : events.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
           <div className="w-16 h-16 rounded-full bg-[#F4EDE1] flex items-center justify-center">
@@ -176,9 +177,7 @@ export default function EventsPage() {
           </div>
           <p className="text-[#0C5F7D] font-semibold">No upcoming events</p>
           <p className="text-sm text-gray-400">
-            {location
-              ? `No events scheduled in ${location}.`
-              : "No events scheduled across any venues yet."}
+            No events scheduled in {location} yet.
           </p>
         </div>
       ) : (
