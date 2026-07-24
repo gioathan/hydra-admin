@@ -31,7 +31,7 @@ const isBookingStatus = (v: string): v is BookingStatus =>
 
 // ─── Booking Rules ──────────────────────────────────────────────────
 
-function VenueRulesForm({ venueId, defaultValues }: { venueId: string; defaultValues: VenueRulesDto }) {
+function VenueRulesForm({ venueId, defaultValues, isNew }: { venueId: string; defaultValues: VenueRulesDto; isNew?: boolean }) {
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
@@ -133,7 +133,7 @@ function VenueRulesForm({ venueId, defaultValues }: { venueId: string; defaultVa
       </div>
 
       <div>
-        <Button type="submit" loading={isPending} disabled={!isDirty}>
+        <Button type="submit" loading={isPending} disabled={!isNew && !isDirty}>
           Save Rules
         </Button>
       </div>
@@ -218,15 +218,22 @@ function VenueRulesSection({ venueId }: { venueId: string }) {
                 <Skeleton key={i} className="h-10 w-full" />
               ))}
             </div>
-          ) : isError ? (
-            <p className="text-sm text-[#566572]">
-              {axios.isAxiosError(error) && error.response?.status === 404
-                ? "Booking rules aren't set up for your venue yet. Contact support to enable bookings."
-                : extractErrorMessage(error)}
-            </p>
-          ) : rules ? (
-            <VenueRulesForm venueId={venueId} defaultValues={rules} />
-          ) : null}
+          ) : isError && !(axios.isAxiosError(error) && error.response?.status === 404) ? (
+            <p className="text-sm text-[#566572]">{extractErrorMessage(error)}</p>
+          ) : (
+            <>
+              {!rules && (
+                <p className="text-sm text-[#566572] -mt-2">
+                  These are the default rules — review and save to apply them to your venue.
+                </p>
+              )}
+              <VenueRulesForm
+                venueId={venueId}
+                defaultValues={rules ?? { autoConfirm: true, slotMinutes: 90, openHour: 9, closeHour: 22 }}
+                isNew={!rules}
+              />
+            </>
+          )}
         </>
       )}
 
