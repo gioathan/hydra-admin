@@ -190,7 +190,6 @@ function VenueRulesSection({ venueId }: { venueId: string }) {
     queryFn: () => getVenueRules(venueId),
     staleTime: 60_000,
     retry: false,
-    enabled: !!venue?.bookingsEnabled,
   });
 
   const { mutate: toggle, isPending: toggling } = useMutation({
@@ -243,38 +242,29 @@ function VenueRulesSection({ venueId }: { venueId: string }) {
         </button>
       </div>
 
-      {/* Rules form — only shown when bookings are enabled */}
-      {venue?.bookingsEnabled && (
+      {/* Rules form — hours/slot duration are venue info worth keeping editable
+          and visible even when this venue isn't currently accepting bookings */}
+      {rulesLoading ? (
+        <div className="flex flex-col gap-4">
+          {[...Array(4)].map((_, i) => (
+            <Skeleton key={i} className="h-10 w-full" />
+          ))}
+        </div>
+      ) : isError && !(axios.isAxiosError(error) && error.response?.status === 404) ? (
+        <p className="text-sm text-[#566572]">{extractErrorMessage(error)}</p>
+      ) : (
         <>
-          {rulesLoading ? (
-            <div className="flex flex-col gap-4">
-              {[...Array(4)].map((_, i) => (
-                <Skeleton key={i} className="h-10 w-full" />
-              ))}
-            </div>
-          ) : isError && !(axios.isAxiosError(error) && error.response?.status === 404) ? (
-            <p className="text-sm text-[#566572]">{extractErrorMessage(error)}</p>
-          ) : (
-            <>
-              {!rules && (
-                <p className="text-sm text-[#566572] -mt-2">
-                  These are the default rules — review and save to apply them to your venue.
-                </p>
-              )}
-              <VenueRulesForm
-                venueId={venueId}
-                defaultValues={rules ?? { autoConfirm: true, slotMinutes: 90, openHour: 9, openMinute: 0, closeHour: 22, closeMinute: 0 }}
-                isNew={!rules}
-              />
-            </>
+          {!rules && (
+            <p className="text-sm text-[#566572] -mt-2">
+              These are the default rules — review and save to apply them to your venue.
+            </p>
           )}
+          <VenueRulesForm
+            venueId={venueId}
+            defaultValues={rules ?? { autoConfirm: true, slotMinutes: 90, openHour: 9, openMinute: 0, closeHour: 22, closeMinute: 0 }}
+            isNew={!rules}
+          />
         </>
-      )}
-
-      {!venue?.bookingsEnabled && (
-        <p className="text-sm text-[#566572]">
-          Enable bookings above to configure booking rules and time slots.
-        </p>
       )}
     </div>
   );
