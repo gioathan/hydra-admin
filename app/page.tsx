@@ -91,11 +91,14 @@ export default function LandingPage() {
               href="/discover"
               className="w-full py-3 text-[#566572] text-sm font-semibold tracking-[0.04em] flex items-center justify-center gap-2 hover:text-[#0C5F7D] transition-colors"
             >
-              Browse without an account
+              Just Looking? Explore Venues First
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                 <path d="M3 8h10m0 0L9 4m4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
+            <p className="text-xs text-[#8B95A0] text-center -mt-1.5">
+              No account needed to browse — you&apos;ll only need to sign in when you&apos;re ready to book.
+            </p>
           </div>
 
           <div className="pt-5 border-t border-[#E1D7C6]">
