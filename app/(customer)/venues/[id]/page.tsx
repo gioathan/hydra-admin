@@ -10,11 +10,13 @@ import { PhotoSlider } from "@/components/customer/PhotoSlider";
 // import { StarRating } from "@/components/customer/StarRating";
 import { CalendarPicker } from "@/components/customer/CalendarPicker";
 import { formatDateParam } from "@/lib/utils";
+import { useCustomerAuthStore } from "@/store/customerAuthStore";
 import type { EventListItemDto } from "@/types";
 
 export default function VenueDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
+  const { token } = useCustomerAuthStore();
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [partySize, setPartySize] = useState(2);
@@ -46,7 +48,12 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
   const handleCheckAvailability = () => {
     if (!selectedDate) return;
     const dateParam = formatDateParam(selectedDate);
-    router.push(`/venues/${id}/slots?date=${dateParam}&partySize=${partySize}`);
+    const target = `/venues/${id}/slots?date=${dateParam}&partySize=${partySize}`;
+    if (!token) {
+      router.push(`/signin?redirect=${encodeURIComponent(target)}`);
+      return;
+    }
+    router.push(target);
   };
 
   if (isLoading || !venue) {

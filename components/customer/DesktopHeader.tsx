@@ -35,7 +35,7 @@ export function CustomerDesktopHeader() {
             <img src="/brand-lockup.svg" alt="Local Bee" style={{ height: 34, width: "auto" }} />
           </Link>
           <div className="flex items-center gap-8">
-            {NAV_LINKS.map(({ href, label }) => {
+            {NAV_LINKS.filter((link) => token || link.href !== "/reservations").map(({ href, label }) => {
               const active = pathname === href || pathname.startsWith(href + "/");
               return (
                 <Link
