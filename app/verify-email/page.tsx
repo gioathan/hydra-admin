@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { verifyEmail, resendVerification } from "@/lib/api/customerAuth";
 import { extractErrorMessage } from "@/lib/axios";
@@ -10,6 +10,8 @@ import Link from "next/link";
 
 export default function VerifyEmailPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
   const email = typeof window !== "undefined"
     ? localStorage.getItem("pending_verify_email") ?? ""
     : "";
@@ -24,7 +26,7 @@ export default function VerifyEmailPage() {
     onSuccess: () => {
       localStorage.removeItem("pending_verify_userId");
       localStorage.removeItem("pending_verify_email");
-      router.replace("/signin");
+      router.replace(redirect ? `/signin?redirect=${encodeURIComponent(redirect)}` : "/signin");
     },
   });
 

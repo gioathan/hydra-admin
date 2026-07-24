@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { GoogleLogin } from "@react-oauth/google";
@@ -30,6 +30,8 @@ function Spinner() {
 
 export default function SignUpPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
   const { setAuth } = useCustomerAuthStore();
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const [googleError, setGoogleError] = useState<string | null>(null);
@@ -46,7 +48,7 @@ export default function SignUpPage() {
     onSuccess: (data, variables) => {
       localStorage.setItem("pending_verify_userId", data.user.id);
       localStorage.setItem("pending_verify_email", variables.email);
-      router.push("/verify-email");
+      router.push(redirect ? `/verify-email?redirect=${encodeURIComponent(redirect)}` : "/verify-email");
     },
   });
 
@@ -59,7 +61,8 @@ export default function SignUpPage() {
       }
       setGoogleError(null);
       setAuth(data.token, data.user, data.customerId, true);
-      router.replace(data.phoneRequired ? "/complete-profile" : "/discover");
+      const dest = redirect || "/discover";
+      router.replace(data.phoneRequired ? `/complete-profile?redirect=${encodeURIComponent(dest)}` : dest);
     },
     onError: (err) => setGoogleError(extractErrorMessage(err)),
   });
