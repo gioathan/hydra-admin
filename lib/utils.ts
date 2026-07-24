@@ -19,18 +19,26 @@ export function formatLocalDateTime(utcStr: string): string {
   return `${formatLocalDate(utcStr)} · ${formatLocalTime(utcStr)}`;
 }
 
-function formatHourLabel(hour: number): string {
+function formatHourLabel(hour: number, minute: number): string {
   const period = hour < 12 ? "AM" : "PM";
   const h12 = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-  return `${h12}${period}`;
+  const mm = minute === 0 ? "" : `:${String(minute).padStart(2, "0")}`;
+  return `${h12}${mm}${period}`;
 }
 
 // Formats a venue's operating hours, correctly handling overnight ranges
 // (e.g. a bar open 18:00-03:00) rather than assuming close is always after open.
-export function formatHourRange(openHour: number | null, closeHour: number | null): string | null {
+export function formatHourRange(
+  openHour: number | null,
+  closeHour: number | null,
+  openMinute?: number | null,
+  closeMinute?: number | null
+): string | null {
   if (openHour == null || closeHour == null) return null;
-  const range = `${formatHourLabel(openHour)} – ${formatHourLabel(closeHour)}`;
-  return closeHour <= openHour ? `${range} (next day)` : range;
+  const om = openMinute ?? 0;
+  const cm = closeMinute ?? 0;
+  const range = `${formatHourLabel(openHour, om)} – ${formatHourLabel(closeHour, cm)}`;
+  return closeHour < openHour || (closeHour === openHour && cm <= om) ? `${range} (next day)` : range;
 }
 
 export function formatDateParam(date: Date): string {
