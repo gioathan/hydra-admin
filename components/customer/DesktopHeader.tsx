@@ -15,7 +15,7 @@ const NAV_LINKS = [
 
 export function CustomerDesktopHeader() {
   const pathname = usePathname();
-  const { customerId } = useCustomerAuthStore();
+  const { token, customerId } = useCustomerAuthStore();
 
   const { data: customer } = useQuery({
     queryKey: ["customer", customerId],
@@ -54,13 +54,23 @@ export function CustomerDesktopHeader() {
             })}
           </div>
         </div>
-        <Link
-          href="/profile"
-          className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white transition-opacity hover:opacity-80"
-          style={{ background: "#C25B3C", fontFamily: "var(--font-sans)" }}
-        >
-          {getInitial(customer?.name ?? "")}
-        </Link>
+        {token ? (
+          <Link
+            href="/profile"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white transition-opacity hover:opacity-80"
+            style={{ background: "#C25B3C", fontFamily: "var(--font-sans)" }}
+          >
+            {getInitial(customer?.name ?? "")}
+          </Link>
+        ) : (
+          <Link
+            href={`/signin?redirect=${encodeURIComponent(pathname)}`}
+            className="px-5 py-2 rounded-full text-sm font-bold text-white transition-opacity hover:opacity-80"
+            style={{ background: "#C25B3C", fontFamily: "var(--font-sans)" }}
+          >
+            Log In
+          </Link>
+        )}
       </div>
     </nav>
   );

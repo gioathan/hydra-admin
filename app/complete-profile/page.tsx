@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useCustomerAuthStore } from "@/store/customerAuthStore";
@@ -15,12 +15,14 @@ interface FormValues {
 
 export default function CompleteProfilePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
   const { customerId } = useCustomerAuthStore();
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: (data: FormValues) => updateCustomer(customerId!, { phone: data.phone }),
-    onSuccess: () => router.replace("/discover"),
+    onSuccess: () => router.replace(redirect || "/discover"),
   });
 
   const errorMessage = error ? extractErrorMessage(error) : null;

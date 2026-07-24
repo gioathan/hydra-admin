@@ -87,6 +87,15 @@ export default function LandingPage() {
             >
               SIGN IN
             </Link>
+            <Link
+              href="/discover"
+              className="w-full py-3 text-[#566572] text-sm font-semibold tracking-[0.04em] flex items-center justify-center gap-2 hover:text-[#0C5F7D] transition-colors"
+            >
+              Browse without an account
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10m0 0L9 4m4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
           </div>
 
           <div className="pt-5 border-t border-[#E1D7C6]">

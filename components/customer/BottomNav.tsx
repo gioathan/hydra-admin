@@ -2,8 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCustomerAuthStore } from "@/store/customerAuthStore";
 
-const navItems = [
+interface NavItem {
+  href: string;
+  activePaths: string[];
+  label: string;
+  loggedOutLabel?: string;
+  icon: (active: boolean) => React.ReactNode;
+}
+
+const navItems: NavItem[] = [
   {
     href: "/discover",
     activePaths: ["/discover", "/venues"],
@@ -38,6 +47,7 @@ const navItems = [
     href: "/profile",
     activePaths: ["/profile"],
     label: "Profile",
+    loggedOutLabel: "Log In",
     icon: (active: boolean) => (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={active ? 2.2 : 1.6} viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -48,6 +58,7 @@ const navItems = [
 
 export function CustomerBottomNav() {
   const pathname = usePathname();
+  const { token } = useCustomerAuthStore();
 
   return (
     <nav
@@ -65,10 +76,13 @@ export function CustomerBottomNav() {
     >
       {navItems.map((item) => {
         const active = item.activePaths.some((p) => pathname === p || pathname.startsWith(p + "/"));
+        const href = !token && item.loggedOutLabel
+          ? `/signin?redirect=${encodeURIComponent(item.href)}`
+          : item.href;
         return (
           <Link
             key={item.href}
-            href={item.href}
+            href={href}
             className="flex-1 flex flex-col items-center justify-center pt-1 gap-1 relative"
           >
             {active && (
@@ -84,7 +98,7 @@ export function CustomerBottomNav() {
               className="text-[10px] font-bold tracking-wide uppercase"
               style={{ color: active ? "#C25B3C" : "#566572", fontFamily: "var(--font-sans)" }}
             >
-              {item.label}
+              {!token && item.loggedOutLabel ? item.loggedOutLabel : item.label}
             </span>
           </Link>
         );

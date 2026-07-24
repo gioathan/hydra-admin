@@ -1,15 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useCustomerAuthStore } from "@/store/customerAuthStore";
 import { CustomerBottomNav } from "@/components/customer/BottomNav";
 import { CustomerDesktopHeader } from "@/components/customer/DesktopHeader";
 import { CustomerDesktopFooter } from "@/components/customer/DesktopFooter";
 
 export default function CustomerLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const { token, hydrate } = useCustomerAuthStore();
+  const { hydrate } = useCustomerAuthStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -17,11 +15,11 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
     setMounted(true);
   }, [hydrate]);
 
-  useEffect(() => {
-    if (mounted && !token) router.replace("/signin");
-  }, [mounted, token, router]);
-
-  if (!mounted || !token) return null;
+  // Public browsing (discover/venues/events) doesn't require login — only render
+  // once hydrated so the header/nav don't flash a logged-out state for a
+  // logged-in customer. Routes that require an account (reservations, profile,
+  // booking confirm/rate) guard themselves via RequireCustomerAuth.
+  if (!mounted) return null;
 
   return (
     <div className="flex min-h-screen flex-col" style={{ background: "#FAF6EF" }}>

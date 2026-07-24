@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { GoogleLogin } from "@react-oauth/google";
@@ -45,6 +45,8 @@ function EyeOff() {
 
 export default function SignInPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
   const { setAuth } = useCustomerAuthStore();
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const [extraError, setExtraError] = useState<string | null>(null);
@@ -66,14 +68,15 @@ export default function SignInPage() {
       }
       setExtraError(null);
       setAuth(data.token, data.user, data.customerId);
-      router.replace(data.phoneRequired ? "/complete-profile" : "/discover");
+      const dest = redirect || "/discover";
+      router.replace(data.phoneRequired ? `/complete-profile?redirect=${encodeURIComponent(dest)}` : dest);
     },
     onError: (err, variables) => {
       if (axios.isAxiosError(err) && err.response?.status === 403) {
         const userId = err.response.data?.userId ?? "";
         localStorage.setItem("pending_verify_userId", userId);
         localStorage.setItem("pending_verify_email", variables.email);
-        router.push("/verify-email");
+        router.push(redirect ? `/verify-email?redirect=${encodeURIComponent(redirect)}` : "/verify-email");
       }
     },
   });
@@ -87,7 +90,8 @@ export default function SignInPage() {
       }
       setExtraError(null);
       setAuth(data.token, data.user, data.customerId, true);
-      router.replace(data.phoneRequired ? "/complete-profile" : "/discover");
+      const dest = redirect || "/discover";
+      router.replace(data.phoneRequired ? `/complete-profile?redirect=${encodeURIComponent(dest)}` : dest);
     },
   });
 
