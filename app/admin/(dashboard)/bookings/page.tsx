@@ -31,6 +31,24 @@ const isBookingStatus = (v: string): v is BookingStatus =>
 
 // ─── Booking Rules ──────────────────────────────────────────────────
 
+const TIME_OPTIONS: { label: string; value: string }[] = (() => {
+  const opts: { label: string; value: string }[] = [];
+  for (let h = 0; h < 24; h++) {
+    for (const m of [0, 30]) {
+      const hh = String(h).padStart(2, "0");
+      const mm = String(m).padStart(2, "0");
+      const period = h < 12 ? "AM" : "PM";
+      const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+      opts.push({ value: `${hh}:${mm}`, label: `${String(h12).padStart(2, "0")}:${mm} ${period}` });
+    }
+  }
+  return opts;
+})();
+
+function pad2(n: number) {
+  return String(n).padStart(2, "0");
+}
+
 function VenueRulesForm({ venueId, defaultValues, isNew }: { venueId: string; defaultValues: VenueRulesDto; isNew?: boolean }) {
   const { showToast } = useToast();
   const queryClient = useQueryClient();
@@ -55,6 +73,21 @@ function VenueRulesForm({ venueId, defaultValues, isNew }: { venueId: string; de
   });
 
   const autoConfirm = watch("autoConfirm");
+  const openHour = watch("openHour");
+  const openMinute = watch("openMinute");
+  const closeHour = watch("closeHour");
+  const closeMinute = watch("closeMinute");
+
+  const handleTimeChange = (field: "open" | "close") => (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const [h, m] = e.target.value.split(":").map(Number);
+    if (field === "open") {
+      setValue("openHour", h, { shouldDirty: true });
+      setValue("openMinute", m, { shouldDirty: true });
+    } else {
+      setValue("closeHour", h, { shouldDirty: true });
+      setValue("closeMinute", m, { shouldDirty: true });
+    }
+  };
 
   return (
     <form
@@ -104,32 +137,33 @@ function VenueRulesForm({ venueId, defaultValues, isNew }: { venueId: string; de
 
       {/* Open / close hours */}
       <div className="grid grid-cols-2 gap-4">
-        <Input
-          label="Open hour (0–23)"
-          type="number"
-          min={0}
-          max={23}
-          error={errors.openHour?.message}
-          {...register("openHour", {
-            required: "Required",
-            valueAsNumber: true,
-            min: { value: 0, message: "Min 0" },
-            max: { value: 23, message: "Max 23" },
-          })}
-        />
-        <Input
-          label="Close hour (0–23)"
-          type="number"
-          min={0}
-          max={23}
-          error={errors.closeHour?.message}
-          {...register("closeHour", {
-            required: "Required",
-            valueAsNumber: true,
-            min: { value: 0, message: "Min 0" },
-            max: { value: 23, message: "Max 23" },
-          })}
-        />
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-medium text-[#0C5F7D]">Opens at</label>
+          <select
+            value={`${pad2(openHour ?? 9)}:${pad2(openMinute ?? 0)}`}
+            onChange={handleTimeChange("open")}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-[#0C5F7D] outline-none focus:border-[#0C5F7D] focus:ring-1 focus:ring-[#0C5F7D] bg-white"
+          >
+            {TIME_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-medium text-[#0C5F7D]">Closes at</label>
+          <select
+            value={`${pad2(closeHour ?? 22)}:${pad2(closeMinute ?? 0)}`}
+            onChange={handleTimeChange("close")}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-[#0C5F7D] outline-none focus:border-[#0C5F7D] focus:ring-1 focus:ring-[#0C5F7D] bg-white"
+          >
+            {TIME_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+          <p className="text-xs text-[#566572]">
+            If earlier than opening time, treated as after midnight (e.g. open 6PM, close 3AM).
+          </p>
+        </div>
       </div>
 
       <div>
@@ -229,7 +263,7 @@ function VenueRulesSection({ venueId }: { venueId: string }) {
               )}
               <VenueRulesForm
                 venueId={venueId}
-                defaultValues={rules ?? { autoConfirm: true, slotMinutes: 90, openHour: 9, closeHour: 22 }}
+                defaultValues={rules ?? { autoConfirm: true, slotMinutes: 90, openHour: 9, openMinute: 0, closeHour: 22, closeMinute: 0 }}
                 isNew={!rules}
               />
             </>

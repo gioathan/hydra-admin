@@ -59,7 +59,10 @@ export interface VenueDto {
   bookingsEnabled: boolean;
   eventsEnabled: boolean;
   openHour: number | null;
+  openMinute: number | null;
   closeHour: number | null;
+  closeMinute: number | null;
+  slotMinutes: number | null;
 }
 
 export interface EventListItemDto {
@@ -232,7 +235,10 @@ export interface CustomerVenueDto {
   bookingsEnabled: boolean;
   eventsEnabled: boolean;
   openHour: number | null;
+  openMinute: number | null;
   closeHour: number | null;
+  closeMinute: number | null;
+  slotMinutes: number | null;
 }
 
 export interface RegisterRequest {
@@ -312,7 +318,9 @@ export interface VenueRulesDto {
   autoConfirm: boolean;
   slotMinutes: number;
   openHour: number;
+  openMinute: number;
   closeHour: number;
+  closeMinute: number;
 }
 
 export type UpdateVenueRulesRequest = VenueRulesDto;

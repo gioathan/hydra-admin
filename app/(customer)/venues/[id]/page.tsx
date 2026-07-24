@@ -118,12 +118,12 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
               )} */}
               <span className="text-sm text-[#8B95A0]">· Capacity {venue.capacity}</span>
             </div>
-            {formatHourRange(venue.openHour, venue.closeHour) && (
+            {formatHourRange(venue.openHour, venue.closeHour, venue.openMinute, venue.closeMinute) && (
               <div className="flex items-center gap-1.5 mt-2 text-sm" style={{ color: "#566572" }}>
                 <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Open {formatHourRange(venue.openHour, venue.closeHour)}
+                Open {formatHourRange(venue.openHour, venue.closeHour, venue.openMinute, venue.closeMinute)}
               </div>
             )}
             {venue.googleMapsUrl && (
@@ -163,7 +163,10 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
           {venue.bookingsEnabled ? (
             <>
               <div>
-                <h2 className="text-base font-semibold text-[#0C5F7D] mb-3">Select a date</h2>
+                <h2 className="text-base font-semibold text-[#0C5F7D] mb-1">Select a date</h2>
+                {venue.slotMinutes && (
+                  <p className="text-xs text-[#8B95A0] mb-2">Reservations are {venue.slotMinutes}-minute slots</p>
+                )}
                 <CalendarPicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
               </div>
 
@@ -386,7 +389,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 </div>
 
                 {/* Open hours */}
-                {formatHourRange(venue.openHour, venue.closeHour) && (
+                {formatHourRange(venue.openHour, venue.closeHour, venue.openMinute, venue.closeMinute) && (
                   <div
                     className="flex items-start gap-4 p-6 rounded-xl border"
                     style={{ background: "#ffffff", borderColor: "#E6DCCC" }}
@@ -398,7 +401,7 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                     </div>
                     <div>
                       <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Open Hours</p>
-                      <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{formatHourRange(venue.openHour, venue.closeHour)}</p>
+                      <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{formatHourRange(venue.openHour, venue.closeHour, venue.openMinute, venue.closeMinute)}</p>
                     </div>
                   </div>
                 )}
@@ -526,7 +529,10 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                 {venue.bookingsEnabled ? (
                   <div className="flex flex-col gap-6">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Select a Date</p>
+                      <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Select a Date</p>
+                      {venue.slotMinutes && (
+                        <p className="text-xs mb-3" style={{ color: "#8B95A0" }}>Reservations are {venue.slotMinutes}-minute slots</p>
+                      )}
                       <CalendarPicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
                     </div>
 
