@@ -74,7 +74,7 @@ export function CustomerBottomNav() {
         paddingBottom: "env(safe-area-inset-bottom, 0px)",
       }}
     >
-      {navItems.map((item) => {
+      {navItems.filter((item) => token || item.href !== "/reservations").map((item) => {
         const active = item.activePaths.some((p) => pathname === p || pathname.startsWith(p + "/"));
         const href = !token && item.loggedOutLabel
           ? `/signin?redirect=${encodeURIComponent(item.href)}`
