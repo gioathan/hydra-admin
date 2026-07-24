@@ -9,7 +9,7 @@ import { getCustomerVenue, getCustomerVenueTypes as getVenueTypes, getCustomerVe
 import { PhotoSlider } from "@/components/customer/PhotoSlider";
 // import { StarRating } from "@/components/customer/StarRating";
 import { CalendarPicker } from "@/components/customer/CalendarPicker";
-import { formatDateParam } from "@/lib/utils";
+import { formatDateParam, formatHourRange } from "@/lib/utils";
 import { useCustomerAuthStore } from "@/store/customerAuthStore";
 import type { EventListItemDto } from "@/types";
 
@@ -118,6 +118,14 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
               )} */}
               <span className="text-sm text-[#8B95A0]">· Capacity {venue.capacity}</span>
             </div>
+            {formatHourRange(venue.openHour, venue.closeHour) && (
+              <div className="flex items-center gap-1.5 mt-2 text-sm" style={{ color: "#566572" }}>
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Open {formatHourRange(venue.openHour, venue.closeHour)}
+              </div>
+            )}
             {venue.googleMapsUrl && (
               <a
                 href={venue.googleMapsUrl}
@@ -376,6 +384,24 @@ export default function VenueDetailPage({ params }: { params: Promise<{ id: stri
                     <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>Up to {venue.capacity} guests</p>
                   </div>
                 </div>
+
+                {/* Open hours */}
+                {formatHourRange(venue.openHour, venue.closeHour) && (
+                  <div
+                    className="flex items-start gap-4 p-6 rounded-xl border"
+                    style={{ background: "#ffffff", borderColor: "#E6DCCC" }}
+                  >
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#F0E9DD" }}>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" style={{ color: "#C25B3C" }}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#8B95A0", fontFamily: "var(--font-sans)" }}>Open Hours</p>
+                      <p className="text-sm font-semibold" style={{ color: "#0C5F7D", fontFamily: "var(--font-sans)" }}>{formatHourRange(venue.openHour, venue.closeHour)}</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Rating */}
                 {/* <div

@@ -71,6 +71,9 @@ export function BookingsTable({
                 Reference
               </th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-[#566572] uppercase tracking-wider">
+                Customer
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-[#566572] uppercase tracking-wider">
                 Date &amp; Time
               </th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-[#566572] uppercase tracking-wider">
@@ -90,7 +93,7 @@ export function BookingsTable({
             ) : bookings.length === 0 ? (
               <tr>
                 <td
-                  colSpan={5}
+                  colSpan={6}
                   className="px-4 py-10 text-center text-[#566572]"
                 >
                   {emptyMessage}
@@ -103,6 +106,12 @@ export function BookingsTable({
                   <tr key={booking.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-3 font-mono text-xs text-[#0C5F7D] font-medium">
                       {formatRef(booking.id)}
+                    </td>
+                    <td className="px-4 py-3 text-[#0C5F7D]">
+                      <div className="font-medium">{booking.customerName ?? "—"}</div>
+                      {booking.customerPhone && (
+                        <div className="text-xs text-[#566572]">{booking.customerPhone}</div>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-[#0C5F7D]">
                       {formatDateTime(booking.startUtc)}

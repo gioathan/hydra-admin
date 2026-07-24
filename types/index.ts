@@ -58,6 +58,8 @@ export interface VenueDto {
   pricingItems: PricingItemDto[];
   bookingsEnabled: boolean;
   eventsEnabled: boolean;
+  openHour: number | null;
+  closeHour: number | null;
 }
 
 export interface EventListItemDto {
@@ -150,6 +152,8 @@ export interface BookingDto {
   venueComment: string | null;
   createdAtUtc: string;
   updatedAtUtc: string;
+  customerName: string | null;
+  customerPhone: string | null;
 }
 
 export interface BookingDecisionRequest {
@@ -227,6 +231,8 @@ export interface CustomerVenueDto {
   pricingItems: PricingItemDto[];
   bookingsEnabled: boolean;
   eventsEnabled: boolean;
+  openHour: number | null;
+  closeHour: number | null;
 }
 
 export interface RegisterRequest {
