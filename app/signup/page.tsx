@@ -9,7 +9,7 @@ import { useCustomerAuthStore } from "@/store/customerAuthStore";
 import { register as registerApi, googleLogin } from "@/lib/api/customerAuth";
 import { extractErrorMessage } from "@/lib/axios";
 import { validatePassword } from "@/lib/utils";
-import { useState, useLayoutEffect, useRef } from "react";
+import { useState, useLayoutEffect, useRef, Suspense } from "react";
 
 interface FormValues {
   name: string;
@@ -29,6 +29,14 @@ function Spinner() {
 }
 
 export default function SignUpPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignUpForm />
+    </Suspense>
+  );
+}
+
+function SignUpForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
